@@ -29,6 +29,19 @@ class JoiningSystem extends EventEmitter
 
     initSocket(socket)
     {
+        socket.on('getRoom', ()=>{
+            
+            let lim = Object.keys(this.rooms).length;
+            let roomNames = [];
+
+            for(var i in this.rooms){
+                
+               roomNames.push(this.rooms[i].name); //Renvoie le nom de la room correspondant à la clé dans le tableau roomNames
+            }
+
+            socket.emit('getRoomresponse', {val : roomNames});
+
+        })
         socket.on('disconnect', () => 
         {
             console.log('Deconnection du socket', socket.id);

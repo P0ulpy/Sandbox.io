@@ -8,6 +8,7 @@
     <script type="module" src="assets/js/joiningManager.js"></script>
     
     <!--pour pas ce bruler les yeux quand on dev de nuit-->
+    <!--Merci flo d'avoir pensé à ça j'ai rajouté la couleur saumon pck le rouge ca agresse -->
     <style>
         html 
         {
@@ -16,7 +17,15 @@
         #infoText
         {
             margin: 0.3em;
-            color: red;
+            color: salmon;
+        }
+        #listeRoom
+        {
+            margin: 0.4em;
+            color :salmon;
+            font-size:x-large;
+            font-family :Arial, Helvetica, sans-serif;
+           
         }
     </style>
 
@@ -25,14 +34,23 @@
 <body>
     <div id="createRoom">
         <input type="text" id="roomName">
-        <input type="button" value="Create Room" id="createRoom">
+        <input type="button" value="Create Room" id="createRoomButton">
         <div id="infoText"></div>
     </div>
-
+    
     <div id="joinRoom">
-        <table id="rooms">
+        <div id="listRoom">
+        
+            <input type="button" value="Room list" id="refreshList">
+            <table>
+                <tr id="listeRoom">
+                   
+                </tr>
+            </table>
+          
             
-        </table>
+        </div>
+    
     </div>
 </body>
 </html>

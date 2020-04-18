@@ -3,9 +3,29 @@ class JoinRoom
     constructor(joiningManager)
     {
         this.joiningManager = joiningManager;
-    
-        // TODO : init la list des rooms
+        this.refreshList = document.getElementById('refreshList');
+        this.listeRoom = document.getElementById('listeRoom')
+        this.refreshRoomsList();
+        // TODO : Noms des rooms à la place du nombre de room
+        // TODO : Afficher toutes les données dans data
+        
         // TODO : rajouter un evenement sur les rooms de la liste pour les rejoindres
+        this.refreshList.addEventListener('click', () => {
+            this.joiningManager.socket.emit('getRoom');
+            this.joiningManager.socket.on('getRoomresponse', (roomNames) => {
+                let affListe = "";
+                
+                for(let i = 0; i<roomNames.val.length; i++)
+                {
+                 affListe +=  roomNames.val[i] + "<br>";
+                 
+                }
+                this.listeRoom.innerHTML = affListe;
+
+            })
+        })
+    
+       
 
         this.refreshRoomsList();
     }
