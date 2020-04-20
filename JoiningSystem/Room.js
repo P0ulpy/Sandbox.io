@@ -46,6 +46,7 @@ class Room extends EventEmiter
     join(playerConfig = {})
     {
         // TODO : lorsque le joueur na pas de nom lui donner un nom de type gest#'randomNumber'
+        console.log("debug de player" + this.players);
 
         // TODO : verifier si le joueur n'existe pas deja
 

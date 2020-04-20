@@ -13,6 +13,13 @@ class CreateRoom
     
     build()
     {
+        this.roomNameInput.addEventListener("keyup", function(event)
+        {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("createRoomButton").click();
+            }
+        })
         this.createRoomButton.addEventListener('click', () =>
         {
             const roomName = this.roomNameInput.value;

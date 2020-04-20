@@ -53,6 +53,7 @@ class JoiningSystem extends EventEmitter {
         socket.on('createRoom', (config = {}) => {
             // TEMPORAIRE
             // TODO : verifier si la room existe deja
+            
             if (true) {
                 this.rooms[config.name] = new Room({
                     name: config.name,

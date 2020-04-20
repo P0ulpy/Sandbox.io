@@ -9,27 +9,25 @@ class JoinRoom {
         //this.refreshRoomsList();
         //TODO : Faire que la liste soit clickable et bordel faire en sorte que "entrer" permette de créer une room marre de cliquer sur le bouton
         this.refreshList.addEventListener('click', () => {
-            this.joiningManager.socket.emit('getRoom');
-            this.joiningManager.socket.on('getRoomresponse', (data) => {
-                let affListe = "";
-                console.log(data.data[0])
-                for(let i in data.data)
-                {
-                    affListe +=  "<li>"+ "Nom : " +data.data[i].name + " Taille : " + data.data[i].size  +  " Motd : " + data.data[i].motd + "</li>";//"<br><br>";
-                }
-
-                this.listeRoom.innerHTML = affListe;
-
-
-              
-
-            })
+        this.refreshRoomsList();
         })
+    
     }
 
     refreshRoomsList() {
         //TODO : recuperer les rooms et refresh la room list coter client
         //mdr c un test
+        this.joiningManager.socket.emit('getRoom');
+        this.joiningManager.socket.on('getRoomresponse', (data) => {
+            let affListe = "";
+            for(let i in data.data)
+            {
+                affListe +=  '<li>' + "Nom : " +data.data[i].name + " Taille : " + data.data[i].size  +  " Motd : " + data.data[i].motd + "</li>";//"<br><br>";
+            }
+
+            this.listeRoom.innerHTML = affListe;
+        })
+        
 
 
     }
