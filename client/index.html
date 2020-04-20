@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title> > Sandbox.io</title>
 
     <script src="assets/js/vendors/socket.io.js"></script>
     <script type="module" src="assets/js/joiningManager.js"></script>
-    
+
     <!--pour pas ce bruler les yeux quand on dev de nuit-->
     <!--Merci flo d'avoir pensé à ça j'ai rajouté la couleur saumon pck le rouge ca agresse -->
     <style>
-        html 
-        {
+        html {
             background-color: black;
         }
-        #infoText
-        {
+
+        #infoText {
             margin: 0.3em;
             color: salmon;
         }
-        #listeRoom
-        {
+
+        #listeRoom {
             margin: 0.4em;
-            color :salmon;
-            font-size:x-large;
-            font-family :Arial, Helvetica, sans-serif;
-           
+            color: salmon;
+            font-size: x-large;
+            font-family: Arial, Helvetica, sans-serif;
+            list-style-type:none;
+
         }
     </style>
 
@@ -37,20 +38,21 @@
         <input type="button" value="Create Room" id="createRoomButton">
         <div id="infoText"></div>
     </div>
-    
+
     <div id="joinRoom">
         <div id="listRoom">
-        
+
             <input type="button" value="Room list" id="refreshList">
-            <table>
-                <tr id="listeRoom">
-                   
-                </tr>
-            </table>
-          
-            
+
+            <ul id="listeRoom">
+
+            </ul>
+
+
+
         </div>
-    
+
     </div>
 </body>
+
 </html>

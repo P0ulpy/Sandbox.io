@@ -6,6 +6,8 @@ const path = require('path');
 const JoiningSystem = require('./JoiningSystem')
 
 app.use(express.static(path.join(__dirname + '/client')));
+// TODO : On peut pas enlever ce qu'il ya entre commentaire la ?
+
 
 /*
 app.use('/client', express.static(path.join(__dirname + '/client')));

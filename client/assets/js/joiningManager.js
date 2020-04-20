@@ -13,6 +13,8 @@ class JoiningManager
         this.joinRoom = new JoinRoom(this);     // c'est vraiment super con comme concepte
         this.createRoom = new CreateRoom(this);
     }
+
+    
 }
 
 // temporaire a terme joining manager sera integerer au systeme de login

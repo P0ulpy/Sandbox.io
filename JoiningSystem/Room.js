@@ -12,7 +12,7 @@ class Room extends EventEmiter
         console.log('Création de la room', this.name)
 
         this.size = config.size || 5;
-        this.motd = config.motd || `room ${this.name}`;
+        this.motd = config.motd || "Maxime is a hoe";//`${this.name}`;
         this.io = config.io || null;
 
         this.players = {};
