@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="phaser.min.js"></script>
+    <script src="socket.io.js"></script>
+    <script src="sandbox.client.js"></script>
+    <script>
+        const server = "http://localhost:80";
+
+        /*const socket = io.connect(server);
+        socket.on("connect", function(data)
+        {
+            console.log(data);
+        });*/
+
+        const mod1Socket = io.connect(`${server}/001`);
+        mod1Socket.on("connect", function()
+        {
+            mod1Socket.emit("dataFromClient", "yo");
+            mod1Socket.on("dataFromServer", (data) => { console.log("ICI"); });
+        });
+
+        /*const mod2Socket = io.connect(`${server}/myMod2`);
+        mod2Socket.on("connect", function()
+        {
+            mod2Socket.emit("first", "yoyo");
+        })*/
+    </script>
+    <title>First game</title>
+</head>
+<body>
+    
+</body>
+
+</html>
