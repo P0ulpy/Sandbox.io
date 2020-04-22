@@ -15,9 +15,9 @@ class SocketManager
     {
         this.sandbox.loadedMods.forEach((mod, uniqueID) =>
         {
-            console.log(`[+] Listening for mod ${uniqueID}...`);
+            console.log(`[+] Mod ${uniqueID} ready to listen for data...`);
             // 1 namespace par mod
-            this.io.of(`/${uniqueID}`).on("connection", (socket) =>
+            this.io.of(`/${this.sandbox.uniqueID}`).on("connection", (socket) =>
             {
                 console.log(`Socket ${socket.id} connected to mod ${uniqueID}`);
 
@@ -26,8 +26,7 @@ class SocketManager
                 les données qui circulent. */
                 socket.use((packet, next) =>
                 {
-                    const event = packet[0];
-                    const data = packet[1];
+                    const event = packet[0], data = packet[1];
 
                     /* L'évènement "receiveData" est réservé à la réception de données pour les mods */
                     mod.emit("receiveData", event, data);
@@ -42,11 +41,11 @@ class SocketManager
     {
         this.sandbox.loadedMods.forEach((mod, uniqueID) =>
         {
-            console.log(`[+] Setting up sending protocol for mod ${uniqueID}`);
+            console.log(`[+] Mod ${uniqueID} ready to send data...`);
             /* L'évènement "sendData" est réservé à l'envoi de données pour les mods */
             mod.on("sendData", (event, data) =>
             {
-                this.io.of(`/${uniqueID}`).emit(event, data);
+                this.io.of(`/${this.sandbox.uniqueID}`).emit(event, data);
             });
         });
     }

@@ -22,4 +22,4 @@ class MyMod1 extends Sandbox.ServerMod
     }
 }
 
-module.exports = function(config) { return new MyMod1(config); };
+module.exports = MyMod1;

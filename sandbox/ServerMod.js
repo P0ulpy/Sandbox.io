@@ -85,7 +85,7 @@ class ServerMod extends EventEmitter
 
                     modConfig.modPath = modPath;
 
-                    resolve(require(serverModFile)(modConfig));
+                    resolve(new (require(serverModFile))(modConfig));
                 }
             });
         });

@@ -10,23 +10,10 @@ app.use("/client", express.static(path.join(__dirname, "/client")));
 
 server.listen(80);
 
-// new Sandbox()
-// new Sandbox.Environment()
-// new Sandbox.Player()
-// new Sandbox.Item()
-// new Sandbox.UserInterface()
-// a = new Sandbox.Mod()
-// a.client && a.server
+// Plus tard, il faudra mieux gérer ça
+Sandbox.globals.httpServer = server;
+Sandbox.globals.app = app;
 
-const config =
-{
-    updateRate: 1000,
-    httpServer: server,
-    mods: [ "001", "002", "004", "0088" ]
-}
-
-const mySandbox = new Sandbox(config);
-mySandbox.on("update", function()
-{
-
-});
+const promise = Sandbox.instanciateFromDirectory(path.join(__dirname, "sandbox/Sandboxes/001/"));
+let sandbox = null;
+promise.then(sandboxInstance => sandbox = sandboxInstance).catch(console.log);

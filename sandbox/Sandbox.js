@@ -1,6 +1,6 @@
+const path = require("path");
+const fs = require("fs");
 const EventEmitter = require("events").EventEmitter;
-//const Environment = require("./Environment");
-//const GameObject = require("./GameObject");
 const SocketManager = require("./SocketManager");
 const ModParser = require("./ModParser");
 const ServerMod = require("./ServerMod");
@@ -17,9 +17,27 @@ class Sandbox extends EventEmitter
         // Liste des mods à charger, tableau de strings : leurs IDs
         this.mods = config.mods || [];
 
+        this.uniqueID = config.uniqueID;
+
+        this.sandboxPath = config.sandboxPath;
+
+        // Instance de httpServer
+        if (!Sandbox.globals.httpServer)
+        {
+            throw new Error("httpServer global must be defined");
+        }
+        this.httpServer = Sandbox.globals.httpServer;
+
+        // Instance de Express
+        if (!Sandbox.globals.app)
+        {
+            throw new Error("App global must be defined");
+        }
+        this.app = config.app;
+
         const socketConfig = {
             sandbox: this,
-            httpServer: config.httpServer || null
+            httpServer: this.httpServer
         };
         this.socketManager = new SocketManager(socketConfig);
 
@@ -39,11 +57,6 @@ class Sandbox extends EventEmitter
             this.loadedMods = loadedMods;
             console.log(`[+] ${loadedMods.length} mods chargés au total`);
             this.initSocketManager();
-
-            this.loadedMods.forEach((mod) =>
-            {
-                console.log(mod);
-            });
         });
         modParser.parse();
     }
@@ -74,7 +87,36 @@ class Sandbox extends EventEmitter
             this.emit("update");
         }, this.updateRate);
     }
+
+    static instanciateFromDirectory(sandboxPath)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            console.log(`[+] Parsing ${sandboxPath} sandbox directory...`);
+            const sandboxConfigPath = path.join(sandboxPath, "sandboxconfig.json");
+
+            /*
+                Toutes les opérations I/O doivent être asynchrones pour des raisons de performances.
+                Il faut donc utiliser des fonctions asynchrones chaque fois que possible.
+            */
+            fs.readFile(sandboxConfigPath, "utf-8", (err, data) =>
+            {
+                if (err) reject(err);
+                else
+                {
+                    const sandboxConfig = JSON.parse(data);
+                    const sandboxFile = path.join(sandboxPath, sandboxConfig.server || "server");
+
+                    sandboxConfig.sandboxPath = sandboxPath;
+
+                    resolve(new (require(sandboxFile))(sandboxConfig));
+                }
+            });
+        });
+    }
 }
+
+Sandbox.globals = {};
 
 Sandbox.ServerMod = ServerMod;
 Sandbox.ModParser = ModParser;
