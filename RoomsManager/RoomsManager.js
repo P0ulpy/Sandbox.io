@@ -60,6 +60,9 @@ class RoomsManager extends EventEmitter
             {
                 roomsData[room] = this.rooms[room].data;
             }
+            // On laise le tiens flo il fait exactement la même chose que mon code mdr donc ca sert 
+            //à rien que je réecrive ça
+            
 
             socket.emit('getRoomsResponse', roomsData);
         });
