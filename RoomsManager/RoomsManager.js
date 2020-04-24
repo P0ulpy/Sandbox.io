@@ -32,8 +32,17 @@ class RoomsManager extends EventEmitter
         socket.on('createRoom', (config = {}) => 
         {
             // TODO : donner une UID a la room plutot que d'utiliser un nom
+            //J'ai fais un randomizer du roomUID un peu marrant
+            
+            let randomLetter = Math.random().toString(36).substring(7);
+            let randomNumber = Math.floor((Math.random() * 1000) + 1);
+            let uidRandomizer = randomNumber + randomLetter;
+            const UID = uidRandomizer;
+            
+            
+            
 
-            const UID = "1";     // TEMP
+            //const UID = "1";// TEMP
 
             if(!this.rooms[UID])
             {
@@ -56,13 +65,10 @@ class RoomsManager extends EventEmitter
         {
             const roomsData = {};
             
-            for(const room of Object.keys(this.rooms))
+            for(const room in this.rooms)
             {
                 roomsData[room] = this.rooms[room].data;
             }
-            // On laise le tiens flo il fait exactement la même chose que mon code mdr donc ca sert 
-            //à rien que je réecrive ça
-            
 
             socket.emit('getRoomsResponse', roomsData);
         });
