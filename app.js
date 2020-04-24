@@ -19,6 +19,6 @@ SandboxLibrary.setGlobal("modPath", path.join(__dirname, "sandbox/Mods/"));
 
 console.log(Sandbox.getAbsolutePath("001"));
 
-const promise = Sandbox.instanciateFromDirectory(path.join(__dirname, "sandbox/Sandboxes/001"));
+const promise = Sandbox.instanciateFromDirectory(Sandbox.getAbsolutePath("001"));
 let sandbox = null;
 promise.then(sandboxInstance => sandbox = sandboxInstance).catch(console.log);
