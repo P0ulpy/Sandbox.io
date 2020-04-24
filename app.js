@@ -6,6 +6,7 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 
+console.log(__dirname);
 app.use("/client", express.static(path.join(__dirname, "/client")));
 
 server.listen(80);
