@@ -99,7 +99,7 @@ class JoiningManager {
             for (let i in roomsData) {
 
 
-                affListe += '<li><button class="button1" id="' + roomsData[i].UID + '">' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd + "UID debug" + roomsData[i].UID + "</button></li>"; //"<br><br>";
+                affListe += '<li><button class="button1" id="' + roomsData[i].UID + '">' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd + " UID :  " + roomsData[i].UID + "</button></li>"; //"<br><br>";
 
             }
 
@@ -125,11 +125,11 @@ class JoiningManager {
                                 'Connecté',
                                 'tu est connécté à ' + roomsData[attribute].name,
                                 
+                                
                             )
                         }
                     })
-                    //let choice = confirm("Vous voulez vous connecter à  " + attribute);
-
+                    
                 }, false);
             }
 
@@ -152,6 +152,7 @@ class JoiningManager {
                 });
 
                 this.room.on('joinSucces', () => {
+                    
 
                 });
 
@@ -166,6 +167,7 @@ class JoiningManager {
 }
 
 // temporaire a terme joining manager sera integerer au systeme de login
+//on fait comment pour le sytème de login qqun à une idée
 const joiningManager = new JoiningManager();
 
 export default JoiningManager;
