@@ -6,7 +6,7 @@ class JoiningManager {
         this.globalSocket = config.socket || io.connect(this.server);
 
         this.rooms = {};
-        
+
         this.initJoinRoom();
         this.initCreateRoom();
 
@@ -22,8 +22,7 @@ class JoiningManager {
         this.createRoom_info = document.getElementById('createRoom-info');
         this.createRoom_createButton = document.getElementById('createRoom-createButton');
 
-        this.refreshList.addEventListener('click', () => 
-        {
+        this.refreshList.addEventListener('click', () => {
             this.refreshRoomList();
         });
 
@@ -52,10 +51,8 @@ class JoiningManager {
         });
 
         // met la function onCreateRoom comme evenement lorsque le serveur repond a la creation d'une room
-        this.globalSocket.on('createRoomResponse', (response) => 
-        {
-            if (response.success) 
-            {
+        this.globalSocket.on('createRoomResponse', (response) => {
+            if (response.success) {
                 console.log(`Création de la room ${response.roomUID}:${response.roomName} réussie !`)
 
                 // fait rejoindre la room au joueur qui la crée
@@ -73,27 +70,23 @@ class JoiningManager {
 
     // Patie Join Room
 
-    async getRemoteRooms(onResonseCallBack = () => {})
-    {
+    async getRemoteRooms(onResonseCallBack = () => {}) {
         // permet de recupere les "rooms" qui existe coter serveur (elles sont stocke dans this.rooms)
         // (si je met rooms en "" c'est par ce que les rooms que l'on recupere ne sont pas exactement celles coter serveur c'est uniquement ce qu'on veut bien montrer au client) 
-        
+
         this.globalSocket.emit('getRooms');
 
-        this.globalSocket.once('getRoomsResponse', (rooms) => 
-        {
+        this.globalSocket.once('getRoomsResponse', (rooms) => {
             console.log('fetching remote rooms...', rooms);
             this.rooms = rooms;
 
-            if(typeof onResonseCallBack === 'function')
-            {
+            if (typeof onResonseCallBack === 'function') {
                 onResonseCallBack(rooms);
             }
         });
     }
 
-    initJoinRoom() 
-    {
+    initJoinRoom() {
         this.refreshRoomList();
     }
 
@@ -114,40 +107,52 @@ class JoiningManager {
 
             for (let i = 0; i < this.elements.length; i++) {
                 this.elements[i].addEventListener('click', () => {
-                    
+
                     let attribute = this.elements[i].getAttribute("id");
-                   let choice = confirm("Vous voulez vous connecter à  " + attribute);
-                   if(choice === true){this.joinRoom(attribute);}
-                   else{};
-                    
+                    //alert avec choix
+                    Swal.fire({
+                        title: 'Confirmer',
+                        text: "Vous voulez vous connecter à  " + roomsData[attribute].name,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Oui me connecter'
+                    }).then((result) => {
+                        if (result.value) {
+                            this.joinRoom(attribute);
+                            Swal.fire(
+                                'Connecté',
+                                'tu est connécté à ' + roomsData[attribute].name,
+                                
+                            )
+                        }
+                    })
+                    //let choice = confirm("Vous voulez vous connecter à  " + attribute);
+
                 }, false);
             }
 
         });
     }
 
-    joinRoom(UID) 
-    {
-        this.getRemoteRooms((rooms) => 
-        {
-            
+    joinRoom(UID) {
+        this.getRemoteRooms((rooms) => {
+
             // cette verification n'est que coter client elle ne sert qu'a éviter les bugs client 
             // elle n'est pas une preuve que la room existe ou pas il ne faut donc pas si fier coter serveur 
-            if (rooms[UID]) 
-            {
+            if (rooms[UID]) {
                 // TODO : lorsque le joueur na pas de nom recuperer le nom que le serveur lui donne
 
-                this.room = new RoomClient(
-                {
+                this.room = new RoomClient({
                     server: this.server,
                     UID: UID
-                },
-                {
+                }, {
                     name: 'robert'
                 });
 
                 this.room.on('joinSucces', () => {
-                    
+
                 });
 
                 this.room.on('joinError', (error) => {
