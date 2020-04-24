@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# Sandbox.io
-=======
 # Sandbox.io
 
 ## Principe
@@ -26,4 +23,3 @@ Travaillant sur le projet
 - Flex Sans Pretexte
 - Poulpy
 - Diplo
->>>>>>> parent of 2aae01e... push vide repo
