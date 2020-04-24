@@ -80,13 +80,11 @@ class JoiningManager {
         // (si je met rooms en "" c'est par ce que les rooms que l'on recupere ne sont pas exactement celles coter serveur c'est uniquement ce qu'on veut bien montrer au client) 
         this.globalSocket.emit('getRooms');
 
-
-        // TODO : Merge le code de théophile
         this.globalSocket.on('getRoomsResponse', (roomsData) => {
             let affListe = "";
             for (let i in roomsData) {
                 console.log("Nom : " + roomsData[i].name);
-                affListe += '<li>' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].name + " Motd : " + roomsData[i].name + "</li>"; //"<br><br>";
+                affListe += '<li>' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd + "</li>"; //"<br><br>";
             }
             this.listeRoom.innerHTML = affListe;
         })
