@@ -101,7 +101,7 @@ class JoiningManager
                 });
                 this.room.on('joinError', (error) => 
                 {
-
+                    
                 });
             }
             else
