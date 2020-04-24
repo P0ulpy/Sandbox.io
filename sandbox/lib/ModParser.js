@@ -8,7 +8,7 @@ const ModsCollection = require("./ModsCollection");
 
 class ModParser extends EventEmitter
 {
-    constructor(sandbox, modsList, modsPath = "./sandbox/Mods")
+    constructor(sandbox, modsList, modsPath = ModParser.Namespace.getGlobal("modPath"))
     {
         super();
 

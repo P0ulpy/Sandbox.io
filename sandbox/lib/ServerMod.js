@@ -90,6 +90,11 @@ class ServerMod extends EventEmitter
             });
         });
     }
+
+    static getAbsolutePath(serverPath)
+    {
+        return path.join(ModServer.Namespace.getGlobal("modPath"), serverPath);
+    }
 }
 
 module.exports = ServerMod;

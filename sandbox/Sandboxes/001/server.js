@@ -1,4 +1,4 @@
-const Sandbox = require("../../");
+const Sandbox = require("../../lib/").Sandbox;
 
 class MySandbox extends Sandbox
 {

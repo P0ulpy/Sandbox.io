@@ -1,19 +1,23 @@
 const path = require("path");
-const Sandbox = require("./sandbox");
+const SandboxLibrary = require("./sandbox/lib");
+const Sandbox = SandboxLibrary.Sandbox;
 
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-
 
 app.use("/client", express.static(path.join(__dirname, "/client")));
 
 server.listen(80);
 
 // Plus tard, il faudra mieux gérer ça
-Sandbox.globals.httpServer = server;
-Sandbox.globals.app = app;
+SandboxLibrary.setGlobal("httpServer", server);
+SandboxLibrary.setGlobal("app", app);
+SandboxLibrary.setGlobal("sandboxPath", path.join(__dirname, "sandbox/Sandboxes/"));
+SandboxLibrary.setGlobal("modPath", path.join(__dirname, "sandbox/Mods/"));
 
-const promise = Sandbox.instanciateFromDirectory(path.join(__dirname, "sandbox/Sandboxes/001/"));
+console.log(Sandbox.getAbsolutePath("001"));
+
+const promise = Sandbox.instanciateFromDirectory(path.join(__dirname, "sandbox/Sandboxes/001"));
 let sandbox = null;
 promise.then(sandboxInstance => sandbox = sandboxInstance).catch(console.log);

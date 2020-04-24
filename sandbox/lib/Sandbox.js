@@ -1,9 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 const EventEmitter = require("events").EventEmitter;
-const SocketManager = require("./SocketManager");
-const ModParser = require("./ModParser");
-const ServerMod = require("./ServerMod");
 
 class Sandbox extends EventEmitter
 {
@@ -22,24 +19,24 @@ class Sandbox extends EventEmitter
         this.sandboxPath = config.sandboxPath;
 
         // Instance de httpServer
-        if (!Sandbox.globals.httpServer)
+        if (!Sandbox.Namespace.hasGlobal("httpServer"))
         {
             throw new Error("httpServer global must be defined");
         }
-        this.httpServer = Sandbox.globals.httpServer;
+        this.httpServer = Sandbox.Namespace.getGlobal("httpServer");
 
         // Instance de Express
-        if (!Sandbox.globals.app)
+        if (!Sandbox.Namespace.hasGlobal("app"))
         {
             throw new Error("App global must be defined");
         }
-        this.app = config.app;
+        this.app = Sandbox.Namespace.getGlobal("app");
 
         const socketConfig = {
             sandbox: this,
             httpServer: this.httpServer
         };
-        this.socketManager = new SocketManager(socketConfig);
+        this.socketManager = new Sandbox.Namespace.SocketManager(socketConfig);
 
         this.loadMods();
 
@@ -49,7 +46,7 @@ class Sandbox extends EventEmitter
 
     loadMods()
     {
-        const modParser = new ModParser(this, this.mods);
+        const modParser = new Sandbox.Namespace.ModParser(this, this.mods);
         modParser.on("modLoadSuccess", (mod) => { console.log(`[+] Mod ${mod.uniqueID} chargé`); });
         modParser.on("modLoadError", (modID, err) => { console.log(`[-] Mod ${modID} non chargé : ${err.message}`); });
         modParser.on("modLoadFinish", (loadedMods) =>
@@ -114,11 +111,11 @@ class Sandbox extends EventEmitter
             });
         });
     }
+
+    static getAbsolutePath(sandboxPath)
+    {
+        return path.join(Sandbox.Namespace.getGlobal("sandboxPath"), sandboxPath);
+    }
 }
-
-Sandbox.globals = {};
-
-Sandbox.ServerMod = ServerMod;
-Sandbox.ModParser = ModParser;
 
 module.exports = Sandbox;

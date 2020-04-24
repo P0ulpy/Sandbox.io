@@ -1,6 +1,6 @@
-const Sandbox = require("../../");
+const ServerMod = require("../../lib/").ServerMod;
 
-class MyMod1 extends Sandbox.ServerMod
+class MyMod1 extends ServerMod
 {
     constructor(config)
     {
