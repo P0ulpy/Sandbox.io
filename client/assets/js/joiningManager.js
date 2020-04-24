@@ -83,8 +83,8 @@ class JoiningManager {
         this.globalSocket.on('getRoomsResponse', (roomsData) => {
             let affListe = "";
             for (let i in roomsData) {
-                console.log("Nom : " + roomsData[i].name);
-                affListe += '<li>' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd + "</li>"; //"<br><br>";
+               
+                affListe += '<li>' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd  +  "</li>"; //"<br><br>";
             }
             this.listeRoom.innerHTML = affListe;
         })
