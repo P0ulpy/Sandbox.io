@@ -113,7 +113,9 @@ class JoiningManager {
                 this.room.on('joinSucces', () => {
 
                 });
+
                 this.room.on('joinError', (error) => {
+
 
                 });
             } else {
