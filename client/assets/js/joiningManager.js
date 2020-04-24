@@ -14,7 +14,8 @@ class JoiningManager {
 
     // Partie Create Room
 
-    initCreateRoom() {
+    initCreateRoom() 
+    {
         this.elements = document.getElementsByClassName("button1");
         this.refreshList = document.getElementById('refreshList');
         this.listeRoom = document.getElementById('listeRoom')
@@ -79,7 +80,6 @@ class JoiningManager {
         // (si je met rooms en "" c'est par ce que les rooms que l'on recupere ne sont pas exactement celles coter serveur c'est uniquement ce qu'on veut bien montrer au client) 
         
         this.globalSocket.emit('getRooms');
-
         this.globalSocket.once('getRoomsResponse', (rooms) => 
         {
             console.log('fetching remote rooms...', rooms);
@@ -100,27 +100,30 @@ class JoiningManager {
     refreshRoomList() {
         // permet de recupere les "rooms" qui existe coter serveur (elles sont stocke dans this.rooms)
         // (si je met rooms en "" c'est par ce que les rooms que l'on recupere ne sont pas exactement celles coter serveur c'est uniquement ce qu'on veut bien montrer au client) 
-        this.getRemoteRooms((roomsData) => {
+        this.getRemoteRooms((roomsData) => 
+        {
             let affListe = "";
 
-            for (let i in roomsData) {
-
-
+            for (let i in roomsData) 
+            {
                 affListe += '<li><button class="button1" id="' + roomsData[i].UID + '">' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd + "UID debug" + roomsData[i].UID + "</button></li>"; //"<br><br>";
-
             }
 
             this.listeRoom.innerHTML = affListe;
 
-            for (let i = 0; i < this.elements.length; i++) {
-                this.elements[i].addEventListener('click', () => {
-                    
-                    let attribute = this.elements[i].getAttribute("id");
-                   let choice = confirm("Vous voulez vous connecter à  " + attribute);
-                   if(choice === true){this.joinRoom(attribute);}
-                   else{};
-                    
-                }, false);
+            for (let i = 0; i < this.elements.length; i++) 
+            {
+                this.elements[i].addEventListener('click', () => 
+                {
+                    const attribute = this.elements[i].getAttribute("id");
+                    const choice = confirm("Vous voulez vous connecter à  " + attribute);
+
+                    if(choice === true)
+                    {
+                        this.joinRoom(attribute);
+                    }
+
+                });
             }
 
         });
@@ -136,6 +139,11 @@ class JoiningManager {
             if (rooms[UID]) 
             {
                 // TODO : lorsque le joueur na pas de nom recuperer le nom que le serveur lui donne
+
+                if(this.room)
+                {
+                    this.room.socket.connection.end();
+                }
 
                 this.room = new RoomClient(
                 {
