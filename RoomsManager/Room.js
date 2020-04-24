@@ -84,8 +84,6 @@ class Room extends EventEmiter
         const playersCount = Object.keys(this.players).length;
 
         return { name: this.name, size: this.size, playersCount: playersCount, motd: this.motd, UID: this.UID};
-
-
     }
 
     /*get players()

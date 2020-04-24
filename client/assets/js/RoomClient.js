@@ -2,7 +2,7 @@ import EventEmitter from "./vendors/EventEmitter.js"
 
 class RoomClient extends EventEmitter
 {
-    constructor(config = {})
+    constructor(config = {}, playerConfig = {})
     {
         super();
         
