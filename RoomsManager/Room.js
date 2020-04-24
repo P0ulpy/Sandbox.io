@@ -85,11 +85,6 @@ class Room extends EventEmiter
 
         return { name: this.name, size: this.size, playersCount: playersCount, motd: this.motd, UID: this.UID};
     }
-
-    /*get players()
-    {
-        // TODO : voir si ce truc peut etre utile        
-    }*/
 }
 
 module.exports = Room;

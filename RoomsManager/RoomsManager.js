@@ -38,11 +38,6 @@ class RoomsManager extends EventEmitter
             let randomNumber = Math.floor((Math.random() * 1000) + 1);
             let uidRandomizer = randomNumber + randomLetter;
             const UID = uidRandomizer;
-            
-            
-            
-
-            //const UID = "1";// TEMP
 
             if(!this.rooms[UID])
             {
