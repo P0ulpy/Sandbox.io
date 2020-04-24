@@ -6,7 +6,7 @@ class RoomClient extends EventEmitter
     {
         super();
         
-        this.UUID = config.UUID;
+        this.UID = config.UID;
         this.server = config.server || 'http://localhost:25565';
 
         this.initSocketEvents();
@@ -16,8 +16,8 @@ class RoomClient extends EventEmitter
 
     initSocketEvents()
     {
-        console.log(`Tentative de connection a la room ${this.UUID}`);
-        this.socket = io.connect(`${this.server}/${this.UUID}`);
+        console.log(`Tentative de connection a la room ${this.UID}`);
+        this.socket = io.connect(`${this.server}/${this.UID}`);
 
         this.socket.on('joinResponse', (response) => 
         {
@@ -27,7 +27,7 @@ class RoomClient extends EventEmitter
                 response.playerName;
                 this.name = response.roomName;
 
-                console.log(`Connection a la room ${response.roomUUID}:${response.roomName} réussie !`);
+                console.log(`Connection a la room ${response.roomUID}:${response.roomName} réussie !`);
 
                 this.emit('joinSucces', this);
 
@@ -35,7 +35,7 @@ class RoomClient extends EventEmitter
             }
             else
             {
-                console.warn(`Echec de la connection a la room ${this.UUID} : ${response.error}`);
+                console.warn(`Echec de la connection a la room ${this.UID} : ${response.error}`);
                 this.emit('joinError', error, this);
             }
         });

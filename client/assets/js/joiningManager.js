@@ -42,11 +42,11 @@ class JoiningManager
         {
             if(response.success)
             {
-                console.log(`Création de la room ${response.roomUUID}:${response.roomName} réussie !`)
+                console.log(`Création de la room ${response.roomUID}:${response.roomName} réussie !`)
 
                 // fait rejoindre la room au joueur qui la crée
                 
-                this.joinRoom(response.roomUUID);
+                this.joinRoom(response.roomUID);
 
                 this.createRoom_info.innerHTML = '';
                 this.createRoom_name.value = '';
@@ -80,7 +80,7 @@ class JoiningManager
         // TODO : Merge le code de théophile
     }
 
-    joinRoom(UUID)
+    joinRoom(UID)
     {
         // re synchronise les rooms avec celles coter serveur
         this.globalSocket.emit('getRooms');
@@ -89,11 +89,11 @@ class JoiningManager
         {
             // cette verification n'est que coter client elle ne sert qu'a éviter les bugs client 
             // elle n'est pas une preuve que la room existe ou pas il ne faut donc pas si fier coter serveur 
-            if(rooms[UUID])
+            if(rooms[UID])
             {
                 // TODO : lorsque le joueur na pas de nom recuperer le nom que le serveur lui donne
 
-                this.room = new RoomClient({server: this.server, UUID: UUID});
+                this.room = new RoomClient({server: this.server, UID: UID});
                 
                 this.room.on('joinSucces', () => 
                 {
@@ -106,7 +106,7 @@ class JoiningManager
             }
             else
             {
-                console.warn(`La room ${UUID} n'existe pas`);
+                console.warn(`La room ${UID} n'existe pas`);
             }
         });
     }

@@ -31,24 +31,24 @@ class RoomsManager extends EventEmitter
 
         socket.on('createRoom', (config = {}) => 
         {
-            // TODO : donner une UUID a la room plutot que d'utiliser un nom
+            // TODO : donner une UID a la room plutot que d'utiliser un nom
 
-            const UUID = "1";     // TEMP
+            const UID = "1";     // TEMP
 
-            if(!this.rooms[UUID])
+            if(!this.rooms[UID])
             {
-                this.rooms[UUID] = new Room({name: config.name, io: this.io, UUID:UUID});
+                this.rooms[UID] = new Room({name: config.name, io: this.io, UID:UID});
 
                 socket.emit('createRoomResponse', 
                 {
                     success: true, 
-                    roomUUID: this.rooms[UUID].UUID, 
-                    roomName: this.rooms[UUID].name
+                    roomUID: this.rooms[UID].UID, 
+                    roomName: this.rooms[UID].name
                 });
             }
             else
             {
-                socket.emit('createRoomResponse', {success: false, roomName: config.name, errorMessage: "UUID is not unique !!! (big bobo)"});
+                socket.emit('createRoomResponse', {success: false, roomName: config.name, errorMessage: "UID is not unique !!! (big bobo)"});
             }
         });
 
