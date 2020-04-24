@@ -32,11 +32,10 @@ class JoiningSystem extends EventEmitter {
            
         
             for (var i in this.rooms) {
-              
+             
                data.push({name : this.rooms[i].name, size :this.rooms[i].size, motd : this.rooms[i].motd })
-               //console.log(this.rooms[i].size, this.rooms[i].name, this.rooms[i].motd);
-
-               //Renvoie le nom de la room correspondant à la clé dans le tableau roomNames
+               //console.log(this.rooms[i].data)
+               
             }
             console.log(data[0].name);
 
