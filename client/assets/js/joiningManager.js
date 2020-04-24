@@ -100,8 +100,7 @@ class JoiningManager {
     refreshRoomList() {
         // permet de recupere les "rooms" qui existe coter serveur (elles sont stocke dans this.rooms)
         // (si je met rooms en "" c'est par ce que les rooms que l'on recupere ne sont pas exactement celles coter serveur c'est uniquement ce qu'on veut bien montrer au client) 
-        this.globalSocket.emit('getRooms');
-        this.globalSocket.on('getRoomsResponse', (roomsData) => {
+        this.getRemoteRooms((roomsData) => {
             let affListe = "";
 
             for (let i in roomsData) {
@@ -124,12 +123,11 @@ class JoiningManager {
                 }, false);
             }
 
-        })
+        });
     }
 
     joinRoom(UID) 
     {
-
         this.getRemoteRooms((rooms) => 
         {
             
