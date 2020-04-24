@@ -13,13 +13,12 @@ class JoiningManager {
     // Partie Create Room
 
     initCreateRoom() {
-
+        this.elements = document.getElementsByClassName("button1");
         this.refreshList = document.getElementById('refreshList');
         this.listeRoom = document.getElementById('listeRoom')
         this.createRoom_name = document.getElementById('createRoom-name');
         this.createRoom_info = document.getElementById('createRoom-info');
         this.createRoom_createButton = document.getElementById('createRoom-createButton');
-
         this.refreshList.addEventListener('click', () => {
             this.refreshRoomList();
         });
@@ -79,18 +78,39 @@ class JoiningManager {
         // permet de recupere les "rooms" qui existe coter serveur (elles sont stocke dans this.rooms)
         // (si je met rooms en "" c'est par ce que les rooms que l'on recupere ne sont pas exactement celles coter serveur c'est uniquement ce qu'on veut bien montrer au client) 
         this.globalSocket.emit('getRooms');
-
         this.globalSocket.on('getRoomsResponse', (roomsData) => {
             let affListe = "";
-            for (let i in roomsData) {
-               
-                affListe += '<li><button class="button1" id="'+ roomsData[i].UID + '">' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd  +  "UID debug" + roomsData[i].UID +"</button></li>"; //"<br><br>";
-                
-            }
-            this.listeRoom.innerHTML = affListe;
-        })
 
+            for (let i in roomsData) {
+
+
+                affListe += '<li><button class="button1" id="' + roomsData[i].UID + '">' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd + "UID debug" + roomsData[i].UID + "</button></li>"; //"<br><br>";
+
+            }
+
+            this.listeRoom.innerHTML = affListe;
+
+            for (let i = 0; i < this.elements.length; i++) {
+                this.elements[i].addEventListener('click', () => {
+                    
+                    let attribute = this.elements[i].getAttribute("id");
+                   let choice = confirm("Vous voulez vous connecter à  " + attribute);
+                   if(choice === true){this.joinRoom(attribute);}
+                   else{};
+                    
+                }, false);
+            }
+
+        })
     }
+
+    getRoomButtonUID() {
+
+
+
+    };
+
+
 
 
 
