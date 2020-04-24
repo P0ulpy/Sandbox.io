@@ -84,7 +84,8 @@ class JoiningManager {
             let affListe = "";
             for (let i in roomsData) {
                
-                affListe += '<li>' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd  +  "</li>"; //"<br><br>";
+                affListe += '<li><button class="button1" id="'+ roomsData[i].UID + '">' + "Nom : " + roomsData[i].name + " Taille : " + roomsData[i].size + " Motd : " + roomsData[i].motd  +  "UID debug" + roomsData[i].UID +"</button></li>"; //"<br><br>";
+                
             }
             this.listeRoom.innerHTML = affListe;
         })
