@@ -9,7 +9,6 @@ class JoiningManager {
         
         this.initJoinRoom();
         this.initCreateRoom();
-
     }
 
     // Partie Create Room
@@ -74,7 +73,7 @@ class JoiningManager {
 
     // Patie Join Room
 
-    async getRemoteRooms(onResonseCallBack = () => {})
+    getRemoteRooms(onResonseCallBack = () => {})
     {
         // permet de recupere les "rooms" qui existe coter serveur (elles sont stocke dans this.rooms)
         // (si je met rooms en "" c'est par ce que les rooms que l'on recupere ne sont pas exactement celles coter serveur c'est uniquement ce qu'on veut bien montrer au client) 
@@ -142,7 +141,7 @@ class JoiningManager {
 
                 if(this.room)
                 {
-                    this.room.socket.connection.end();
+                    //this.room.socket.connection.end();
                 }
 
                 this.room = new RoomClient(
@@ -161,6 +160,7 @@ class JoiningManager {
                 this.room.on('joinError', (error) => {
 
                 });
+                
             } else {
                 console.warn(`La room ${UID} n'existe pas`);
             }
