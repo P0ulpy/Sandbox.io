@@ -54,36 +54,49 @@ class Room extends EventEmiter
 
     join(clientData = {})
     {
-        if(clientData.socket)
+        if(this.clientsCount + 1 >= this.size)
         {
-            // TODO : verifier si il y a de la place dans la room (avec Room.clients)
-            // TODO : verifier si le joueur n'existe pas deja
-
-            this.clients[clientData.socket.id] = new Client(clientData);
-
-            console.log(`[${this.UID}:${this.name}] [+] Le joueur [${this.clients[clientData.socket.id].name}] a rejoin la room`);
-            this.emit('clientConnect', this.clients[clientData.socket.id], this); 
-
             clientData.socket.emit('joinResponse', 
             {
-                success: true, 
-                roomName: this.name, 
-                roomUID: this.UID, 
-                clientName: this.clients[clientData.socket.id].name
+                success: false, 
+                error: "room is full"
             });
+
+            clientData.socket.close();
+            return;
         }
         else
         {
-            console.log(`${clientData.name} ne peut pas rejoindre la room ${this.UID}:${this.name} : invalid socket`);
-            clientData.socket.close();
+            if(!this.clients[clientData.socket.id])
+            {
+                this.clients[clientData.socket.id] = new Client(clientData);
+            
+                console.log(`[${this.UID}:${this.name}] [+] Le joueur [${this.clients[clientData.socket.id].name}] a rejoin la room`);
+                this.emit('clientConnect', this.clients[clientData.socket.id], this); 
+                
+                clientData.socket.emit('joinResponse',
+                {
+                    success: true,
+                    roomName: this.name,
+                    roomUID: this.UID,
+                    clientName: this.clients[clientData.socket.id].name
+                });
+            }
+            else
+            {
+                console.log(`[${this.UID}:${this.name}] [/!\] le client [${clientData.socket.id}] existe deja`);
+            }
         }
     }
 
     get data()
     {
-        const clientsCount = Object.keys(this.clients).length;
+        return { name: this.name, size: this.size, clientsCount: this.clientsCount, motd: this.motd, UID: this.UID};
+    }
 
-        return { name: this.name, size: this.size, clientsCount: clientsCount, motd: this.motd, UID: this.UID};
+    get clientsCount()
+    {
+        return Object.keys(this.clients).length;
     }
 }
 

@@ -8,9 +8,8 @@ class Client extends EventEmitter
 
         if(!config.socket) console.log("invalid arguments : socket is undefined");
 
-        // TODO : lorsque le joueur na pas de nom lui donner un nom de type gest#UID
-        this.name = config.name || 'unamedPlayer';
         this.socket = config.socket;
+        this.name = config.name.replace(/[^a-z0-9]/gi,'') || `player#${this.socket.id}`;
     
         this.initSocketEvents();
     }

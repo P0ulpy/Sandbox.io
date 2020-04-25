@@ -38,6 +38,8 @@ class RoomsManager extends EventEmitter
             let randomNumber = Math.floor((Math.random() * 1000) + 1);
             let uidRandomizer = randomNumber + randomLetter;
             const UID = uidRandomizer;
+            
+            // TODO : faire un generateur d'UID vraiment unique et le mettre en global
 
             if(!this.rooms[UID])
             {
