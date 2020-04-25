@@ -43,12 +43,12 @@ class Sandbox extends LibraryComponent
     loadMods()
     {
         const modParser = new this.constructors.ModParser(this, this.mods);
-        modParser.on("modLoadSuccess", (mod) => { console.log(`[+] Mod ${mod.uniqueID} chargé`); });
-        modParser.on("modLoadError", (modID, err) => { console.log(`[-] Mod ${modID} non chargé : ${err.message}`); });
+        modParser.on("modLoadSuccess", (mod) => { this.debug("note", `Mod ${mod.uniqueID} chargé`); });
+        modParser.on("modLoadError", (modID, err) => { this.debug("error", `Mod ${modID} non chargé : ${err.message}`); });
         modParser.on("modLoadFinish", (loadedMods) =>
         {
             this.loadedMods = loadedMods;
-            console.log(`[+] ${loadedMods.length} mods chargés au total`);
+            this.debug("note", `${loadedMods.length} mods chargés au total`);
             this.initSocketManager();
         });
         modParser.parse();
@@ -85,7 +85,7 @@ class Sandbox extends LibraryComponent
     {
         return new Promise((resolve, reject) =>
         {
-            console.log(`[+] Parsing ${sandboxPath} sandbox directory...`);
+            LibraryComponent.debug("note", `Parsing ${sandboxPath} sandbox directory...`)
             const sandboxConfigPath = path.join(sandboxPath, "sandboxconfig.json");
 
             /*
@@ -108,9 +108,9 @@ class Sandbox extends LibraryComponent
         });
     }
 
-    static getAbsolutePath(sandboxPath)
+    static getAbsolutePath(sandboxFolder)
     {
-        return path.join(LibraryComponent.Namespace.globals.get("sandboxPath"), sandboxPath);
+        return path.join(LibraryComponent.Namespace.globals.get("sandboxPath"), sandboxFolder);
     }
 }
 

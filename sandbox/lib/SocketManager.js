@@ -15,11 +15,11 @@ class SocketManager extends LibraryComponent
     {
         this.sandbox.loadedMods.forEach((mod, uniqueID) =>
         {
-            console.log(`[+] Mod ${uniqueID} ready to listen for data...`);
-            // 1 namespace par mod
+            this.debug("note", `Mod ${uniqueID} ready to listen for data...`)
+            // 1 namespace par sandbox
             this.io.on("connection", (socket) =>
             {
-                console.log(`Socket ${socket.id} connected to mod ${uniqueID}`);
+                this.debug("log", `Socket ${socket.id} connected to mod ${uniqueID}`);
 
                 /* Middleware à partir duquel on va récupérer tous les paquets entrants associés à ce mod,
                 puis on va envoyer les informations à ce mod. Le mod n'interagit donc pas directement avec
@@ -41,7 +41,7 @@ class SocketManager extends LibraryComponent
     {
         this.sandbox.loadedMods.forEach((mod, uniqueID) =>
         {
-            console.log(`[+] Mod ${uniqueID} ready to send data...`);
+            this.debug("note", `Mod ${uniqueID} ready to send data...`);
             /* L'évènement "sendData" est réservé à l'envoi de données pour les mods */
             mod.on("sendData", (event, data) =>
             {

@@ -11,6 +11,16 @@ const UIDManager = SandboxLibrary.constructors.UIDManager;
 const app = express();
 const server = http.createServer(app);
 
+/*
+Alerte !!!! Je pense que le mieux à terme serait d'avoir aucune classe statique
+ni de méthode statique car c'est pas ouf pour la compatibilité notamment avec le this sur lequel
+est basé ma ptite classe LibraryComponent.
+Tout ce qui pourrait être classe statique (unique) genre SandboxContainer par exemple,
+le mieux serait d'en instancier 1 et 1 seul et de le mettre dans l'espace global de la library.
+Ca faciliterait grandement le développement et en + c'est cool car dans Symfony5 ça marche
+un peu comme ça mais bon vous coco pas donc
+*/
+
 // Déplacer tout ça dans un endroit adapté : config.js ou init.js
 SandboxLibrary.globals.set("httpServer", server);
 SandboxLibrary.globals.set("app", app);
@@ -19,7 +29,14 @@ SandboxLibrary.globals.set("sandboxPath", path.join(__dirname, "sandbox/Sandboxe
 SandboxLibrary.globals.set("modPath", path.join(__dirname, "sandbox/Mods/"));
 SandboxLibrary.globals.set("registeredSandboxes", new SandboxContainer());
 SandboxLibrary.globals.set("UIDManager", new UIDManager());
-SandboxLibrary.globals.set("debugLevel", 1);
+SandboxLibrary.globals.set("debugLevel", "note");
+
+
+/*const LibraryComponent = require("./sandbox/lib/LibraryComponent");
+LibraryComponent.debug("note", 1);
+LibraryComponent.debug("log", 2);
+LibraryComponent.debug("warning", 3);
+LibraryComponent.debug("error", 4);*/
 
 app.use("/client", express.static(path.join(__dirname, "/client")));
 
@@ -46,7 +63,7 @@ SandboxLibrary.globals.get("UIDManager")
 .create("sandbox", basicIterator, checkValidity, { lastValue: 0 })
 .create("mod", basicIterator, checkValidity, { lastValue: 0 });
 
-const test = SandboxLibrary.globals.get("UIDManager").get("sandbox");
+/*const test = SandboxLibrary.globals.get("UIDManager").get("sandbox");
 
 console.log(test.nextValue());
 console.log(test.nextValue());
@@ -54,8 +71,10 @@ console.log(test.nextValue());
 
 console.log(test.isValid("056"));
 
-console.log(Sandbox.getAbsolutePath("001"));
+console.log(Sandbox.getAbsolutePath("001"));*/
 
 const promise = Sandbox.instanciateFromDirectory(Sandbox.getAbsolutePath("001"));
 let sandbox = null;
 promise.then(sandboxInstance => sandbox = sandboxInstance).catch(console.log);
+
+//Sandbox.instanciateFromDirectory(Sandbox.getAbsolutePath("002"));

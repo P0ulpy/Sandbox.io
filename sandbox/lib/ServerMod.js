@@ -1,8 +1,8 @@
 const path = require("path");
 const fs = require("fs");
-const EventEmitter = require("events").EventEmitter;
+const LibraryComponent = require("./LibraryComponent");
 
-class ServerMod extends EventEmitter
+class ServerMod extends LibraryComponent
 {
     constructor(config = {})
     {
@@ -62,7 +62,7 @@ class ServerMod extends EventEmitter
     {
         return new Promise((resolve, reject) =>
         {
-            console.log(`[+] Parsing ${modPath} mod directory...`);
+            this.debug("note", `Parsing ${modPath} mod directory...`)
             const modConfigPath = path.join(modPath, "modconfig.json");
 
             /*
@@ -85,9 +85,9 @@ class ServerMod extends EventEmitter
         });
     }
 
-    static getAbsolutePath(serverPath)
+    static getAbsolutePath(modFolder)
     {
-        return path.join(ModServer.Namespace.getGlobal("modPath"), serverPath);
+        return path.join(LibraryComponent.Namespace.globals.get("modPath"), modFolder);
     }
 }
 

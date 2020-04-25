@@ -12,13 +12,26 @@ class LibraryComponent extends EventEmitter
         this.constructors = LibraryComponent.Namespace.constructors;
     }
 
-    debug(mod, ...args)
+    debug(level, ...args)
     {
-        const debugMods = [ "note", "warning", "error" ];
+        const debugMods = [ "note", "log" ,"warning", "error" ], notations = [ "+", "~", "!", "-" ];
+        const debugIndex = debugMods.indexOf(level);
 
-        if (debugMods.indexOf(mod) >= this.getGlobal("debugLevel"))
+        if (debugIndex >= debugMods.indexOf(this.globals.get("debugLevel")))
         {
-            console.log(...args);
+            console.log(`[${notations[debugIndex]}]`, ...args);
+        }
+    }
+
+    // Version statique : pas ouf comme code, en attente d'une solution meilleure
+    static debug(level, ...args)
+    {
+        const debugMods = [ "note", "log", "warning", "error" ], notations = [ "+", "~", "!", "-" ];
+        const debugIndex = debugMods.indexOf(level);
+
+        if (debugIndex >= debugMods.indexOf(LibraryComponent.Namespace.globals.get("debugLevel")))
+        {
+            console.log(`[${notations[debugIndex]}]`, ...args);
         }
     }
 }
