@@ -1,3 +1,10 @@
+const Sandbox = require("./Sandbox");
+const ServerMod = require("./ServerMod");
+const ModParser = require("./ModParser");
+const SocketManager = require("./SocketManager");
+const SandboxContainer = require("./SandboxContainer");
+const UIDManager = require("./UIDManager");
+
 const SandboxNamespace =
 {
     globals: new Map(),
@@ -15,12 +22,6 @@ const SandboxNamespace =
     }
 };
 
-const Sandbox = require("./Sandbox");
-const ServerMod = require("./ServerMod");
-const ModParser = require("./ModParser");
-//const SandboxParser = require("./SandboxParser");
-const SocketManager = require("./SocketManager");
-
 SandboxNamespace.Sandbox = Sandbox;
 Sandbox.Namespace = SandboxNamespace;
 
@@ -32,5 +33,11 @@ ModParser.Namespace = SandboxNamespace;
 
 SandboxNamespace.SocketManager = SocketManager;
 SocketManager.Namespace = SandboxNamespace;
+
+SandboxNamespace.SandboxContainer = SandboxContainer;
+SandboxContainer.Namespace = SandboxNamespace;
+
+SandboxNamespace.UIDManager = UIDManager;
+UIDManager.Namespace = SandboxNamespace;
 
 module.exports = SandboxNamespace;

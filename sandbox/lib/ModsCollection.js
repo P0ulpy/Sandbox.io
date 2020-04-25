@@ -13,14 +13,12 @@ class ModsCollection
     add(mod)
     {
         this.mods.set(mod.uniqueID, mod);
+        return this;
     }
 
     forEach(callback)
     {
-        this.mods.forEach((mod, uniqueID) =>
-        {
-            callback(mod, uniqueID);
-        });
+        this.mods.forEach((mod, uniqueID) => callback(mod, uniqueID));
     }
 
     to(...targetsIDs)
