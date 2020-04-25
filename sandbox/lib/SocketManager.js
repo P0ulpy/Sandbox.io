@@ -1,13 +1,14 @@
-//const LibraryComponent = require("./LibraryComponent");
+const LibraryComponent = require("./LibraryComponent");
 
 // Ici seront gérées toutes les données qui transitent entre les clients et le serveur
-class SocketManager
+class SocketManager extends LibraryComponent
 {
-    constructor(config)
+    constructor(sandbox)
     {
-        this.sandbox = config.sandbox;
+        super();
+        this.sandbox = sandbox;
 
-        this.io = SocketManager.Namespace.getGlobal("socketIO").of(`/${this.sandbox.uniqueID}`);
+        this.io = this.globals.get("socketIO").of(`/${this.sandbox.uniqueID}`);
     }
 
     initModsListener()

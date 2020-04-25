@@ -4,17 +4,22 @@ const EventEmitter = require("events").EventEmitter;
 
 class LibraryComponent extends EventEmitter
 {
-    getGlobal(key)
+    constructor()
     {
-        return LibraryComponent.Namespace.getGlobal(key);
+        super();
+
+        this.globals = LibraryComponent.Namespace.globals;
+        this.constructors = LibraryComponent.Namespace.constructors;
     }
 
-    // mod = [ "note", "warning", "error" ]
     debug(mod, ...args)
     {
-        // const debugLevel = this.getGlobal("debugLevel");
-        // if (debugLevel === 1) ...
-        console.log(...args);
+        const debugMods = [ "note", "warning", "error" ];
+
+        if (debugMods.indexOf(mod) >= this.getGlobal("debugLevel"))
+        {
+            console.log(...args);
+        }
     }
 }
 

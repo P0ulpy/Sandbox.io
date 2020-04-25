@@ -1,4 +1,4 @@
-const ServerMod = require("../../lib/").ServerMod;
+const ServerMod = require("../../lib/").constructors.ServerMod;
 
 class MyMod1 extends ServerMod
 {

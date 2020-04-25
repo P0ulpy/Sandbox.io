@@ -1,14 +1,12 @@
-const ServerMod = require("./ServerMod");
 const path = require("path");
 // Pollyfill de Promise.allSettled() qui n'est pas encore disponible sur Node.JS
 const allSettled = require("promise.allsettled");
-const EventEmitter = require("events").EventEmitter;
 const ModsCollection = require("./ModsCollection");
+const LibraryComponent = require("./LibraryComponent");
 
-
-class ModParser extends EventEmitter
+class ModParser extends LibraryComponent
 {
-    constructor(sandbox, modsList, modsPath = ModParser.Namespace.getGlobal("modPath"))
+    constructor(sandbox, modsList)
     {
         super();
 
@@ -18,7 +16,7 @@ class ModParser extends EventEmitter
 
         // Suppression des doublons
         this.modsList = Array.from(new Set(modsList));
-        this.modsPath = modsPath;
+        this.modsPath = this.globals.get("modPath");
     }
 
     parse()
@@ -32,12 +30,12 @@ class ModParser extends EventEmitter
         this.modsList.forEach((modID) =>
         {
             // On regarde si l'ID est valide
-            if (ModParser.Namespace.getGlobal("UIDManager").get("mod").isValid(modID))
+            if (this.globals.get("UIDManager").get("mod").isValid(modID))
             {
                 const modPath = path.join(modsPath, modID);
 
                 // Instanciation du mode et ajout à la liste des mods chargés
-                const promise = ServerMod.instanciateFromDirectory(modPath);
+                const promise = this.constructors.ServerMod.instanciateFromDirectory(modPath);
                 pendingPromises.push(promise);
 
                 promise.then(modInstance =>

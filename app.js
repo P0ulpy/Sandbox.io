@@ -4,23 +4,22 @@ const express = require("express");
 const http = require("http");
 
 const SandboxLibrary = require("./sandbox/lib");
-const Sandbox = SandboxLibrary.Sandbox;
-const SandboxContainer = SandboxLibrary.SandboxContainer;
-const UIDManager = SandboxLibrary.UIDManager;
+const Sandbox = SandboxLibrary.constructors.Sandbox;
+const SandboxContainer = SandboxLibrary.constructors.SandboxContainer;
+const UIDManager = SandboxLibrary.constructors.UIDManager;
 
 const app = express();
 const server = http.createServer(app);
 
 // Déplacer tout ça dans un endroit adapté : config.js ou init.js
-SandboxLibrary.setGlobal("httpServer", server);
-SandboxLibrary.setGlobal("app", app);
-SandboxLibrary.setGlobal("socketIO", socket(server));
-SandboxLibrary.setGlobal("sandboxPath", path.join(__dirname, "sandbox/Sandboxes/"));
-SandboxLibrary.setGlobal("modPath", path.join(__dirname, "sandbox/Mods/"));
-SandboxLibrary.setGlobal("registeredSandboxes", new SandboxContainer());
-SandboxLibrary.setGlobal("UIDManager", new UIDManager());
-SandboxLibrary.setGlobal("debugLevel", 1);
-
+SandboxLibrary.globals.set("httpServer", server);
+SandboxLibrary.globals.set("app", app);
+SandboxLibrary.globals.set("socketIO", socket(server));
+SandboxLibrary.globals.set("sandboxPath", path.join(__dirname, "sandbox/Sandboxes/"));
+SandboxLibrary.globals.set("modPath", path.join(__dirname, "sandbox/Mods/"));
+SandboxLibrary.globals.set("registeredSandboxes", new SandboxContainer());
+SandboxLibrary.globals.set("UIDManager", new UIDManager());
+SandboxLibrary.globals.set("debugLevel", 1);
 
 app.use("/client", express.static(path.join(__dirname, "/client")));
 
@@ -43,11 +42,11 @@ function checkValidity(uniqueID)
 }
 
 // Création de générateurs d'UID : 1 pour les sandboxes, 1 pour les mods
-SandboxLibrary.getGlobal("UIDManager")
+SandboxLibrary.globals.get("UIDManager")
 .create("sandbox", basicIterator, checkValidity, { lastValue: 0 })
 .create("mod", basicIterator, checkValidity, { lastValue: 0 });
 
-const test = SandboxLibrary.getGlobal("UIDManager").get("sandbox");
+const test = SandboxLibrary.globals.get("UIDManager").get("sandbox");
 
 console.log(test.nextValue());
 console.log(test.nextValue());

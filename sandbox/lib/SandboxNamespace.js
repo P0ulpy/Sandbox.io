@@ -4,22 +4,27 @@ const ModParser = require("./ModParser");
 const SocketManager = require("./SocketManager");
 const SandboxContainer = require("./SandboxContainer");
 const UIDManager = require("./UIDManager");
+const LibraryComponent = require("./LibraryComponent");
 
 const SandboxNamespace =
 {
-    globals: new Map(),
-    hasGlobal(key)
+    globals:
     {
-        return this.globals.has(key);
+        data: new Map(),
+        has(key)
+        {
+            return this.data.has(key);
+        },
+        set(key, value)
+        {
+            return this.data.set(key, value);
+        },
+        get(key)
+        {
+            return this.data.get(key);
+        }
     },
-    setGlobal(key, value)
-    {
-        return this.globals.set(key, value);
-    },
-    getGlobal(key)
-    {
-        return this.globals.get(key);
-    }
+    constructors: {}
 };
 
 /*const LibraryComponent = require("./LibraryComponent");
@@ -36,22 +41,22 @@ SocketManager.Namespace = SandboxNamespace;
 SandboxNamespace.SocketManager = SocketManager;
 */
 
-SandboxNamespace.Sandbox = Sandbox;
+LibraryComponent.Namespace = SandboxNamespace;
+
+SandboxNamespace.constructors.Sandbox = Sandbox;
 Sandbox.Namespace = SandboxNamespace;
 
-SandboxNamespace.ServerMod = ServerMod;
+SandboxNamespace.constructors.ServerMod = ServerMod;
 ServerMod.Namespace = SandboxNamespace;
 
-SandboxNamespace.ModParser = ModParser;
+SandboxNamespace.constructors.ModParser = ModParser;
 ModParser.Namespace = SandboxNamespace;
 
-SandboxNamespace.SocketManager = SocketManager;
-SocketManager.Namespace = SandboxNamespace;
+SandboxNamespace.constructors.SocketManager = SocketManager;
 
-SandboxNamespace.SandboxContainer = SandboxContainer;
+SandboxNamespace.constructors.SandboxContainer = SandboxContainer;
 SandboxContainer.Namespace = SandboxNamespace;
 
-SandboxNamespace.UIDManager = UIDManager;
-UIDManager.Namespace = SandboxNamespace;
+SandboxNamespace.constructors.UIDManager = UIDManager;
 
 module.exports = SandboxNamespace;

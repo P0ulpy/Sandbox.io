@@ -1,8 +1,8 @@
 const path = require("path");
 const fs = require("fs");
-const EventEmitter = require("events").EventEmitter;
+const LibraryComponent = require("./LibraryComponent");
 
-class Sandbox extends EventEmitter
+class Sandbox extends LibraryComponent
 {
     constructor(config = {})
     {
@@ -19,24 +19,20 @@ class Sandbox extends EventEmitter
         this.sandboxPath = config.sandboxPath;
 
         // Instance de httpServer
-        if (!Sandbox.Namespace.hasGlobal("httpServer"))
+        if (!this.globals.has("httpServer"))
         {
             throw new Error("httpServer global must be defined");
         }
-        this.httpServer = Sandbox.Namespace.getGlobal("httpServer");
+        this.httpServer = this.globals.get("httpServer");
 
         // Instance de Express
-        if (!Sandbox.Namespace.hasGlobal("app"))
+        if (!this.globals.has("app"))
         {
             throw new Error("App global must be defined");
         }
-        this.app = Sandbox.Namespace.getGlobal("app");
+        this.app = this.globals.get("app");
 
-        const socketConfig = {
-            sandbox: this,
-            httpServer: this.httpServer
-        };
-        this.socketManager = new Sandbox.Namespace.SocketManager(socketConfig);
+        this.socketManager = new this.constructors.SocketManager(this);
 
         this.loadMods();
 
@@ -46,7 +42,7 @@ class Sandbox extends EventEmitter
 
     loadMods()
     {
-        const modParser = new Sandbox.Namespace.ModParser(this, this.mods);
+        const modParser = new this.constructors.ModParser(this, this.mods);
         modParser.on("modLoadSuccess", (mod) => { console.log(`[+] Mod ${mod.uniqueID} chargé`); });
         modParser.on("modLoadError", (modID, err) => { console.log(`[-] Mod ${modID} non chargé : ${err.message}`); });
         modParser.on("modLoadFinish", (loadedMods) =>
@@ -114,7 +110,7 @@ class Sandbox extends EventEmitter
 
     static getAbsolutePath(sandboxPath)
     {
-        return path.join(Sandbox.Namespace.getGlobal("sandboxPath"), sandboxPath);
+        return path.join(LibraryComponent.Namespace.globals.get("sandboxPath"), sandboxPath);
     }
 }
 
