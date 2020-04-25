@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <title> > Sandbox.io</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="assets/css/joining.css">
+    <script src="assets/js/vendors/socket.io.js"></script>
+    <script type="module" src="assets/js/joiningManager.js"></script>
+</head>
+
+<body>
+    <h1>Sandbox.io</h1>
+
+    <div id="createRoom">
+        <input type="text" id="createRoom-name">
+        <input type="button" value="Create Room" class="button" id="createRoom-createButton">
+        <div id="createRoom-info"></div>
+    </div>
+
+    <div id="joinRoom">
+        <input type="button" value="Refresh List" class="button" id="joinRoom-refreshList">
+        <div id="joinRoom-list">
+            
+        </div>
+    </div>
+</body>
+
+</html>

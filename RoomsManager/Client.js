@@ -1,6 +1,6 @@
 const EventEmitter = require('events').EventEmitter;
 
-class Player extends EventEmitter
+class Client extends EventEmitter
 {
     constructor(config = {})
     {
@@ -26,4 +26,4 @@ class Player extends EventEmitter
     }
 }
 
-module.exports = Player;
+module.exports = Client;
