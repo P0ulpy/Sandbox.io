@@ -7,9 +7,9 @@ class UIDManager
         this.UIDGenerators = new Map();
     }
 
-    create(name, nextValueCallback, defaultValues)
+    create(name, nextValueCallback, validityCallback, defaultValues)
     {
-        this.UIDGenerators.set(name, new UIDGenerator(nextValueCallback, defaultValues));
+        this.UIDGenerators.set(name, new UIDGenerator(nextValueCallback, validityCallback, defaultValues));
         return this;
     }
 

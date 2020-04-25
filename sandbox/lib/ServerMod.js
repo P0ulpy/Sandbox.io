@@ -53,12 +53,6 @@ class ServerMod extends EventEmitter
         return this.customProperties.get(key);
     }
 
-    static isValidModID(modID)
-    {
-        // ID : chaîne de caractère qui représente un nombre allant de 000 à 999
-        return /^[0-9]{3}$/.test(modID);
-    }
-
     /*
         Un dossier de mod doit être composé de cette manière :
         - Un fichier modinfos.json, qui décrit le mod : fichier client, fichier serveur, version, nom, etc.

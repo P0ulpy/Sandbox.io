@@ -1,4 +1,4 @@
-const socket = require("socket.io");
+//const LibraryComponent = require("./LibraryComponent");
 
 // Ici seront gérées toutes les données qui transitent entre les clients et le serveur
 class SocketManager
@@ -7,8 +7,7 @@ class SocketManager
     {
         this.sandbox = config.sandbox;
 
-        this.httpServer = config.httpServer;
-        this.io = socket(this.httpServer);
+        this.io = SocketManager.Namespace.getGlobal("socketIO").of(`/${this.sandbox.uniqueID}`);
     }
 
     initModsListener()
@@ -17,7 +16,7 @@ class SocketManager
         {
             console.log(`[+] Mod ${uniqueID} ready to listen for data...`);
             // 1 namespace par mod
-            this.io.of(`/${this.sandbox.uniqueID}`).on("connection", (socket) =>
+            this.io.on("connection", (socket) =>
             {
                 console.log(`Socket ${socket.id} connected to mod ${uniqueID}`);
 
@@ -45,7 +44,7 @@ class SocketManager
             /* L'évènement "sendData" est réservé à l'envoi de données pour les mods */
             mod.on("sendData", (event, data) =>
             {
-                this.io.of(`/${this.sandbox.uniqueID}`).emit(event, data);
+                this.io.emit(event, data);
             });
         });
     }

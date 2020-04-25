@@ -1,8 +1,10 @@
 class UIDGenerator
 {
-    constructor(nextValueCallback, defaultValues = {})
+    constructor(nextValueCallback, validityCallback, defaultValues = {})
     {
         this.nextValue = nextValueCallback;
+
+        this.validityCallback = validityCallback;
 
         this.staticData = new Map(Object.entries(defaultValues));
     }
@@ -22,6 +24,11 @@ class UIDGenerator
     nextValue()
     {
         return this.nextValue.call(this);
+    }
+
+    isValid(uniqueID)
+    {
+        return this.validityCallback.call(this, uniqueID);
     }
 }
 

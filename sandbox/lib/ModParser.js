@@ -32,7 +32,7 @@ class ModParser extends EventEmitter
         this.modsList.forEach((modID) =>
         {
             // On regarde si l'ID est valide
-            if (ServerMod.isValidModID(modID))
+            if (ModParser.Namespace.getGlobal("UIDManager").get("mod").isValid(modID))
             {
                 const modPath = path.join(modsPath, modID);
 

@@ -22,6 +22,20 @@ const SandboxNamespace =
     }
 };
 
+/*const LibraryComponent = require("./LibraryComponent");
+SandboxNamespace.LibraryComponent = LibraryComponent;
+LibraryComponent.Namespace = SandboxNamespace;*/
+
+/* Lorsque les classes hériteront de LibraryComponent, il faudra juste alimenter
+SandboxNamespace, on aura plus besoin d'assigner le namespace à chaque component
+car il sera récupéré depuis LibraryComponent :
+// PLUS DE :
+SandboxNamespace.SocketManager = SocketManager;
+SocketManager.Namespace = SandboxNamespace;
+// MAIS PLUTOT :
+SandboxNamespace.SocketManager = SocketManager;
+*/
+
 SandboxNamespace.Sandbox = Sandbox;
 Sandbox.Namespace = SandboxNamespace;
 
