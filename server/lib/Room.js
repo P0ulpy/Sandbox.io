@@ -18,7 +18,7 @@ class Room extends LibraryComponent
 
         this.name = config.name;
 
-        this.uniqueID = config.uniqueID;
+        this.UID = config.UID;
 
         this.MOTD = config.MOTD;
 

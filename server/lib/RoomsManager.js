@@ -17,27 +17,6 @@ class RoomsManager extends LibraryComponent
         this.initApp();
     }
 
-    add(room)
-    {
-        this.rooms.set(room.uniqueID, room);
-        return this;
-    }
-
-    has(uniqueID)
-    {
-        return this.rooms.has(uniqueID);
-    }
-
-    get(uniqueID)
-    {
-        return this.rooms.get(uniqueID);
-    }
-
-    forEach(callback)
-    {
-        this.rooms.forEach((room, uniqueID) => callback(room, uniqueID));
-    }
-
     initApp()
     {
         this.app.get('/', (req, res) => 
@@ -57,7 +36,7 @@ class RoomsManager extends LibraryComponent
             if(!this.has(UID))
             {
                 const config = {
-                    uniqueID: UID,
+                    UID: UID,
                     name: `SDB#${UID}`,
                     MOTD: `Welcome to #${UID}`,
                     mods: [ "001", "002", "004", "0088" ],
@@ -65,16 +44,7 @@ class RoomsManager extends LibraryComponent
                     size: 5
                 };
                 const room = new this.constructors.Room(config);
-                /*
-                    this.rooms[UID] = new Room({
-                        io: this.io,
-                        UID: UID,
-                        name: req.body.name,
-                        motd: req.body.motd,
-                        size: req.body.size
-                    });
-                */
-               this.add(room);
+                this.add(room);
 
                 //redirige l'utilisateur vers /room?UID='UID'
                 res.redirect(url.format({
@@ -99,16 +69,40 @@ class RoomsManager extends LibraryComponent
 
             if(this.has(UID))
             {
+                console.log('ça marche', UID);
                 res.render('room.ejs', this.get(UID).data);
             }
             else
             {
+                console.log('ça marche pas', UID);
+
                 res.redirect(url.format({
                     pathname:'/',
                     query : {"error": "Room not found"}
                 }));
             }
         });
+    }
+
+    add(room)
+    {
+        this.rooms.set(room.UID, room);
+        return this;
+    }
+
+    has(UID)
+    {
+        return this.rooms.has(UID);
+    }
+
+    get(UID)
+    {
+        return this.rooms.get(UID);
+    }
+
+    forEach(callback)
+    {
+        this.rooms.forEach((room, UID) => callback(room, UID));
     }
 
     getRoomsData()
