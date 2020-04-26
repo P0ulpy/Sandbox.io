@@ -10,8 +10,8 @@ class Room extends EventEmiter
         this.IO = config.io;
         this.UID = config.UID;
 
-        this.name = config.name || `room#${this.UID}`    // TODO : faire passer le nom de la room dans un regex pour eviter l'injetion 
-        this.motd = config.motd || `Room - ${this.name}`;
+        this.name = config.name.replace(/[^a-z0-9]/gi,'') || `room#${this.UID}`
+        this.motd = config.motd.replace(/[^a-z0-9]/gi,'') || `Room - ${this.name}`;
         this.size = parseInt(config.size.replace(/[^0-9]+/, '')) || 5;
 
         this.io = this.IO.of(`/${this.UID}`);
