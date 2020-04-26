@@ -26,9 +26,9 @@ class UIDGenerator
         return this.nextValue.call(this);
     }
 
-    isValid(uniqueID)
+    isValid(UID)
     {
-        return this.validityCallback.call(this, uniqueID);
+        return this.validityCallback.call(this, UID);
     }
 }
 

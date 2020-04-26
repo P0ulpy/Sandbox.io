@@ -45,7 +45,7 @@ class ModLoader extends LibraryComponent
                     const modConfig = JSON.parse(data);
                     const serverModFile = path.join(absolutePath, modConfig.server);
 
-                    if (this.env.get("UIDManager").get("mod").isValid(modConfig.uniqueID))
+                    if (this.env.get("UIDManager").get("mod").isValid(modConfig.UID))
                     {
                         modConfig.absolutePath = absolutePath;
 

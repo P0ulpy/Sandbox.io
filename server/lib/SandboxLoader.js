@@ -34,7 +34,7 @@ class SandboxLoader extends LibraryComponent
                 {
                     const sandboxConfig = JSON.parse(data);
 
-                    if (this.env.get("UIDManager").get("sandbox").isValid(sandboxConfig.uniqueID))
+                    if (this.env.get("UIDManager").get("sandbox").isValid(sandboxConfig.UID))
                     {
                         sandboxConfig.sandboxPath = absolutePath;
 

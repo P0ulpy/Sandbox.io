@@ -15,7 +15,7 @@ class ServerMod extends LibraryComponent
         this.version = config.version || "0.0.0";
 
         // Obligatoire : erreur
-        this.uniqueID = config.uniqueID;
+        this.UID = config.UID;
 
         // Obligatoire : erreur
         this.sandbox = config.sandbox;
