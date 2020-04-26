@@ -1,4 +1,4 @@
-import EventEmitter from "./vendors/EventEmitter.js"
+import EventEmitter from "./vendors/EventEmitter.js";
 
 class RoomClient extends EventEmitter
 {
@@ -10,8 +10,6 @@ class RoomClient extends EventEmitter
         this.server = config.server || 'http://localhost:25565';
 
         this.initSocketEvents();
-
-        this.socket.emit('join', {name: 'robert'});
     }
 
     initSocketEvents()
@@ -19,7 +17,9 @@ class RoomClient extends EventEmitter
         console.log(`Tentative de connection a la room ${this.UID}`);
         this.socket = io.connect(`${this.server}/${this.UID}`);
 
-        this.socket.on('joinResponse', (response) => 
+        this.socket.emit('join', {name: 'robert'});
+        
+        this.socket.once('joinResponse', (response) => 
         {
             if(response.success)
             {

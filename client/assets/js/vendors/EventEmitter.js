@@ -29,7 +29,7 @@ class EventEmitter
         {
             this.events[event].push(callback);
 
-            // TODO : supprimer le callback quand il estr appeler
+            // TODO : supprimer le callback quand il est appeler
         }
     }
 

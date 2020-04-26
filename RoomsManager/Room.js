@@ -1,5 +1,5 @@
 const EventEmiter = require('events').EventEmitter;
-const Player = require('./Player');
+const Client = require('./Client');
 
 class Room extends EventEmiter
 {
@@ -7,19 +7,18 @@ class Room extends EventEmiter
     {
         super();
 
+        this.IO = config.io;
         this.UID = config.UID;
 
-        // TODO : faire passer le nom de la room dans un regex pour eviter l'injetion 
-        this.name = config.name || 'room#' + this.UID;
-        this.size = config.size || 5;
-        this.motd = config.motd || `room ${this.name}`;
-        
-        this.globalIO = config.io;
-        this.io = this.globalIO.of(`/${this.UID}`);
+        this.name = config.name || `room#${this.UID}`    // TODO : faire passer le nom de la room dans un regex pour eviter l'injetion 
+        this.motd = config.motd || `Room - ${this.name}`;
+        this.size = parseInt(config.size.replace(/[^0-9]+/, '')) || 5;
+
+        this.io = this.IO.of(`/${this.UID}`);
 
         console.log(`-- Création de la room ${this.UID}:${this.name}`)
 
-        this.players = {};
+        this.clients = {};
 
         this.initIO();
     }
@@ -39,12 +38,12 @@ class Room extends EventEmiter
 
             socket.on('disconnect', () => 
             {
-                if(this.players[socket.id])
+                if(this.clients[socket.id])
                 {
-                    console.log(`[${this.UID}:${this.name}] [-] Le joueur [${this.players[socket.id].name}] a quitter la room`);
-                    this.emit('playerDisconnect', this.players[socket.id].name, this);
+                    console.log(`[${this.UID}:${this.name}] [-] Le joueur [${this.clients[socket.id].name}] a quitter la room`);
+                    this.emit('clientDisconnect', this.clients[socket.id].name, this);
 
-                    delete this.players[socket.id];
+                    delete this.clients[socket.id];
                 }
 
                 console.log(`[${this.UID}:${this.name}] [~] Déconnexion du socket [${socket.id}] de la room`);
@@ -55,36 +54,51 @@ class Room extends EventEmiter
 
     join(clientData = {})
     {
-        if(clientData.socket)
+        if(this.clientsCount + 1 >= this.size)
         {
-            // TODO : verifier si il y a de la place dans la room (avec Room.players)
-            // TODO : verifier si le joueur n'existe pas deja
-
-            this.players[clientData.socket.id] = new Player(clientData);
-
-            console.log(`[${this.UID}:${this.name}] [+] Le joueur [${this.players[clientData.socket.id].name}] a rejoin la room`);
-            this.emit('playerConnect', this.players[clientData.socket.id], this); 
-
             clientData.socket.emit('joinResponse', 
             {
-                success: true, 
-                roomName: this.name, 
-                roomUID: this.UID, 
-                playerName: this.players[clientData.socket.id].name
+                success: false, 
+                error: "room is full"
             });
+
+            clientData.socket.close();
+            return;
         }
         else
         {
-            console.log(`${clientData.name} ne peut pas rejoindre la room ${this.UID}:${this.name} : invalid socket`);
+            if(!this.clients[clientData.socket.id])
+            {
+                this.clients[clientData.socket.id] = new Client(clientData);
+            
+                console.log(`[${this.UID}:${this.name}] [+] Le joueur [${this.clients[clientData.socket.id].name}] a rejoin la room`);
+                this.emit('clientConnect', this.clients[clientData.socket.id], this); 
+                
+                clientData.socket.emit('joinResponse',
+                {
+                    success: true,
+                    roomName: this.name,
+                    roomUID: this.UID,
+                    clientName: this.clients[clientData.socket.id].name
+                });
+            }
+            else
+            {
+                console.log(`[${this.UID}:${this.name}] [/!\] le client [${clientData.socket.id}] existe deja`);
+            }
         }
     }
 
     get data()
     {
-        const playersCount = Object.keys(this.players).length;
+        return { name: this.name, size: this.size, clientsCount: this.clientsCount, motd: this.motd, UID: this.UID};
+    }
 
-        return { name: this.name, size: this.size, playersCount: playersCount, motd: this.motd, UID: this.UID};
+    get clientsCount()
+    {
+        return Object.keys(this.clients).length;
     }
 }
 
+Room.Client = Client;
 module.exports = Room;
