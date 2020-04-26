@@ -36,17 +36,10 @@
             transition-duration: 0.4s;
         }
 
-
-
         .Submitbutton,
         .joinButton:hover {
             box-shadow: 5px 10px 18px 0 rgba(236, 168, 9, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
         }
-
-
-
-
-
 
         #infoText {
             margin: 0.3em;
@@ -63,7 +56,6 @@
             list-style-type: none;
         }
 
-
         #listeRoom {
             margin: 0.4em;
             color: salmon;
@@ -72,7 +64,6 @@
             list-style-type: none;
 
         }
-
 
         #joinRoom {
             text-align: center;
@@ -129,7 +120,7 @@
 <body>
     <h1>Sandbox.io</h1>
 
-    <form action="/createRoom" method="POST" id="RoomForm">
+    <form action="/createRoom" method="POST" class="RoomForm">
         <div id="create-info"></div>
         <div>
             <label for="name">Room name</label>
@@ -148,27 +139,24 @@
 
     </form>
 
-    <form action="/room" method="GET" id="RoomForm">
+    <form action="/room" method="GET" class="RoomForm">
         <div>
             <label for="UID">Room UID</label>
             <input type="text" id="UID" name="UID">
             <button type="submit" class="Submitbutton" id="join-submit">Join room</button>
 
         </div>
-        <button id="join-refresh" class="joinButton">Refresh</button>
-
     </form>
 
+    <button id="join-refresh" class="joinButton">Refresh</button>
 
     <ul>
         <% for(room of rooms) { %>
 
         <!--TODO : faire un truc bo :) -->
-
         
-            <li id="<%= room.UID %>" class="joinRoom-room"><%= room.name %> | <%= room.motd %> |
+            <li id="<%= room.UID %>" class="joinRoom-room"><%= room.name %> | <%= room.MOTD %> |
                 <%= room.clientsCount %>/<%= room.size %></li>
-        </div>
 
         <% } %>
     </ul>
