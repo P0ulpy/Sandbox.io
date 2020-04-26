@@ -14,3 +14,4 @@ app.set('view-engine', 'ejs');
 const roomsManager = new RoomsManager({httpServer: server, express: express, app:app});
 
 server.listen(80);
+console.log("");
