@@ -2,6 +2,7 @@
     "uniqueID": "001",
     "server": "server.js",
     "name": "mySandbox1",
+    "MOTD": "Welcome to mySandbox1",
     "mods": [ "001", "002", "004", "0088" ],
     "updateRate": 1000
 }

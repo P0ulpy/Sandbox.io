@@ -40,6 +40,14 @@ class Sandbox extends LibraryComponent
         // Chaque client sera désigné par son id de connexion (socket.id) qui est le même peu importe le namespace
     }
 
+    get data()
+    {
+        return {
+            name: this.name,
+
+        };
+    }
+
     loadMods()
     {
         const modParser = new this.constructors.ModParser(this, this.mods);
@@ -49,28 +57,22 @@ class Sandbox extends LibraryComponent
         {
             this.loadedMods = loadedMods;
             this.debug("note", `${loadedMods.length} mods chargés au total`);
-            this.initSocketManager();
+            this.socketManager.init();
+            this.initEvents();
         });
         modParser.parse();
     }
 
-    initSocketManager()
+    initEvents()
     {
-        this.socketManager.initModsListener();
-        this.socketManager.initModsSendProtocol();
-    }
-
-    init()
-    {
-        if (this.autoStart)
+        this.socketManager.on("socketConnected", socket =>
         {
-            this.startUpdateLoop();
-
-            if (this.httpServer)
-            {
-                this.initSocket();
-            }
-        }
+            this.debug("log", `Socket ${socket.id} connected to Sandbox #${this.uniqueID}`);
+        });
+        this.socketManager.on("socketDisconnected", (socket, reason) =>
+        {
+            this.debug("log", `Socket ${socket.id} disconnected from #${this.uniqueID} : ${reason}`);
+        });
     }
 
     startUpdateLoop()

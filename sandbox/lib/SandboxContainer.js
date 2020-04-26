@@ -23,6 +23,18 @@ class SandboxContainer extends LibraryComponent
     {
         this.sandboxes.forEach((sandbox, uniqueID) => callback(sandbox, uniqueID));
     }
+
+    getSandboxesData()
+    {
+        const data = {};
+
+        this.forEach((sandbox, uniqueID) =>
+        {
+            
+        });
+
+        return data;
+    }
 }
 
 module.exports = SandboxContainer;

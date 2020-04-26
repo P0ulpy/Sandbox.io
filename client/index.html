@@ -15,20 +15,14 @@
         {
             console.log(data);
         });*/
-        const sandboxUID = "001";
+        const sandboxToConnect = "001";
 
-        const mod1Socket = io.connect(`${server}/${sandboxUID}`);
-        mod1Socket.on("connect", function()
+        const sandboxSocket = io.connect(`${server}/${sandboxToConnect}`);
+        sandboxSocket.on("connect", function()
         {
-            mod1Socket.emit("dataFromClient", "yo");
-            mod1Socket.on("dataFromServer", (data) => { console.log("ICI"); });
+            sandboxSocket.emit("dataFromClient", "yo");
+            sandboxSocket.on("dataFromServer", console.log);
         });
-
-        /*const mod2Socket = io.connect(`${server}/myMod2`);
-        mod2Socket.on("connect", function()
-        {
-            mod2Socket.emit("first", "yoyo");
-        })*/
     </script>
     <title>First game</title>
 </head>

@@ -1,5 +1,11 @@
 const LibraryComponent = require("./LibraryComponent");
 
+/* Puisqu'il va falloir gérer un objet Room et un Sandbox via un seul et unique SocketManager,
+on émet des évènements qui seront traités différemment selon qu'on est encore « en mode room »
+ou qu'on est en « mode sandbox »
+Cet objet SocketManager sera partagé entre Room et Sandbox !!!
+*/
+
 // Ici seront gérées toutes les données qui transitent entre les clients et le serveur
 class SocketManager extends LibraryComponent
 {
@@ -8,7 +14,31 @@ class SocketManager extends LibraryComponent
         super();
         this.sandbox = sandbox;
 
+        this.clients = new Map();
+
         this.io = this.env.get("socketIO").of(`/${this.sandbox.uniqueID}`);
+    }
+
+    init()
+    {
+        this.initJoin();
+        this.initModsListener();
+        this.initModsSendProtocol();
+    }
+
+    initJoin()
+    {
+        this.io.on("connection", socket =>
+        {
+            this.emit("socketConnected", socket);
+            this.clients.set(socket.id, socket);
+
+            socket.on("disconnect", (reason) =>
+            {
+                this.emit("socketDisconnected", socket, reason);
+                this.clients.delete(socket.id);
+            });
+        });
     }
 
     initModsListener()
