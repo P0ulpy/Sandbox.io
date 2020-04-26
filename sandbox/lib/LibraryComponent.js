@@ -8,7 +8,7 @@ class LibraryComponent extends EventEmitter
     {
         super();
 
-        this.globals = LibraryComponent.Namespace.globals;
+        this.env = LibraryComponent.Namespace.env;
         this.constructors = LibraryComponent.Namespace.constructors;
     }
 
@@ -19,7 +19,7 @@ class LibraryComponent extends EventEmitter
 
         /* Niveau de débug : si le niveau est sur "note", alors "note", "log", "warning" et "error"
         seront affichés. Si vaut "warning", alors seuls "warning" et "error" seront affichés */
-        if (debugIndex >= debugMods.indexOf(this.globals.get("debugLevel")))
+        if (debugIndex >= debugMods.indexOf(this.env.get("debugLevel")))
         {
             console.log(`[${notations[debugIndex]}]`, ...args);
         }

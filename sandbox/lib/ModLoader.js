@@ -16,7 +16,7 @@ class ModLoader extends LibraryComponent
 
     getAbsolutePath(modFolder)
     {
-        return path.join(this.globals.get("modPath"), modFolder);
+        return path.join(this.env.get("modPath"), modFolder);
     }
 
     /*
@@ -45,7 +45,7 @@ class ModLoader extends LibraryComponent
                     const modConfig = JSON.parse(data);
                     const serverModFile = path.join(absolutePath, modConfig.server);
 
-                    if (this.globals.get("UIDManager").get("mod").isValid(modConfig.uniqueID))
+                    if (this.env.get("UIDManager").get("mod").isValid(modConfig.uniqueID))
                     {
                         modConfig.absolutePath = absolutePath;
 

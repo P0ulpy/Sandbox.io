@@ -19,18 +19,18 @@ class Sandbox extends LibraryComponent
         this.sandboxPath = config.sandboxPath;
 
         // Instance de httpServer
-        if (!this.globals.has("httpServer"))
+        if (!this.env.has("httpServer"))
         {
             throw new Error("httpServer global must be defined");
         }
-        this.httpServer = this.globals.get("httpServer");
+        this.httpServer = this.env.get("httpServer");
 
         // Instance de Express
-        if (!this.globals.has("app"))
+        if (!this.env.has("app"))
         {
             throw new Error("App global must be defined");
         }
-        this.app = this.globals.get("app");
+        this.app = this.env.get("app");
 
         this.socketManager = new this.constructors.SocketManager(this);
 

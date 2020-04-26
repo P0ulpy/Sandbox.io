@@ -4,10 +4,10 @@ const express = require("express");
 const http = require("http");
 
 const SandboxLibrary = require("./sandbox/lib");
-const Sandbox = SandboxLibrary.constructors.Sandbox;
 const ModLoader = SandboxLibrary.constructors.ModLoader;
 const SandboxContainer = SandboxLibrary.constructors.SandboxContainer;
 const UIDManager = SandboxLibrary.constructors.UIDManager;
+const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
 
 const app = express();
 const server = http.createServer(app);
@@ -23,15 +23,16 @@ un peu comme ça mais bon vous coco pas donc
 */
 
 // Déplacer tout ça dans un endroit adapté : config.js ou init.js
-SandboxLibrary.globals.set("httpServer", server);
-SandboxLibrary.globals.set("app", app);
-SandboxLibrary.globals.set("socketIO", socket(server));
-SandboxLibrary.globals.set("sandboxPath", path.join(__dirname, "sandbox/Sandboxes/"));
-SandboxLibrary.globals.set("modPath", path.join(__dirname, "sandbox/Mods/"));
-SandboxLibrary.globals.set("sandboxContainer", new SandboxContainer());
-SandboxLibrary.globals.set("UIDManager", new UIDManager());
-SandboxLibrary.globals.set("debugLevel", "note");
-SandboxLibrary.globals.set("modLoader", new ModLoader());
+SandboxLibrary.env.set("httpServer", server);
+SandboxLibrary.env.set("app", app);
+SandboxLibrary.env.set("socketIO", socket(server));
+SandboxLibrary.env.set("sandboxPath", path.join(__dirname, "sandbox/Sandboxes/"));
+SandboxLibrary.env.set("modPath", path.join(__dirname, "sandbox/Mods/"));
+SandboxLibrary.env.set("sandboxContainer", new SandboxContainer());
+SandboxLibrary.env.set("UIDManager", new UIDManager());
+SandboxLibrary.env.set("debugLevel", "note");
+SandboxLibrary.env.set("modLoader", new ModLoader());
+SandboxLibrary.env.set("sandboxLoader", new SandboxLoader());
 
 
 /*const LibraryComponent = require("./sandbox/lib/LibraryComponent");
@@ -60,7 +61,7 @@ function checkValidity(uniqueID)
 }
 
 // Création de générateurs d'UID : 1 pour les sandboxes, 1 pour les mods
-SandboxLibrary.globals.get("UIDManager")
+SandboxLibrary.env.get("UIDManager")
 .create("sandbox", basicIterator, checkValidity, { lastValue: 0 })
 .create("mod", basicIterator, checkValidity, { lastValue: 0 });
 
@@ -74,10 +75,11 @@ console.log(test.isValid("056"));
 
 console.log(Sandbox.getAbsolutePath("001"));*/
 
-const sandboxContainer = SandboxLibrary.globals.get("sandboxContainer");
+//const sandboxContainer = SandboxLibrary.globals.get("sandboxContainer");
 
-const promise = sandboxContainer.instanciateFromFolder("001");
-let sandbox = null;
+const sandboxLoader = SandboxLibrary.env.get("sandboxLoader");
+const promise = sandboxLoader.instanciateFromFolder("001");
+
 promise.then(sandboxInstance => sandbox = sandboxInstance).catch(console.log);
 
 //Sandbox.instanciateFromDirectory(Sandbox.getAbsolutePath("002"));

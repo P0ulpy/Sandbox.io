@@ -8,7 +8,7 @@ class SocketManager extends LibraryComponent
         super();
         this.sandbox = sandbox;
 
-        this.io = this.globals.get("socketIO").of(`/${this.sandbox.uniqueID}`);
+        this.io = this.env.get("socketIO").of(`/${this.sandbox.uniqueID}`);
     }
 
     initModsListener()

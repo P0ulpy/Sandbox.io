@@ -1,6 +1,7 @@
 const Sandbox = require("./Sandbox");
 const ServerMod = require("./ServerMod");
 const ModLoader = require("./ModLoader");
+const SandboxLoader = require("./SandboxLoader");
 const ModParser = require("./ModParser");
 const SocketManager = require("./SocketManager");
 const SandboxContainer = require("./SandboxContainer");
@@ -9,7 +10,7 @@ const LibraryComponent = require("./LibraryComponent");
 
 const SandboxNamespace =
 {
-    globals:
+    env:
     {
         data: new Map(),
         has(key)
@@ -33,6 +34,7 @@ LibraryComponent.Namespace = SandboxNamespace;
 SandboxNamespace.constructors.Sandbox = Sandbox;
 SandboxNamespace.constructors.ServerMod = ServerMod;
 SandboxNamespace.constructors.ModLoader = ModLoader;
+SandboxNamespace.constructors.SandboxLoader = SandboxLoader;
 SandboxNamespace.constructors.ModParser = ModParser;
 SandboxNamespace.constructors.SocketManager = SocketManager;
 SandboxNamespace.constructors.SandboxContainer = SandboxContainer;
