@@ -21,11 +21,11 @@ class ServerMod extends LibraryComponent
         this.sandbox = config.sandbox;
 
         // Chemin absolu du Mod sur le serveur : erreur
-        this.modPath = config.modPath;
+        this.modPath = config.absolutePath;
 
         // Pas obligatoire : warning (mod uniquement serveur par exemple)
         // Seulement 1 fichier client supporté pour le moment
-        this.clientFile = path.join(config.modPath, config.client);
+        this.clientFile = path.join(config.absolutePath, config.client);
 
         // Propriétés ajoutées au mod par le développeur
         this.customProperties = new Map();
@@ -51,43 +51,6 @@ class ServerMod extends LibraryComponent
     get()
     {
         return this.customProperties.get(key);
-    }
-
-    /*
-        Un dossier de mod doit être composé de cette manière :
-        - Un fichier modinfos.json, qui décrit le mod : fichier client, fichier serveur, version, nom, etc.
-        - D'autres fichiers d'extension ".js" dont le nom doit correspondre à ce qu'il y a dans modinfo.json
-    */
-    static instanciateFromDirectory(modPath)
-    {
-        return new Promise((resolve, reject) =>
-        {
-            this.debug("note", `Parsing ${modPath} mod directory...`)
-            const modConfigPath = path.join(modPath, "modconfig.json");
-
-            /*
-                Toutes les opérations I/O doivent être asynchrones pour des raisons de performances.
-                Il faut donc utiliser des fonctions asynchrones chaque fois que possible.
-            */
-            fs.readFile(modConfigPath, "utf-8", (err, data) =>
-            {
-                if (err) reject(err);
-                else
-                {
-                    const modConfig = JSON.parse(data);
-                    const serverModFile = path.join(modPath, modConfig.server || "server");
-
-                    modConfig.modPath = modPath;
-
-                    resolve(new (require(serverModFile))(modConfig));
-                }
-            });
-        });
-    }
-
-    static getAbsolutePath(modFolder)
-    {
-        return path.join(LibraryComponent.Namespace.globals.get("modPath"), modFolder);
     }
 }
 

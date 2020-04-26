@@ -1,7 +1,12 @@
-class ModsCollection
+const path = require("path");
+const fs = require("fs");
+const LibraryComponent = require("./LibraryComponent");
+
+class ModsCollection extends LibraryComponent
 {
     constructor()
     {
+        super();
         this.mods = new Map();
     }
 

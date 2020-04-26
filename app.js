@@ -5,6 +5,7 @@ const http = require("http");
 
 const SandboxLibrary = require("./sandbox/lib");
 const Sandbox = SandboxLibrary.constructors.Sandbox;
+const ModLoader = SandboxLibrary.constructors.ModLoader;
 const SandboxContainer = SandboxLibrary.constructors.SandboxContainer;
 const UIDManager = SandboxLibrary.constructors.UIDManager;
 
@@ -27,9 +28,10 @@ SandboxLibrary.globals.set("app", app);
 SandboxLibrary.globals.set("socketIO", socket(server));
 SandboxLibrary.globals.set("sandboxPath", path.join(__dirname, "sandbox/Sandboxes/"));
 SandboxLibrary.globals.set("modPath", path.join(__dirname, "sandbox/Mods/"));
-SandboxLibrary.globals.set("registeredSandboxes", new SandboxContainer());
+SandboxLibrary.globals.set("sandboxContainer", new SandboxContainer());
 SandboxLibrary.globals.set("UIDManager", new UIDManager());
 SandboxLibrary.globals.set("debugLevel", "note");
+SandboxLibrary.globals.set("modLoader", new ModLoader());
 
 
 /*const LibraryComponent = require("./sandbox/lib/LibraryComponent");
@@ -41,7 +43,6 @@ LibraryComponent.debug("error", 4);*/
 app.use("/client", express.static(path.join(__dirname, "/client")));
 
 server.listen(80);
-
 
 function basicIterator()
 {
@@ -73,8 +74,13 @@ console.log(test.isValid("056"));
 
 console.log(Sandbox.getAbsolutePath("001"));*/
 
-const promise = Sandbox.instanciateFromDirectory(Sandbox.getAbsolutePath("001"));
+const sandboxContainer = SandboxLibrary.globals.get("sandboxContainer");
+
+const promise = sandboxContainer.instanciateFromFolder("001");
 let sandbox = null;
 promise.then(sandboxInstance => sandbox = sandboxInstance).catch(console.log);
 
 //Sandbox.instanciateFromDirectory(Sandbox.getAbsolutePath("002"));
+
+// Mieux gérer Promesse instanciation
+// container.on("sandboxLoaded")

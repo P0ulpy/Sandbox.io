@@ -17,19 +17,9 @@ class LibraryComponent extends EventEmitter
         const debugMods = [ "note", "log" ,"warning", "error" ], notations = [ "+", "~", "!", "-" ];
         const debugIndex = debugMods.indexOf(level);
 
+        /* Niveau de débug : si le niveau est sur "note", alors "note", "log", "warning" et "error"
+        seront affichés. Si vaut "warning", alors seuls "warning" et "error" seront affichés */
         if (debugIndex >= debugMods.indexOf(this.globals.get("debugLevel")))
-        {
-            console.log(`[${notations[debugIndex]}]`, ...args);
-        }
-    }
-
-    // Version statique : pas ouf comme code, en attente d'une solution meilleure
-    static debug(level, ...args)
-    {
-        const debugMods = [ "note", "log", "warning", "error" ], notations = [ "+", "~", "!", "-" ];
-        const debugIndex = debugMods.indexOf(level);
-
-        if (debugIndex >= debugMods.indexOf(LibraryComponent.Namespace.globals.get("debugLevel")))
         {
             console.log(`[${notations[debugIndex]}]`, ...args);
         }

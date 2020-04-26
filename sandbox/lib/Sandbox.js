@@ -43,8 +43,8 @@ class Sandbox extends LibraryComponent
     loadMods()
     {
         const modParser = new this.constructors.ModParser(this, this.mods);
-        modParser.on("modLoadSuccess", (mod) => { this.debug("note", `Mod ${mod.uniqueID} chargé`); });
-        modParser.on("modLoadError", (modID, err) => { this.debug("error", `Mod ${modID} non chargé : ${err.message}`); });
+        modParser.on("modLoadSuccess", (mod) => { this.debug("note", `Mod #${mod.uniqueID} chargé`); });
+        modParser.on("modLoadError", (modFolder, err) => { this.debug("error", `Dossier de mod ${modFolder} non chargé : ${err.message}`); });
         modParser.on("modLoadFinish", (loadedMods) =>
         {
             this.loadedMods = loadedMods;
@@ -79,38 +79,6 @@ class Sandbox extends LibraryComponent
         {
             this.emit("update");
         }, this.updateRate);
-    }
-
-    static instanciateFromDirectory(sandboxPath)
-    {
-        return new Promise((resolve, reject) =>
-        {
-            LibraryComponent.debug("note", `Parsing ${sandboxPath} sandbox directory...`)
-            const sandboxConfigPath = path.join(sandboxPath, "sandboxconfig.json");
-
-            /*
-                Toutes les opérations I/O doivent être asynchrones pour des raisons de performances.
-                Il faut donc utiliser des fonctions asynchrones chaque fois que possible.
-            */
-            fs.readFile(sandboxConfigPath, "utf-8", (err, data) =>
-            {
-                if (err) reject(err);
-                else
-                {
-                    const sandboxConfig = JSON.parse(data);
-                    const sandboxFile = path.join(sandboxPath, sandboxConfig.server || "server");
-
-                    sandboxConfig.sandboxPath = sandboxPath;
-
-                    resolve(new (require(sandboxFile))(sandboxConfig));
-                }
-            });
-        });
-    }
-
-    static getAbsolutePath(sandboxFolder)
-    {
-        return path.join(LibraryComponent.Namespace.globals.get("sandboxPath"), sandboxFolder);
     }
 }
 

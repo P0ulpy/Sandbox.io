@@ -4,9 +4,18 @@ const allSettled = require("promise.allsettled");
 const ModsCollection = require("./ModsCollection");
 const LibraryComponent = require("./LibraryComponent");
 
+/*
+    Le ModParser va chercher les informations depuis l'instance de Sandbox :
+    - mods à instancier
+    - instance de ModsCollection
+
+    Pour chaque mod à instancier, le ModParser va vérifier si l'ID est valide,
+    puis il passe la main à l'instance de ModsCollection qui va instancier chaque mod
+    indépendemment. Le ModParser doit regarder par exemple si 
+*/
 class ModParser extends LibraryComponent
 {
-    constructor(sandbox, modsList)
+    constructor(sandbox)
     {
         super();
 
@@ -15,41 +24,30 @@ class ModParser extends LibraryComponent
         this.loadedMods = new ModsCollection();
 
         // Suppression des doublons
-        this.modsList = Array.from(new Set(modsList));
-        this.modsPath = this.globals.get("modPath");
+        this.mods = Array.from(new Set(this.sandbox.mods));
     }
 
     parse()
     {
         // Liste de toutes les promesses de instanciateMod()
         const pendingPromises = [];
-        // Utilisation de chemins absolus pour limiter les erreurs de chemins
-        const modsPath = path.resolve(this.modsPath);
 
-        // Liste des IDs des mods : 
-        this.modsList.forEach((modID) =>
+        // Liste des chemins des Mods : il faut bien comprendre que le nom du dossier est différent
+        // de l'UID du mode, même si dans notre cas ils ont la même valeur
+        // Le "vrai" UID du mode est contenu dans modconfig.json
+        this.mods.forEach(modFolder =>
         {
-            // On regarde si l'ID est valide
-            if (this.globals.get("UIDManager").get("mod").isValid(modID))
-            {
-                const modPath = path.join(modsPath, modID);
+            // Instanciation du mode et ajout à la liste des mods chargés
+            const promise = this.globals.get("modLoader").instanciateFromFolder(modFolder);
+            pendingPromises.push(promise);
 
-                // Instanciation du mode et ajout à la liste des mods chargés
-                const promise = this.constructors.ServerMod.instanciateFromDirectory(modPath);
-                pendingPromises.push(promise);
-
-                promise.then(modInstance =>
-                {
-                    modInstance.sandbox = this.sandbox;
-                    this.loadedMods.add(modInstance);
-                    this.emit("modLoadSuccess", modInstance);
-                })
-                .catch(err => this.emit("modLoadError", modID, err));
-            }
-            else
+            promise.then(modInstance =>
             {
-                this.emit("modLoadError", modID, new Error("Invalid modID"));
-            }
+                modInstance.sandbox = this.sandbox;
+                this.loadedMods.add(modInstance);
+                this.emit("modLoadSuccess", modInstance);
+            })
+            .catch(err => this.emit("modLoadError", modFolder, err));
         });
 
         // Lorsque toutes les promesses seront terminées (succès ou échec)
