@@ -6,7 +6,7 @@ const http = require("http");
 const SandboxLibrary = require("./server/lib");
 const ModLoader = SandboxLibrary.constructors.ModLoader;
 const UIDManager = SandboxLibrary.constructors.UIDManager;
-const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
+const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 
 const app = express();
@@ -22,7 +22,7 @@ SandboxLibrary.env.set("sandboxContainer", new RoomsManager());
 SandboxLibrary.env.set("UIDManager", new UIDManager());
 SandboxLibrary.env.set("debugLevel", "note");
 SandboxLibrary.env.set("modLoader", new ModLoader());
-SandboxLibrary.env.set("sandboxLoader", new SandboxLoader());
+SandboxLibrary.env.set("roomLoader", new RoomLoader());
 
 app.use(express.static(path.join(__dirname + '/client')));
 

@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const LibraryComponent = require("./LibraryComponent");
 
-class SandboxLoader extends LibraryComponent
+class RoomLoader extends LibraryComponent
 {
     constructor()
     {
@@ -47,4 +47,4 @@ class SandboxLoader extends LibraryComponent
     }
 }
 
-module.exports = SandboxLoader;
+module.exports = RoomLoader;
