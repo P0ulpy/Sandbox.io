@@ -13,7 +13,7 @@ class RoomsManager extends LibraryComponent
 
         this.app = this.env.get("app");
         this.io = this.env.get("socketIO");
-        
+
         this.initApp();
     }
 

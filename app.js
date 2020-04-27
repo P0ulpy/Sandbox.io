@@ -18,11 +18,12 @@ SandboxLibrary.env.set("app", app);
 SandboxLibrary.env.set("socketIO", socket(server));
 SandboxLibrary.env.set("sandboxPath", path.join(__dirname, "server/Sandboxes/"));
 SandboxLibrary.env.set("modPath", path.join(__dirname, "server/Mods/"));
-SandboxLibrary.env.set("sandboxContainer", new RoomsManager());
+SandboxLibrary.env.set("roomsManager", new RoomsManager());
 SandboxLibrary.env.set("UIDManager", new UIDManager());
 SandboxLibrary.env.set("debugLevel", "note");
 SandboxLibrary.env.set("modLoader", new ModLoader());
 SandboxLibrary.env.set("roomLoader", new RoomLoader());
+
 
 app.use(express.static(path.join(__dirname + '/client')));
 
