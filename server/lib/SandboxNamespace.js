@@ -8,6 +8,7 @@ const UIDManager = require("./UIDManager");
 const LibraryComponent = require("./LibraryComponent");
 const RoomsManager = require("./RoomsManager");
 const Room = require("./Room");
+const AjaxManager = require("./AjaxManager");
 
 const SandboxNamespace =
 {
@@ -20,7 +21,8 @@ const SandboxNamespace =
         },
         set(key, value)
         {
-            return this.data.set(key, value);
+            this.data.set(key, value);
+            return this;
         },
         get(key)
         {
@@ -41,5 +43,6 @@ SandboxNamespace.constructors.SocketManager = SocketManager;
 SandboxNamespace.constructors.UIDManager = UIDManager;
 SandboxNamespace.constructors.RoomsManager = RoomsManager;
 SandboxNamespace.constructors.Room = Room;
+SandboxNamespace.constructors.AjaxManager = AjaxManager;
 
 module.exports = SandboxNamespace;

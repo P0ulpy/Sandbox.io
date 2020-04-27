@@ -8,6 +8,7 @@ const ModLoader = SandboxLibrary.constructors.ModLoader;
 const UIDManager = SandboxLibrary.constructors.UIDManager;
 const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
+const AjaxManager = SandboxLibrary.constructors.AjaxManager;
 
 const app = express();
 const server = http.createServer(app);
@@ -18,18 +19,13 @@ SandboxLibrary.env.set("app", app);
 SandboxLibrary.env.set("socketIO", socket(server));
 SandboxLibrary.env.set("sandboxPath", path.join(__dirname, "server/Sandboxes/"));
 SandboxLibrary.env.set("modPath", path.join(__dirname, "server/Mods/"));
-SandboxLibrary.env.set("roomsManager", new RoomsManager());
+SandboxLibrary.env.set("RoomsManager", new RoomsManager());
 SandboxLibrary.env.set("UIDManager", new UIDManager());
 SandboxLibrary.env.set("debugLevel", "note");
 SandboxLibrary.env.set("modLoader", new ModLoader());
 SandboxLibrary.env.set("roomLoader", new RoomLoader());
+SandboxLibrary.env.set("AjaxManager", new AjaxManager());
 
-
-app.use(express.static(path.join(__dirname + '/client')));
-
-// permet de generer un acces au variables d'un POST dans req.body 
-app.use(express.urlencoded({ extended: false }));
-app.set('view-engine', 'ejs');
 
 /* BEGINNING OF DEGUEULASSE CODE */
 function basicIterator()
