@@ -36,8 +36,11 @@ class Joining {
         this.rooms = document.getElementsByClassName("joinRoom-room");
         this.joinRoom_Input = document.getElementById("UID");
         this.joinRoom_Button = document.getElementById("join-submit");
-        for (let i = 0; i < this.rooms.length; i++) {
-            this.rooms[i].addEventListener('click', () => {
+        
+        for (let i = 0; i < this.rooms.length; i++) 
+        {
+            this.rooms[i].addEventListener('click', () => 
+            {
 
                 let attribute = this.rooms[i].getAttribute("id");
                 Swal.fire({
@@ -49,16 +52,12 @@ class Joining {
                     cancelButtonColor: '#d33',
                     confirmButtonText: "Rejoindre"
                   }).then((result) => {
-                    if (result.value) {
+                    if (result.value) 
+                    {
                         this.joinRoom_Input.value = attribute;
                         this.joinRoom_Button.click();
                     }
                   })
-                /*let choice = confirm("Vous voulez vous connecter à  " + attribute);
-                if (choice === true) {
-                    this.joinRoom_Input.value = attribute;
-                    this.joinRoom_Button.click();
-                };*/
 
             }, false);
         }

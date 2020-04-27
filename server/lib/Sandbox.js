@@ -13,7 +13,7 @@ class Sandbox extends LibraryComponent
         this.mods = config.mods || [];
 
         // Commun
-        this.uniqueID = config.uniqueID;
+        this.UID = config.UID;
 
         // Que Sandbox
         this.sandboxPath = config.sandboxPath;
@@ -38,7 +38,7 @@ class Sandbox extends LibraryComponent
     loadMods()
     {
         const modParser = new this.constructors.ModParser(this, this.mods);
-        modParser.on("modLoadSuccess", (mod) => { this.debug("note", `Mod #${mod.uniqueID} chargé`); });
+        modParser.on("modLoadSuccess", (mod) => { this.debug("note", `Mod #${mod.UID} chargé`); });
         modParser.on("modLoadError", (modFolder, err) => { this.debug("error", `Dossier de mod ${modFolder} non chargé : ${err.message}`); });
         modParser.on("modLoadFinish", (loadedMods) =>
         {
@@ -54,11 +54,11 @@ class Sandbox extends LibraryComponent
     {
         this.socketManager.on("socketConnected", socket =>
         {
-            this.debug("log", `Socket ${socket.id} connected to Sandbox #${this.uniqueID}`);
+            this.debug("log", `Socket ${socket.id} connected to Sandbox #${this.UID}`);
         });
         this.socketManager.on("socketDisconnected", (socket, reason) =>
         {
-            this.debug("log", `Socket ${socket.id} disconnected from #${this.uniqueID} : ${reason}`);
+            this.debug("log", `Socket ${socket.id} disconnected from #${this.UID} : ${reason}`);
         });
     }
 

@@ -17,22 +17,22 @@ class ModsCollection extends LibraryComponent
 
     add(mod)
     {
-        this.mods.set(mod.uniqueID, mod);
+        this.mods.set(mod.UID, mod);
         return this;
     }
 
     forEach(callback)
     {
-        this.mods.forEach((mod, uniqueID) => callback(mod, uniqueID));
+        this.mods.forEach((mod, UID) => callback(mod, UID));
     }
 
     to(...targetsIDs)
     {
         const filteredCollection = new ModsCollection();
 
-        this.mods.forEach((mod, uniqueID) =>
+        this.mods.forEach((mod, UID) =>
         {
-            if (targetsIDs.includes(uniqueID))
+            if (targetsIDs.includes(UID))
             {
                 filteredCollection.add(mod);
             }

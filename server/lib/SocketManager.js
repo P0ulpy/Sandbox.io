@@ -16,7 +16,7 @@ class SocketManager extends LibraryComponent
 
         this.clients = new Map();
 
-        this.io = this.env.get("socketIO").of(`/${this.room.uniqueID}`);
+        this.io = this.env.get("socketIO").of(`/${this.room.UID}`);
     }
 
     get clientsCount()
@@ -48,13 +48,13 @@ class SocketManager extends LibraryComponent
 
     initModsListener()
     {
-        this.sandbox.loadedMods.forEach((mod, uniqueID) =>
+        this.sandbox.loadedMods.forEach((mod, UID) =>
         {
-            this.debug("note", `Mod ${uniqueID} ready to listen for data...`)
+            this.debug("note", `Mod ${UID} ready to listen for data...`)
             // 1 namespace par sandbox
             this.io.on("connection", (socket) =>
             {
-                this.debug("log", `Socket ${socket.id} connected to mod ${uniqueID}`);
+                this.debug("log", `Socket ${socket.id} connected to mod ${UID}`);
 
                 /* Middleware à partir duquel on va récupérer tous les paquets entrants associés à ce mod,
                 puis on va envoyer les informations à ce mod. Le mod n'interagit donc pas directement avec
@@ -74,9 +74,9 @@ class SocketManager extends LibraryComponent
 
     initModsSendProtocol()
     {
-        this.sandbox.loadedMods.forEach((mod, uniqueID) =>
+        this.sandbox.loadedMods.forEach((mod, UID) =>
         {
-            this.debug("note", `Mod ${uniqueID} ready to send data...`);
+            this.debug("note", `Mod ${UID} ready to send data...`);
             /* L'évènement "sendData" est réservé à l'envoi de données pour les mods */
             mod.on("sendData", (event, data) =>
             {
