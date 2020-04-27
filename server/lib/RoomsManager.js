@@ -37,12 +37,11 @@ class RoomsManager extends LibraryComponent
             {
                 const config = {
                     UID: UID,
-                    name: `SDB#${UID}`,
-                    MOTD: `Welcome to #${UID}`,
-                    mods: [ "001", "002", "004", "0088" ],
-                    updateRate: 1000,
-                    size: 5
+                    name: req.body.name,
+                    MOTD: req.body.MOTD,
+                    size: req.body.size
                 };
+
                 const room = new this.constructors.Room(config);
                 this.add(room);
 

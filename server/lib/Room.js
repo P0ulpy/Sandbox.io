@@ -16,16 +16,15 @@ class Room extends LibraryComponent
     {
         super();
 
+        config.mods = [ "001", "002", "004", "0088" ];
+        config.updateRate = 1000;
+
         this.name = config.name;
-
         this.UID = config.UID;
-
         this.MOTD = config.MOTD;
-
         this.size = config.size;
 
         this.socketManager = new this.constructors.SocketManager(this);
-
         config.socketManager = this.socketManager;
 
         this.sandbox = new this.constructors.Sandbox(config);
