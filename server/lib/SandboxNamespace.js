@@ -1,7 +1,7 @@
 const Sandbox = require("./Sandbox");
 const ServerMod = require("./ServerMod");
 const ModLoader = require("./ModLoader");
-const SandboxLoader = require("./SandboxLoader");
+const RoomLoader = require("./RoomLoader");
 const ModParser = require("./ModParser");
 const SocketManager = require("./SocketManager");
 const UIDManager = require("./UIDManager");
@@ -35,7 +35,7 @@ LibraryComponent.Namespace = SandboxNamespace;
 SandboxNamespace.constructors.Sandbox = Sandbox;
 SandboxNamespace.constructors.ServerMod = ServerMod;
 SandboxNamespace.constructors.ModLoader = ModLoader;
-SandboxNamespace.constructors.SandboxLoader = SandboxLoader;
+SandboxNamespace.constructors.RoomLoader = RoomLoader;
 SandboxNamespace.constructors.ModParser = ModParser;
 SandboxNamespace.constructors.SocketManager = SocketManager;
 SandboxNamespace.constructors.UIDManager = UIDManager;
