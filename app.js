@@ -12,6 +12,8 @@ const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const app = express();
 const server = http.createServer(app);
 
+console.log("Le serveur tourne");
+
 // Déplacer tout ça dans un endroit adapté : config.js ou init.js
 SandboxLibrary.env.set("httpServer", server);
 SandboxLibrary.env.set("app", app);
