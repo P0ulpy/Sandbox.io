@@ -68,13 +68,10 @@ class RoomsManager extends LibraryComponent
 
             if(this.has(UID))
             {
-                console.log('ça marche', UID);
                 res.render('room.ejs', this.get(UID).data);
             }
             else
             {
-                console.log('ça marche pas', UID);
-
                 res.redirect(url.format({
                     pathname:'/',
                     query : {"error": "Room not found"}
