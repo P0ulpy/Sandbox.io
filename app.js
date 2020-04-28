@@ -24,12 +24,12 @@ SandboxLibrary.env.set("debugLevel", "note");
 SandboxLibrary.env.set("modLoader", new ModLoader());
 SandboxLibrary.env.set("roomLoader", new RoomLoader());
 
-
-app.use(express.static(path.join(__dirname + '/client')));
-
 // permet de generer un acces au variables d'un POST dans req.body 
 app.use(express.urlencoded({ extended: false }));
 app.set('view-engine', 'ejs');
+
+app.use(express.static(path.join(__dirname, '/client')));
+
 
 /* BEGINNING OF DEGUEULASSE CODE */
 function basicIterator()
