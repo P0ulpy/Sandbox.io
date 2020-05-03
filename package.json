@@ -1,29 +1,26 @@
 {
-  "name": "sandbox.io",
+  "name": "current-project",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "nodemon app.js"
+    "devStart": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GabeNThePrimaryGod/Sandbox.io.git"
-  },
-  "keywords": [
-    "sandbox.io"
-  ],
-  "author": "Burrito inc",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/GabeNThePrimaryGod/Sandbox.io/issues"
-  },
-  "homepage": "https://github.com/GabeNThePrimaryGod/Sandbox.io#readme",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.2",
+    "bcrypt": "^3.0.6",
+    "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "nodemon": "^2.0.3",
-    "promise.allsettled": "^1.0.2",
-    "socket.io": "^2.3.0"
+    "express-flash": "0.0.2",
+    "express-session": "^1.16.2",
+    "method-override": "^3.0.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "promise.allsettled": "^1.0.2"
+  },
+  "devDependencies": {
+    "dotenv": "^8.0.0",
+    "nodemon": "^1.19.1"
   }
 }
