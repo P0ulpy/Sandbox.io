@@ -4,7 +4,7 @@ const url = require('express');
 
 const LibraryComponent = require('./LibraryComponent');
 
-class AjaxManager extends LibraryComponent
+class HTTPManager extends LibraryComponent
 {
     constructor()
     {
@@ -85,4 +85,4 @@ class AjaxManager extends LibraryComponent
     }
 }
 
-module.exports = AjaxManager;
+module.exports = HTTPManager;

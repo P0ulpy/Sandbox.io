@@ -8,7 +8,7 @@ const ModLoader = SandboxLibrary.constructors.ModLoader;
 const UIDManager = SandboxLibrary.constructors.UIDManager;
 const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
-const AjaxManager = SandboxLibrary.constructors.AjaxManager;
+const HTTPManager = SandboxLibrary.constructors.HTTPManager;
 
 const app = express();
 const server = http.createServer(app);
@@ -24,7 +24,7 @@ SandboxLibrary.env.set("UIDManager", new UIDManager());
 SandboxLibrary.env.set("debugLevel", "note");
 SandboxLibrary.env.set("modLoader", new ModLoader());
 SandboxLibrary.env.set("roomLoader", new RoomLoader());
-SandboxLibrary.env.set("AjaxManager", new AjaxManager());
+SandboxLibrary.env.set("AjaxManager", new HTTPManager());
 
 
 /* BEGINNING OF DEGUEULASSE CODE */
