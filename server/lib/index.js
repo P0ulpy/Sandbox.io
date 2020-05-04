@@ -1,3 +1,3 @@
-const SandboxLibrary = require("./SandboxNamespace").default;
+const SandboxLibrary = require("./SandboxNamespace");
 
 module.exports = SandboxLibrary;
