@@ -36,11 +36,11 @@ const SandboxNamespace =
     constructors: {}
 };
 
-LibraryComponent.Namespace = SandboxNamespace;
-
 for(constructor in constructors)
 {
     SandboxNamespace.constructors[constructor] = require(constructors[constructor]);    
 }
+
+LibraryComponent.Namespace = SandboxNamespace;
 
 module.exports = SandboxNamespace;

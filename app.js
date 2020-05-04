@@ -14,8 +14,8 @@ const app = express();
 const server = http.createServer(app);
 
 // Déplacer tout ça dans un endroit adapté : config.js ou init.js
-SandboxLibrary.env.set("httpServer", server);
 SandboxLibrary.env.set("app", app);
+SandboxLibrary.env.set("httpServer", server);
 SandboxLibrary.env.set("socketIO", socket(server));
 SandboxLibrary.env.set("sandboxPath", path.join(__dirname, "server/Sandboxes/"));
 SandboxLibrary.env.set("modPath", path.join(__dirname, "server/Mods/"));
