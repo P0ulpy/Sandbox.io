@@ -31,18 +31,6 @@ class ServerMod extends LibraryComponent
         this.customProperties = new Map();
     }
 
-    getClientCode()
-    {
-        return new Promise((resolve, reject) =>
-        {
-            fs.readFile(this.clientFile, "utf8", (err, data) =>
-            {
-                if (err) reject(err);
-                else resolve(data);
-            });
-        });
-    }
-
     set(key, value)
     {
         this.customProperties.set(key, value);

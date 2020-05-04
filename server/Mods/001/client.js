@@ -1,8 +1,12 @@
 // Ce fichier sera directement envoyé au client et pas interprété par le serveur
 // ClientMod provient de sandbox.client.js
-class MonMod1 extends Sandbox.ClientMod
+class Mod001 extends Sandbox.ClientMod
 {
-
+    constructor()
+    {
+        super();
+        console.log("Mod001 instancié !!!!");
+    }
 }
 
 

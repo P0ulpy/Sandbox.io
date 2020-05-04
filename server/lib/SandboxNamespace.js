@@ -8,6 +8,7 @@ const UIDManager = require("./UIDManager");
 const LibraryComponent = require("./LibraryComponent");
 const RoomsManager = require("./RoomsManager");
 const Room = require("./Room");
+const HTTPManager = require("./HTTPManager");
 
 const SandboxNamespace =
 {
@@ -41,5 +42,6 @@ SandboxNamespace.constructors.SocketManager = SocketManager;
 SandboxNamespace.constructors.UIDManager = UIDManager;
 SandboxNamespace.constructors.RoomsManager = RoomsManager;
 SandboxNamespace.constructors.Room = Room;
+SandboxNamespace.constructors.HTTPManager = HTTPManager;
 
 module.exports = SandboxNamespace;

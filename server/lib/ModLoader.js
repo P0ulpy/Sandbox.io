@@ -12,11 +12,39 @@ class ModLoader extends LibraryComponent
     constructor()
     {
         super();
+        this.UIDManager = this.env.get("UIDManager");
     }
 
     getAbsolutePath(modFolder)
     {
         return path.join(this.env.get("modPath"), modFolder);
+    }
+
+    getModconfigPath(modFolder)
+    {
+        const absolutePath = this.getAbsolutePath(modFolder);
+        return path.join(absolutePath, "modconfig.json");
+    }
+
+    getClientCodePath(modFolder)
+    {
+        const absolutePath = this.getAbsolutePath(modFolder);
+        return path.join(absolutePath, "client.js");
+    }
+
+    //getClient...
+    // getServer...
+
+    getClientCode(modUID)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            fs.readFile(this.getClientCodePath(modUID), "utf8", (err, data) =>
+            {
+                if (err) reject(err);
+                else resolve(data);
+            });
+        });
     }
 
     /*
@@ -45,7 +73,7 @@ class ModLoader extends LibraryComponent
                     const modConfig = JSON.parse(data);
                     const serverModFile = path.join(absolutePath, modConfig.server);
 
-                    if (this.env.get("UIDManager").get("mod").isValid(modConfig.UID))
+                    if (this.UIDManager.get("mod").isValid(modConfig.UID))
                     {
                         modConfig.absolutePath = absolutePath;
 
