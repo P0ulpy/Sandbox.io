@@ -1,6 +1,9 @@
+// SALE, temporaire, trouver meilleure façon
+import SandboxNamespace from "./../../assets/js/SandboxNamespace.js";
+
 // Ce fichier sera directement envoyé au client et pas interprété par le serveur
 // ClientMod provient de sandbox.client.js
-class Mod001 extends Sandbox.ClientMod
+class Mod001 extends SandboxNamespace.constructors.ClientMod
 {
     constructor()
     {
@@ -8,6 +11,8 @@ class Mod001 extends Sandbox.ClientMod
         console.log("Mod001 instancié !!!!");
     }
 }
+
+export default Mod001;
 
 
 // Mods natifs : NativeItemMod

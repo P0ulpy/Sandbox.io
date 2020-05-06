@@ -32,8 +32,22 @@ class ModLoader extends LibraryComponent
         return path.join(absolutePath, "client.js");
     }
 
-    //getClient...
-    // getServer...
+    getModconfigData(modFolder)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            fs.readFile(this.getModconfigPath(modFolder), "utf8", (err, data) =>
+            {
+                if (err) reject(err)
+                else resolve(JSON.parse(data));
+            });
+        });
+    }
+
+    getModPublicData(modFolder)
+    {
+        
+    }
 
     getClientCode(modUID)
     {

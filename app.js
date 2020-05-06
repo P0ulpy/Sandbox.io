@@ -9,6 +9,7 @@ const UIDManager = SandboxLibrary.constructors.UIDManager;
 const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const HTTPManager = SandboxLibrary.constructors.HTTPManager;
+const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
 
 const app = express();
 const server = http.createServer(app);
@@ -25,6 +26,7 @@ SandboxLibrary.env.set("debugLevel", "note");
 SandboxLibrary.env.set("ModLoader", new ModLoader());
 SandboxLibrary.env.set("RoomLoader", new RoomLoader());
 SandboxLibrary.env.set("HTTPManager", new HTTPManager());
+SandboxLibrary.env.set("SandboxLoader", new SandboxLoader());
 
 // permet de generer un acces au variables d'un POST dans req.body 
 app.use(express.urlencoded({ extended: false }));

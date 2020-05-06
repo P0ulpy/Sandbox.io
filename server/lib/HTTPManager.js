@@ -31,7 +31,8 @@ class HTTPManager extends LibraryComponent
         this.app.get('/room', (req, res) => this.getRoom(req, res));
         this.app.get('/createRoom', (req, res) => res.redirect('/'));
         this.app.post('/createRoom', (req, res) => this.createRoom(req, res));
-        this.app.get("/mod/:UID/", (req, res) => this.sendClientMod(req, res));
+        this.app.get("/mod/:UID/class.js", (req, res) => this.sendClientMod(req, res));
+        this.app.get("/sandbox/:UID/infos", (req, res) => this.sendSandboxInfos(req, res));
     }
 
     getHome(req, res)
@@ -95,7 +96,7 @@ class HTTPManager extends LibraryComponent
         this.modLoader.getClientCode(modUID).then((data) =>
         {
             res.set("Content-Type", "application/javascript");
-            // send() écrase les headers
+            // send() écrase les headers je sais pas pourquoi
             res.end(data);
         })
         .catch((reason) =>
@@ -103,6 +104,28 @@ class HTTPManager extends LibraryComponent
             this.debug("error", `Can't send mod code : ${reason}`);
             res.send({ success: false });
         });
+    }
+
+    sendSandboxInfos(req, res)
+    {
+        const UID = req.params.UID;
+
+        if (this.UIDManager.get("sandbox").isValid(UID))
+        {
+            this.env.get("SandboxLoader").getPublicInfos(UID).then(data =>
+            {
+                res.send(data);
+            })
+            .catch((err) =>
+            {
+                this.debug("error", err);
+                res.status(500).send({ status: false, errorMessage: "Internal error", errorData: { UID: UID } });
+            });
+        }
+        else
+        {
+            res.status(500).send({ status: false, errorMessage: "Invalid Sandbox UID", errorData: { UID: UID } });
+        }
     }
 }
 

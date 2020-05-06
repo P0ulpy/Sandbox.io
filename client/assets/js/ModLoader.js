@@ -1,10 +1,13 @@
-import AjaxManager from "./AjaxManager";
-
 class ModLoader
 {
     constructor()
     {
         
+    }
+
+    loadClassFile(URL)
+    {
+        return import(URL);
     }
 }
 
