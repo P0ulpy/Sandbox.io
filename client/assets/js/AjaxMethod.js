@@ -12,29 +12,11 @@ class AjaxMethod
 
         this.autoAbort = config.autoAbort ?? false;
 
-        // Si config.URL est une chaîne, alors on la prend telle quelle
-        // exemple : https://www.google.com/blabla?a=holala#bonjour
-        if (typeof config.URL === "string")
+        if (typeof config.URLkey !== "string")
         {
-            this.URL = new URL(config.URL);
+            throw new Error(`[AjaxMethod] : config.URLkey must be a string`);
         }
-        // Sinon, c'est un objet du type :
-        // { base: "http://localhost", link: "/_a_", linkParams: [ "a" ] }
-        // et on fait appel au module URLGenerator pour le transformer en chaîne
-        else
-        {
-            this.computeURL(config.URL);
-
-            if (this.autoAbort)
-            {
-                console.warn("Attention, utiliser autoAbort avec une URL dynamique peut annuler des requêtes de manière pas ouf");
-            }
-        }
-    }
-
-    computeURL(URLconfig)
-    {
-        this.dynamicURL = new SandboxNamespace.constructors.DynamicURL(URLconfig);
+        this.URLkey = config.URLkey;
     }
 
     setSearchParams()
@@ -63,17 +45,14 @@ class AjaxMethod
 
     abort()
     {
-        if (this.autoAbort) this.currentXHR?.abort();
+        this.currentXHR?.abort();
     }
 
-    execute(linkParams = {})
+    execute(linkParams)
     {
-        this.abort();
+        if (this.autoAbort) this.abort();
 
-        if (this.dynamicURL)
-        {
-            this.URL = this.dynamicURL.compute(linkParams);
-        }
+        this.URL = SandboxNamespace.env.get("URLManager").computeAsURL(this.URLkey, linkParams);
 
         this.setSearchParams();
         this.setBody();

@@ -1,4 +1,4 @@
-import SandboxNamespace from "./SandboxNamespace.js";
+import AjaxMethod from "./AjaxMethod.js";
 
 class AjaxManager
 {
@@ -9,7 +9,7 @@ class AjaxManager
 
     create(name, config)
     {
-        this.methods.set(name, new SandboxNamespace.constructors.AjaxMethod(config));
+        this.methods.set(name, new AjaxMethod(config));
         return this;
     }
 

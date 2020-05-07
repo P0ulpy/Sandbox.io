@@ -1,9 +1,8 @@
-import AjaxMethod from "./AjaxMethod.js";
 import AjaxManager from "./AjaxManager.js";
 import ModLoader from "./ModLoader.js";
 import ClientMod from "./ClientMod.js";
-import DynamicURL from "./DynamicURL.js";
 import Sandbox from "./Sandbox.js";
+import URLManager from "./URLManager.js";
 
 const SandboxNamespace =
 {
@@ -26,20 +25,20 @@ const SandboxNamespace =
     constructors: {},
 };
 
-SandboxNamespace.constructors.AjaxMethod = AjaxMethod;
 SandboxNamespace.constructors.AjaxManager = AjaxManager;
 SandboxNamespace.constructors.ModLoader = ModLoader;
 SandboxNamespace.constructors.ClientMod = ClientMod;
-SandboxNamespace.constructors.DynamicURL = DynamicURL;
+SandboxNamespace.constructors.URLManager = URLManager;
 SandboxNamespace.constructors.Sandbox = Sandbox;
 
-AjaxMethod.Namespace = SandboxNamespace;
 AjaxManager.Namespace = SandboxNamespace;
 ModLoader.Namespace = SandboxNamespace;
 ClientMod.Namespace = SandboxNamespace;
-DynamicURL.Namespace = SandboxNamespace;
+URLManager.Namespace = SandboxNamespace;
 Sandbox.Namespace = SandboxNamespace;
 
 // PAS (ENCORE ?) de LibraryComponent
+
+
 
 export default SandboxNamespace;

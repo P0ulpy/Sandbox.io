@@ -1,18 +1,24 @@
-// SALE, temporaire, trouver meilleure façon
-import SandboxNamespace from "./../../assets/js/SandboxNamespace.js";
-
 // Ce fichier sera directement envoyé au client et pas interprété par le serveur
 // ClientMod provient de sandbox.client.js
-class Mod001 extends SandboxNamespace.constructors.ClientMod
+
+// Pas ouf mais marche, comme ça on contrôle bien le ClientMod passé (côté client)
+export default (ClientMod) =>
 {
-    constructor()
+    return class Mod001 extends ClientMod
     {
-        super();
-        console.log("Mod001 instancié !!!!");
+        constructor()
+        {
+            super();
+
+            this.init();
+        }
+
+        init()
+        {
+            console.log("Mod001 instancié !");
+        }
     }
 }
-
-export default Mod001;
 
 
 // Mods natifs : NativeItemMod

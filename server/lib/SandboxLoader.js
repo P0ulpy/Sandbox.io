@@ -48,7 +48,7 @@ class SandboxLoader extends LibraryComponent
 
                 for (const modUID of sandboxConfigData.mods)
                 {
-                    const modPromise = modLoader.getModconfigData(modUID);
+                    const modPromise = modLoader.getModPublicInfos(modUID);
                     modsPromise.push(modPromise);
 
                     modPromise.then((data) => { mods[modUID] = data })
@@ -58,8 +58,6 @@ class SandboxLoader extends LibraryComponent
                 // Vachement pratique le await !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // ici 0 risque de Promise.reject()
                 await allSettled(modsPromise);
-
-                console.log(mods);
 
                 const publicData = {
                     name: sandboxConfigData.name,

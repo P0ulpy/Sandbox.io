@@ -44,9 +44,27 @@ class ModLoader extends LibraryComponent
         });
     }
 
-    getModPublicData(modFolder)
+    getModPublicInfos(modFolder)
     {
-        
+        return new Promise(async(resolve, reject) =>
+        {
+            try
+            {
+                const modConfigData = await this.getModconfigData(modFolder);
+
+                const publicData = {
+                    UID: modConfigData.UID,
+                    name: modConfigData.name,
+                    version: modConfigData.version
+                };
+
+                resolve(publicData);
+            }
+            catch (error)
+            {
+                reject(error);
+            }
+        });
     }
 
     getClientCode(modUID)

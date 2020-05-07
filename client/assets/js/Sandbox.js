@@ -11,6 +11,9 @@ class Sandbox extends EventEmitter
         super();
         const ajaxManager = SandboxNamespace.env.get("AjaxManager");
 
+        // Gérer avec objet spécifique plus tard
+        this.modsInstances = new Map();
+
         ajaxManager.execute("getSandboxInfos", { UID: UID })
         .then((infos) =>
         {
@@ -33,11 +36,16 @@ class Sandbox extends EventEmitter
         const promises = [];
         this.emit("modLoadStart");
 
-        this.mods.forEach(modUID =>
+        for (const mod of Object.values(this.mods))
         {
-            // url statique pour l'instant, URLManager serait pas de trop
-            promises.push(modLoader.loadClassFile(modUID));
-        });
+            // Chargement du fichier de la classe client correspondant au mod
+            // URL statique, pas ouf, mais pas le temps de faire mieux
+            const classModPromise = modLoader.getModClass(mod.UID);
+
+            classModPromise.then(modClass => this.modsInstances.set(mod.UID, new modClass()));
+
+            promises.push(classModPromise);
+        }
     }
 }
 

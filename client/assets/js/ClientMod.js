@@ -2,7 +2,7 @@ class ClientMod
 {
     constructor()
     {
-        console.log("Ici");
+        console.log("ClientMod instancié");
     }
 }
 
