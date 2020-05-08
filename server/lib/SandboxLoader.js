@@ -48,7 +48,7 @@ class SandboxLoader extends LibraryComponent
 
                 for (const modUID of sandboxConfigData.mods)
                 {
-                    const modPromise = modLoader.getModPublicInfos(modUID);
+                    const modPromise = modLoader.getModPublicData(modUID);
                     modsPromise.push(modPromise);
 
                     modPromise.then((data) => { mods[modUID] = data })

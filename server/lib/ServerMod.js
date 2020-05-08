@@ -1,5 +1,3 @@
-const path = require("path");
-const fs = require("fs");
 const LibraryComponent = require("./LibraryComponent");
 
 class ServerMod extends LibraryComponent
@@ -7,6 +5,8 @@ class ServerMod extends LibraryComponent
     constructor(config = {})
     {
         super();
+
+        this.debug("note", `${this.constructor.name} instancié`);
 
         // Pas obligatoire : warning
         this.name = config.name || "default";
@@ -22,10 +22,6 @@ class ServerMod extends LibraryComponent
 
         // Chemin absolu du Mod sur le serveur : erreur
         this.modPath = config.absolutePath;
-
-        // Pas obligatoire : warning (mod uniquement serveur par exemple)
-        // Seulement 1 fichier client supporté pour le moment
-        this.clientFile = path.join(config.absolutePath, config.client);
 
         // Propriétés ajoutées au mod par le développeur
         this.customProperties = new Map();

@@ -11,8 +11,6 @@ class HTTPManager extends LibraryComponent
         super();
 
         this.app = this.env.get('app');
-        this.UIDManager = this.env.get("UIDManager");
-        this.modLoader = this.env.get("ModLoader");
 
         // permet de generer un acces au variables d'un POST dans req.body 
         this.app.use(express.urlencoded({ extended: false }));
@@ -59,7 +57,7 @@ class HTTPManager extends LibraryComponent
 
     createRoom(req, res)
     {
-        const UID = this.UIDManager.get("sandbox").nextValue();
+        const UID = this.env.get("UIDManager").get("sandbox").nextValue();
 
         if(!this.RM.has(UID))
         {
@@ -92,9 +90,13 @@ class HTTPManager extends LibraryComponent
     {
         // Pour l'instant, on se contente d'envoyer le fichier client.js en brut
         const modUID = req.params.UID;
+        const modLoader = this.env.get("ModLoader");
 
-        this.modLoader.getClientCode(modUID).then((data) =>
+        
+
+        modLoader.getClientClass(modUID).then((data) =>
         {
+            console.log(res.sendFile);
             res.set("Content-Type", "application/javascript");
             // send() écrase les headers je sais pas pourquoi
             res.end(data);
@@ -109,8 +111,9 @@ class HTTPManager extends LibraryComponent
     sendSandboxInfos(req, res)
     {
         const UID = req.params.UID;
+        const UIDManager = this.env.get("UIDManager");
 
-        if (this.UIDManager.get("sandbox").isValid(UID))
+        if (UIDManager.get("sandbox").isValid(UID))
         {
             this.env.get("SandboxLoader").getPublicInfos(UID).then(data =>
             {
