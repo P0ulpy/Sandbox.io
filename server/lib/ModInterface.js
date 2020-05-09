@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const LibraryComponent = require("./LibraryComponent.js");
+const ModInterfaceDependencies = require("./ModInterfaceDependencies");
 
 /* Cette classe ainsi que ModInterfaceContainer sont le résultat de la réécriture complète de
 ModLoader et de ModParser, de manière beaucoup plus propre, le but étant qu'elles soient le plus
@@ -50,7 +51,7 @@ class ModInterface extends LibraryComponent
         // Données à charger
         this.serverClass = null;
         this.modConfig = null;
-        // SOCCUPER DES DEPENDANCES
+        this.dependencies = new ModInterfaceDependencies(this);
 
         this.startLoading();
     }
@@ -63,8 +64,13 @@ class ModInterface extends LibraryComponent
 
         // Le chargement d'UN élément a rencontré une erreur : on termine sur une erreur
         this.on("elementLoadError", () => this.endWithError());
-        // La chargement d'UN élément s'est effectué avec succès
+        // Le chargement d'UNE dépendance a échoué
+        this.on("loadDependencyError", () => this.endWithError());
+
+        // Le chargement d'UN élément s'est effectué avec succès
         this.on("elementLoadSuccess", () => this.checkLoadSuccess());
+        // Toutes les dépendances ont été chargées correctement
+        this.on("loadAllDependencies", () => this.checkLoadSuccess());
 
         // Récupération des évènements d'erreurs spécifiques pour émettre un évènement d'erreur générique
         this.on("modconfigLoadError", () => this.emit("elementLoadError"));
@@ -73,6 +79,8 @@ class ModInterface extends LibraryComponent
         // Récupération des évènements de chargement spécifiques pour émettre un évènement de chargement générique
         this.on("modconfigLoadSuccess", () => this.emit("elementLoadSuccess"));
         this.on("serverClassLoadSuccess", () => this.emit("elementLoadSuccess"));
+
+        this.on("loadDependencySuccess", (dep) => this.debug("note", `La dépendance ${dep.UID} vient d'être chargée pour le Mod #${this.UID}`));
 
         // Appel des méthodes de chargement des données
         this.loadModconfig();
@@ -99,11 +107,14 @@ class ModInterface extends LibraryComponent
 
     checkLoadSuccess()
     {
-        if (this.serverClass !== null && this.modConfig !== null)
+        if (this.serverClass !== null && this.modConfig !== null && this.dependencies.hasAllLoaded())
         {
             this.changeStatus(ModInterface.LOADING_SUCCESS);
+
             // Tous les éléments ont été chargés correctement. L'objet ModInterface est utilisable.
             this.emit("loadSuccess");
+
+            this.debug("note", `Composants de MotInterface #${this.UID} chargés avec succès`);
         }
     }
 
@@ -177,6 +188,11 @@ class ModInterface extends LibraryComponent
         {
             this.emit("serverClassLoadError", err);
         }
+    }
+
+    loadDependencies()
+    {
+        const modInterfaceContainer = this.env.get("ModInterfaceContainer");
     }
 }
 

@@ -38,10 +38,7 @@ class ModInterfaceContainer extends LibraryComponent
 
     get(UID)
     {
-        if (!this.has(UID))
-        {
-            this.add(UID);
-        }
+        this.add(UID);
 
         return this.modInterfaces.get(UID);
     }
@@ -65,8 +62,36 @@ class ModInterfaceContainer extends LibraryComponent
         return this.getSyncModInterfaceData(UID, "serverClass");
     }
 
+    /* Récupérer un 'ModInterface' de manière asynchorne */
+
+    getModInterface(UID)
+    {
+        const modInterface = this.get(UID);
+
+        return new Promise((resolve, reject) =>
+        {
+            // Si le 'ModInterface' est déjà chargé
+            if (modInterface.hasSucceeded())
+            {
+                resolve(modInterface);
+            }
+            // Si le chargement de 'ModInterface' a échoué
+            else if (modInterface.hasFailed())
+            {
+                reject(`Loading of ${modInterface.UID} data has failed`);
+            }
+            // Si le chargement de 'ModInterface' est encore en cours
+            else
+            {
+                modInterface.on("loadSuccess", () => resolve(modInterface));
+                modInterface.on("loadError", () => reject(`Loading of ${modInterface.UID} data has failed`));
+            }
+        });
+    }
+
     /* Méthodes asynchones pour interagir avec les données des 'ModInterface' */
 
+    // Duplication de code avec getModInterface() : corriger à l'occasion, mais pas une priorité
     getModInterfaceData(UID, key)
     {
         const modInterface = this.get(UID);
