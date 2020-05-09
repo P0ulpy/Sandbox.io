@@ -10,6 +10,7 @@ const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const HTTPManager = SandboxLibrary.constructors.HTTPManager;
 const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
+const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;
 
 const app = express();
 const server = http.createServer(app);
@@ -27,6 +28,7 @@ SandboxLibrary.env.set("ModLoader", new ModLoader());
 SandboxLibrary.env.set("RoomLoader", new RoomLoader());
 SandboxLibrary.env.set("HTTPManager", new HTTPManager());
 SandboxLibrary.env.set("SandboxLoader", new SandboxLoader());
+SandboxLibrary.env.set("ModInterfaceContainer", new ModInterfaceContainer());
 
 // permet de generer un acces au variables d'un POST dans req.body 
 app.use(express.urlencoded({ extended: false }));
@@ -69,7 +71,15 @@ a = new ModInterface("001").on("statusChange", function(newStatus)
     console.log(newStatus);
 });
 
+
+b = SandboxLibrary.env.get("ModInterfaceContainer");
+
+
 console.log(a.isFinished());
+
+console.log(b.getSyncModconfig("001"));
+b.getModconfig("001").then(modConfig => console.log(modConfig));
+setTimeout(() => console.log(b.getSyncModconfig("001")), 1000);
 
 /*var modlo = SandboxLibrary.env.get("ModLoader");
 

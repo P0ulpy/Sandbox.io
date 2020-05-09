@@ -61,8 +61,8 @@ class ModInterface extends LibraryComponent
     {
         this.debug("note", `Début de chargement du ModInterface #${this.UID}.`);
 
-        // Le chargement d'UN élément a rencontré une erreur
-        this.on("elementLoadError", () => this.changeStatus(ModInterface.LOADING_ERROR));
+        // Le chargement d'UN élément a rencontré une erreur : on termine sur une erreur
+        this.on("elementLoadError", () => this.endWithError());
         // La chargement d'UN élément s'est effectué avec succès
         this.on("elementLoadSuccess", () => this.checkLoadSuccess());
 
@@ -74,6 +74,7 @@ class ModInterface extends LibraryComponent
         this.on("modconfigLoadSuccess", () => this.emit("elementLoadSuccess"));
         this.on("serverClassLoadSuccess", () => this.emit("elementLoadSuccess"));
 
+        // Appel des méthodes de chargement des données
         this.loadModconfig();
         this.loadServerClass();
 
@@ -81,6 +82,14 @@ class ModInterface extends LibraryComponent
     }
 
     /* Méthodes qui contrôlent le statut du chargement */
+
+    endWithError()
+    {
+        this.changeStatus(ModInterface.LOADING_ERROR);
+        this.emit("loadError");
+
+        // Éventuellement, arrêter le chargement des autres données
+    }
 
     changeStatus(newStatus)
     {

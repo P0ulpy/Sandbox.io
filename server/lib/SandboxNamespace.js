@@ -11,6 +11,7 @@ const Room = require("./Room");
 const HTTPManager = require("./HTTPManager");
 const SandboxLoader = require("./SandboxLoader");
 const ModInterface = require("./ModInterface");
+const ModInterfaceContainer = require("./ModInterfaceContainer");
 
 const SandboxNamespace =
 {
@@ -47,5 +48,6 @@ SandboxNamespace.constructors.Room = Room;
 SandboxNamespace.constructors.HTTPManager = HTTPManager;
 SandboxNamespace.constructors.SandboxLoader = SandboxLoader;
 SandboxNamespace.constructors.ModInterface = ModInterface;
+SandboxNamespace.constructors.ModInterfaceContainer = ModInterfaceContainer;
 
 module.exports = SandboxNamespace;
