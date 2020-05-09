@@ -25,12 +25,12 @@ class HTTPManager extends LibraryComponent
 
     setEvents()
     {
-        this.app.get('/', (req, res) => this.getHome(req, res));
+        /*this.app.get('/', (req, res) => this.getHome(req, res));
         this.app.get('/room', (req, res) => this.getRoom(req, res));
         this.app.get('/createRoom', (req, res) => res.redirect('/'));
         this.app.post('/createRoom', (req, res) => this.createRoom(req, res));
         this.app.get("/mod/:UID/class.js", (req, res) => this.sendClientMod(req, res));
-        this.app.get("/sandbox/:UID/infos", (req, res) => this.sendSandboxInfos(req, res));
+        this.app.get("/sandbox/:UID/infos", (req, res) => this.sendSandboxInfos(req, res));*/
     }
 
     getHome(req, res)
@@ -92,19 +92,15 @@ class HTTPManager extends LibraryComponent
         const modUID = req.params.UID;
         const modLoader = this.env.get("ModLoader");
 
-        
-
-        modLoader.getClientClass(modUID).then((data) =>
+        modLoader.getModconfig(modUID).then(modConfig =>
         {
-            console.log(res.sendFile);
-            res.set("Content-Type", "application/javascript");
-            // send() écrase les headers je sais pas pourquoi
-            res.end(data);
+            this.debug("note", `Sending client class for mod #${modUID}`);
+            res.sendFile(modConfig.clientClassPath);
         })
-        .catch((reason) =>
+        .catch(error =>
         {
-            this.debug("error", `Can't send mod code : ${reason}`);
-            res.send({ success: false });
+            this.debug("error", `Can't send mod code : ${error}`);
+            res.status(500).send({ success: false, errorMessage: error });
         });
     }
 

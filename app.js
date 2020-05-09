@@ -62,16 +62,23 @@ SandboxLibrary.env.get("UIDManager")
 //const roomsManager = new RoomsManager({httpServer: server, express: express, app:app});
 
 
+const ModInterface = SandboxLibrary.constructors.ModInterface;
 
+a = new ModInterface("001").on("statusChange", function(newStatus)
+{
+    console.log(newStatus);
+});
 
-var modlo = SandboxLibrary.env.get("ModLoader");
+console.log(a.isFinished());
+
+/*var modlo = SandboxLibrary.env.get("ModLoader");
 
 (async function()
 {
     const mode = await modlo.getMod("002");
 
     console.log(mode);
-})();
+})();*/
 
 
 server.listen(80);

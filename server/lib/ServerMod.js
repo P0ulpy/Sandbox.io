@@ -20,9 +20,6 @@ class ServerMod extends LibraryComponent
         // Obligatoire : erreur
         this.sandbox = config.sandbox;
 
-        // Chemin absolu du Mod sur le serveur : erreur
-        this.modPath = config.absolutePath;
-
         // Propriétés ajoutées au mod par le développeur
         this.customProperties = new Map();
     }

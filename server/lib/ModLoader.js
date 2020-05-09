@@ -92,6 +92,13 @@ class ModLoader extends LibraryComponent
         });
     }
 
+    // Retourne une promesse qui est résolue lorsque les dépendances du mod sont chargées
+    // 
+    loadModDependencies(UID)
+    {
+
+    }
+
     loadModconfig(UID)
     {
         return new Promise((resolve, reject) =>
