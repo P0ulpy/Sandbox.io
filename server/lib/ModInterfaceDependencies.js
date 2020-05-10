@@ -58,6 +58,8 @@ class ModInterfaceDependencies extends LibraryComponent
 
         this.debug("note", `Loading ${this.toLoad.length} dependencies for Mod #${this.modInterface.UID}`);
 
+        /* Pas besoin d'émettre l'évènement "loadAllDependencies" s'il n'y a aucune dépendance, puisque la vérification sera effectuée
+        dans 'ModInterface' via hasAllLoaded() */
         for (const dep of this.toLoad)
         {
             const dependencyPromise = modInterfaceContainer.getModInterface(dep);

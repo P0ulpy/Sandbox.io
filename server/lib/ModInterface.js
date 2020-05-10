@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const LibraryComponent = require("./LibraryComponent.js");
 const ModInterfaceDependencies = require("./ModInterfaceDependencies");
+const ModServer = require("./ModServer");
 
 /* Cette classe ainsi que ModInterfaceContainer sont le résultat de la réécriture complète de
 ModLoader et de ModParser, de manière beaucoup plus propre, le but étant qu'elles soient le plus
@@ -63,40 +64,39 @@ class ModInterface extends LibraryComponent
         this.debug("note", `Début de chargement du ModInterface #${this.UID}.`);
 
         // Le chargement d'UN élément a rencontré une erreur : on termine sur une erreur
-        this.on("elementLoadError", () => this.endWithError());
+        this.on("elementLoadError", err => this.endWithError(err));
         // Le chargement d'UNE dépendance a échoué
-        this.on("loadDependencyError", () => this.endWithError());
+        this.on("loadDependencyError", err => this.endWithError(err));
 
         // Le chargement d'UN élément s'est effectué avec succès
         this.on("elementLoadSuccess", () => this.checkLoadSuccess());
         // Toutes les dépendances ont été chargées correctement
+        this.on("loadAllDependencies", () => this.debug("note", `Successfully loaded ${this.dependencies.length} dependencies for Mod #${this.UID}`));
         this.on("loadAllDependencies", () => this.checkLoadSuccess());
 
         // Récupération des évènements d'erreurs spécifiques pour émettre un évènement d'erreur générique
-        this.on("modconfigLoadError", () => this.emit("elementLoadError"));
-        this.on("serverClassLoadError", () => this.emit("elementLoadError"));
+        this.on("modconfigLoadError", err => this.emit("elementLoadError", err));
+        this.on("serverClassLoadError", err => this.emit("elementLoadError", err));
 
         // Récupération des évènements de chargement spécifiques pour émettre un évènement de chargement générique
         this.on("modconfigLoadSuccess", () => this.emit("elementLoadSuccess"));
         this.on("serverClassLoadSuccess", () => this.emit("elementLoadSuccess"));
 
-        this.on("loadDependencySuccess", (dep) => this.debug("note", `La dépendance ${dep.UID} vient d'être chargée pour le Mod #${this.UID}`));
+        this.on("loadDependencySuccess", dep => this.debug("note", `La dépendance ${dep.UID} vient d'être chargée pour le Mod #${this.UID}`));
+
+        this.changeStatus(ModInterface.LOADING_PROGRESS);
 
         // Appel des méthodes de chargement des données
         this.loadModconfig();
         this.loadServerClass();
-
-        this.changeStatus(ModInterface.LOADING_PROGRESS);
     }
 
     /* Méthodes qui contrôlent le statut du chargement */
 
-    endWithError()
+    endWithError(err)
     {
         this.changeStatus(ModInterface.LOADING_ERROR);
-        this.emit("loadError");
-
-        // Éventuellement, arrêter le chargement des autres données
+        this.emit("loadError", err);
     }
 
     changeStatus(newStatus)
@@ -179,7 +179,7 @@ class ModInterface extends LibraryComponent
     {
         try
         {
-            const serverClass = require(this.serverClassPath)(this.constructors.ServerMod);
+            const serverClass = require(this.serverClassPath)(ModServer);
 
             this.serverClass = serverClass;
             this.emit("serverClassLoadSuccess");
@@ -190,9 +190,17 @@ class ModInterface extends LibraryComponent
         }
     }
 
-    loadDependencies()
+    /* Instanciation d'un 'ModServer' à partir de l'instance de 'ModInterface' */
+
+    instanciateSync()
     {
-        const modInterfaceContainer = this.env.get("ModInterfaceContainer");
+        // L'instanciation des dépendances va entraîner une réaction en chaîne : instanciation des dépendances des dépendances, etc.
+
+        if (!this.hasSucceeded())
+        {
+            throw new Error(`Can't instanciate 'ModServer' #${this.UID}, because 'ModInterface isn't loaded`);
+        }
+        return new this.serverClass(this, null);
     }
 }
 

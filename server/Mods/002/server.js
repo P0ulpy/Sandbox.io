@@ -1,6 +1,6 @@
-module.exports = function(ServerMod)
+module.exports = function(ModServer)
 {
-    return class Mod002 extends ServerMod
+    return class Mod002 extends ModServer
     {
         constructor(config)
         {

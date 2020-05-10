@@ -1,3 +1,5 @@
+console.clear();
+
 const path = require("path");
 const socket = require("socket.io");
 const express = require("express");
@@ -63,8 +65,6 @@ SandboxLibrary.env.get("UIDManager")
 
 //const roomsManager = new RoomsManager({httpServer: server, express: express, app:app});
 
-
-
 b = SandboxLibrary.env.get("ModInterfaceContainer");
 
 /*
@@ -73,8 +73,10 @@ console.log(b.getSyncModconfig("001"));
 b.getModconfig("001").then(modConfig => console.log(modConfig));
 setTimeout(() => console.log(b.getSyncModconfig("001")), 1000);
 */
+let a = null;
 
-b.getModconfig("001");
+b.getModInterface("001").then(m => a = m.instanciateSync())
+.catch(console.log);
 
 
 /*var modlo = SandboxLibrary.env.get("ModLoader");
