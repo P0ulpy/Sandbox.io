@@ -1,24 +1,23 @@
-const ServerMod = require("../../lib/").constructors.ServerMod;
-
-class MyMod2 extends ServerMod
+module.exports = function(ModServer)
 {
-    constructor(config)
+    return class Mod002 extends ModServer
     {
-        super(config);
+        constructor(config)
+        {
+            super(config);
+        }
+    
+        init()
+        {
+            this.on("test", (data) => { console.log("test recu : " + data) });
+            //this.on("test", onTest);
+            //this.on("test", (data) => { this.onTest(data) });
+            //this.on("test", this.onTest);
+        }
+    
+        onTest(data)
+        {
+            console.log(`[onTest] : ${data}`);
+        }
     }
-
-    init()
-    {
-        this.on("test", (data) => { console.log("test recu : " + data) });
-        //this.on("test", onTest);
-        //this.on("test", (data) => { this.onTest(data) });
-        //this.on("test", this.onTest);
-    }
-
-    onTest(data)
-    {
-        console.log(`[onTest] : ${data}`);
-    }
-}
-
-module.exports = MyMod2;
+};

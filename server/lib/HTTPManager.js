@@ -25,10 +25,12 @@ class HTTPManager extends LibraryComponent
 
     setEvents()
     {
-        this.app.get('/', (req, res) => this.getHome(req, res));
+        /*this.app.get('/', (req, res) => this.getHome(req, res));
         this.app.get('/room', (req, res) => this.getRoom(req, res));
         this.app.get('/createRoom', (req, res) => res.redirect('/'));
         this.app.post('/createRoom', (req, res) => this.createRoom(req, res));
+        this.app.get("/mod/:UID/class.js", (req, res) => this.sendClientMod(req, res));
+        this.app.get("/sandbox/:UID/infos", (req, res) => this.sendSandboxInfos(req, res));*/
     }
 
     getHome(req, res)
@@ -39,7 +41,7 @@ class HTTPManager extends LibraryComponent
         });
     }
 
-    getRoom(req, res, next) 
+    getRoom(req, res) 
     {
         const UID = req.query.UID;
 
@@ -81,6 +83,47 @@ class HTTPManager extends LibraryComponent
         {
             //TODO : trouver un truc plus malinx que les GET pour passer les erreurs
             res.redirect('/');
+        }
+    }
+
+    sendClientMod(req, res)
+    {
+        // Pour l'instant, on se contente d'envoyer le fichier client.js en brut
+        const modUID = req.params.UID;
+        const modLoader = this.env.get("ModLoader");
+
+        modLoader.getModconfig(modUID).then(modConfig =>
+        {
+            this.debug("note", `Sending client class for mod #${modUID}`);
+            res.sendFile(modConfig.clientClassPath);
+        })
+        .catch(error =>
+        {
+            this.debug("error", `Can't send mod code : ${error}`);
+            res.status(500).send({ success: false, errorMessage: error });
+        });
+    }
+
+    sendSandboxInfos(req, res)
+    {
+        const UID = req.params.UID;
+        const UIDManager = this.env.get("UIDManager");
+
+        if (UIDManager.get("sandbox").isValid(UID))
+        {
+            this.env.get("SandboxLoader").getPublicInfos(UID).then(data =>
+            {
+                res.send(data);
+            })
+            .catch((err) =>
+            {
+                this.debug("error", err);
+                res.status(500).send({ status: false, errorMessage: "Internal error", errorData: { UID: UID } });
+            });
+        }
+        else
+        {
+            res.status(500).send({ status: false, errorMessage: "Invalid Sandbox UID", errorData: { UID: UID } });
         }
     }
 }
