@@ -39,7 +39,7 @@ class HTTPManager extends LibraryComponent
         });
     }
 
-    getRoom(req, res) 
+    getRoom(req, res, next) 
     {
         const UID = req.query.UID;
 

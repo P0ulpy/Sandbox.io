@@ -12,7 +12,7 @@ const constructors =
     RoomsManager: "./RoomsManager",
     Room: "./Room",
     HTTPManager: "./HTTPManager",
-}
+};
 
 const SandboxNamespace = 
 {
