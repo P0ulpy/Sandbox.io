@@ -1,3 +1,5 @@
+console.clear();
+
 const path = require("path");
 const socket = require("socket.io");
 const express = require("express");
@@ -9,23 +11,28 @@ const UIDManager = SandboxLibrary.constructors.UIDManager;
 const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const HTTPManager = SandboxLibrary.constructors.HTTPManager;
+const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
+const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;
 
 const app = express();
 const server = http.createServer(app);
 
 // Déplacer tout ça dans un endroit adapté : config.js ou init.js
-SandboxLibrary.env.set("app", app);
 SandboxLibrary.env.set("httpServer", server);
+SandboxLibrary.env.set("app", app);
 SandboxLibrary.env.set("socketIO", socket(server));
 SandboxLibrary.env.set("sandboxPath", path.join(__dirname, "server/Sandboxes/"));
 SandboxLibrary.env.set("modPath", path.join(__dirname, "server/Mods/"));
 SandboxLibrary.env.set("RoomsManager", new RoomsManager());
 SandboxLibrary.env.set("UIDManager", new UIDManager());
 SandboxLibrary.env.set("debugLevel", "note");
-SandboxLibrary.env.set("modLoader", new ModLoader());
-SandboxLibrary.env.set("roomLoader", new RoomLoader());
-SandboxLibrary.env.set("AjaxManager", new HTTPManager());
+SandboxLibrary.env.set("ModLoader", new ModLoader());
+SandboxLibrary.env.set("RoomLoader", new RoomLoader());
+SandboxLibrary.env.set("HTTPManager", new HTTPManager());
+SandboxLibrary.env.set("SandboxLoader", new SandboxLoader());
+SandboxLibrary.env.set("ModInterfaceContainer", new ModInterfaceContainer());
 
+app.use(express.static(path.join(__dirname + '/client')));
 
 /* BEGINNING OF DEGUEULASSE CODE */
 function basicIterator()
@@ -34,7 +41,7 @@ function basicIterator()
 
     this.persist("lastValue", next);
 
-    return ("00" + next).slice(-3);
+    return (`00${next}`).slice(-3);
 };
 
 function checkValidity(uniqueID)
@@ -52,5 +59,30 @@ SandboxLibrary.env.get("UIDManager")
 //const room = SandboxLibrary.env.get("sandboxLoader").instanciateFromFolder("001");
 
 //const roomsManager = new RoomsManager({httpServer: server, express: express, app:app});
+
+b = SandboxLibrary.env.get("ModInterfaceContainer");
+
+/*
+
+
+console.log(b.getSyncModconfig("001"));
+b.getModconfig("001").then(modConfig => console.log(modConfig));
+setTimeout(() => console.log(b.getSyncModconfig("001")), 1000);
+*/
+let a = null;
+
+b.getModInterface("001").then(m => a = m.instanciateSync())
+.catch(console.log);
+
+
+/*var modlo = SandboxLibrary.env.get("ModLoader");
+
+(async function()
+{
+    res.sendFile(path.join(__dirname + '/client/game.html'));
+});*/
+
+server.listen(25565);
+
 
 server.listen(80);

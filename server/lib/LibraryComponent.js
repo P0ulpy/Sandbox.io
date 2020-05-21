@@ -7,6 +7,8 @@ class LibraryComponent extends EventEmitter
     constructor()
     {
         super();
+        // METTRE EN PLACE SYSTEME DE RESTRICTIONS EN FONCTION DES CLASSES
+        // PAR EXEMPLE SERVERMOD NE PEUT PAS ACCEDER A TELS ELEMENTS
 
         this.env = LibraryComponent.Namespace.env;
         this.constructors = LibraryComponent.Namespace.constructors;
