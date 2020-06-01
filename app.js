@@ -1,4 +1,6 @@
 console.clear();
+// Couleurs de console : https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
+console.log("\x1b[31m%s\x1b[0m", "[--------------------------------]");
 
 const path = require("path");
 const socket = require("socket.io");
@@ -12,6 +14,8 @@ const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const HTTPManager = SandboxLibrary.constructors.HTTPManager;
 const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
+
+//const { ModInterfaceContainer } = require("./server/lib/ModInterface");
 const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;
 
 const app = express();
@@ -30,7 +34,7 @@ SandboxLibrary.env.set("ModLoader", new ModLoader());
 SandboxLibrary.env.set("RoomLoader", new RoomLoader());
 SandboxLibrary.env.set("HTTPManager", new HTTPManager());
 SandboxLibrary.env.set("SandboxLoader", new SandboxLoader());
-SandboxLibrary.env.set("ModInterfaceContainer", new ModInterfaceContainer());
+SandboxLibrary.env.set("ModInterfaceContainer", new ModInterfaceContainer(true));
 
 // permet de generer un acces au variables d'un POST dans req.body 
 app.use(express.urlencoded({ extended: false }));
@@ -49,10 +53,10 @@ function basicIterator()
     return (`00${next}`).slice(-3);
 };
 
-function checkValidity(uniqueID)
+function checkValidity(UID)
 {
     // Chaîne de caractère qui représente un nombre allant de 000 à 999
-    return /^[0-9]{3}$/.test(uniqueID);
+    return /^[0-9]{3}$/.test(UID);
 }
 
 // Création de générateurs d'UID : 1 pour les sandboxes, 1 pour les mods
@@ -77,6 +81,12 @@ let a = null;
 
 b.getModInterface("001").then(m => a = m.instanciateSync())
 .catch(console.log);
+
+
+const c = new ModInterfaceContainer();
+c.load([ "001", "002", "003" ])
+.then(() => console.log(SandboxLibrary.env.get("ModInterfaceContainer")))
+.catch(() => console.log("eh merde"));
 
 
 /*var modlo = SandboxLibrary.env.get("ModLoader");

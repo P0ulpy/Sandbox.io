@@ -10,6 +10,8 @@ class LibraryComponent extends EventEmitter
         // METTRE EN PLACE SYSTEME DE RESTRICTIONS EN FONCTION DES CLASSES
         // PAR EXEMPLE SERVERMOD NE PEUT PAS ACCEDER A TELS ELEMENTS
 
+        // AMELIORER SYSTEME DE debug à partir de this (infos de this)
+
         this.env = LibraryComponent.Namespace.env;
         this.constructors = LibraryComponent.Namespace.constructors;
     }
