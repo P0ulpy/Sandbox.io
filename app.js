@@ -84,9 +84,9 @@ b.getModInterface("001").then(m => a = m.instanciateSync())
 
 
 const c = new ModInterfaceContainer();
-c.load([ "001", "002", "003" ])
-.then(() => console.log(SandboxLibrary.env.get("ModInterfaceContainer")))
-.catch(() => console.log("eh merde"));
+c.load([ "001", "002", "008" ])
+.then(() => console.log("youpi"))
+.catch((err) => console.log("eh merde : " + err));
 
 
 /*var modlo = SandboxLibrary.env.get("ModLoader");

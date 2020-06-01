@@ -96,6 +96,7 @@ class ModInterface extends LibraryComponent
     endWithError(err)
     {
         this.changeStatus(ModInterface.LOADING_ERROR);
+        this.error = err;
         this.emit("loadError", err);
     }
 
@@ -169,12 +170,12 @@ class ModInterface extends LibraryComponent
                 }
                 else if (this.hasFailed())
                 {
-                    reject(this);
+                    reject(this.error);
                 }
                 else
                 {
                     this.on("loadSuccess", () => resolve(this));
-                    this.on("loadError", () => reject(this));
+                    this.on("loadError", err => reject(err));
                 }
             });
         }

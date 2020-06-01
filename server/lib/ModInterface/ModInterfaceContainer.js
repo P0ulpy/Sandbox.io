@@ -1,5 +1,5 @@
-const LibraryComponent = require("./LibraryComponent");
-const ModInterface = require("./ModInterface");
+const LibraryComponent = require("../LibraryComponent");
+const ModInterface = require("../ModInterface");
 
 /*
     Cette classe fonctionne avec 'ModInterface'. 'ModInterfaceContainer' est un conteneur d'instances
@@ -11,31 +11,52 @@ const ModInterface = require("./ModInterface");
     classe et non pas une méthode pour récupérer le 'ModInterface' directement.
 */
 
-/* Cette classe a beaucoup de défauts, notamment au niveau de la gestion des erreurs. TODO :
-    - il faudrait déclencher des exceptions en cas d'erreur
-    - utiliser les évènements
-    - éventuellement, avoir deux classes dinstinctes pour gérer isEnvironmentContainer ou non
-    - hasSucceeded() et hasFailed() pour isEnvironmentContainer === false
- */
 class ModInterfaceContainer extends LibraryComponent
 {
-    constructor(isEnvironmentContainer)
+    constructor()
     {
         super();
 
-        this.isEnvironmentContainer = isEnvironmentContainer ?? false;
-        /* Si à true, alors :
-            - un appel à add() va instancier le 'ModInterface' correspondant s'il ne l'est pas déjà au
-            sein du conteneur
-            - on peut appeler load() autant de fois que l'on veut, mais cette méthode ne devrait pas être
-            utilisée dans ce cas
-           Si vaut false, alors :
-            - un appel à add() va aller chercher l'intance de 'ModInterface' correspondante depuis
-            this.env.get("ModInterfaceContainer")
-            - on ne peut appeler qu'une fois load()
-        */
-
         this.modInterfaces = new Map();
+
+        this.changeStatus(ModInterfaceContainer.LOADING_PROGRESS);
+    }
+
+    /* Gestion des évènements */
+
+    isStatusValid(status)
+    {
+        return (status === ModInterfaceContainer.LOADING_PROGRESS ||
+                status === ModInterfaceContainer.LOADING_SUCCESS ||
+                status === ModInterfaceContainer.LOADING_ERROR);
+    }
+
+    changeStatus(newStatus)
+    {
+        if (!this.isStatusValid(newStatus))
+        {
+            throw new Error(`Invalid status ${newStatus}`);
+        }
+
+        this.emit("statusChange", newStatus);
+        this.status = newStatus;
+    }
+
+    /* Gestion du statut */
+
+    hasSucceeded()
+    {
+        return (this.status === ModInterfaceContainer.LOADING_SUCCESS);
+    }
+
+    hasFailed()
+    {
+        return (this.status === ModInterfaceContainer.LOADING_ERROR);
+    }
+
+    isFinished()
+    {
+        return (this.hasSucceeded() || this.hasFailed());
     }
 
     /* Accesseurs à ne pas utiliser en dehors de la classe */
@@ -47,22 +68,14 @@ class ModInterfaceContainer extends LibraryComponent
 
     add(UID)
     {
+        const environmentContainer = this.env.get("ModInterfaceContainer");
+
         if (!this.has(UID))
         {
-            this.modInterfaces.set(UID, this.provideModInterface(UID));
+            this.modInterfaces.set(UID, environmentContainer.get(UID));
         }
 
         return this;
-    }
-
-    // Se comporte différemment en fonction de la valeur de this.isEnvironmentContainer
-    provideModInterface(UID)
-    {
-        if (this.isEnvironmentContainer)
-        {
-            return new ModInterface(UID);
-        }
-        return this.env.get("ModInterfaceContainer").get(UID);
     }
 
     get(UID)
@@ -108,27 +121,17 @@ class ModInterfaceContainer extends LibraryComponent
     {
         const modInterface = this.get(UID);
 
-        return new Promise((resolve, reject) =>
-        {
+        return new Promise((resolve, reject) => {
             if (!modInterface)
             {
                 reject(`Can't access ModInterface #${UID}`);
             }
-            // Si le 'ModInterface' est déjà chargé
-            else if (modInterface.hasSucceeded())
-            {
-                resolve(key === null ? modInterface : modInterface[key]);
-            }
-            // Si le chargement de 'ModInterface' a échoué
-            else if (modInterface.hasFailed())
-            {
-                reject(`Loading of #${modInterface.UID} data has failed`);
-            }
-            // Si le chargement de 'ModInterface' est encore en cours
             else
             {
-                modInterface.on("loadSuccess", () => resolve(key === null ? modInterface : modInterface[key]));
-                modInterface.on("loadError", () => reject(`Loading of #${modInterface.UID} data has failed`));
+                const loadingPromise = modInterface.loadingPromise;
+
+                loadingPromise.then(() => resolve(modInterface))
+                .catch(() => reject(modInterface));
             }
         });
     }
@@ -167,6 +170,9 @@ class ModInterfaceContainer extends LibraryComponent
             const modInterface = this.get(UID);
             const loadingPromise = modInterface.loadingPromise;
 
+            loadingPromise.then(() => this.emit("modInterfaceLoaded", modInterface))
+            .catch(() => this.emit("modInterfaceError", modInterface));
+
             promises.push(loadingPromise);
         }
 
@@ -175,8 +181,17 @@ class ModInterfaceContainer extends LibraryComponent
             this.canLoad = false;
         }
 
-        return Promise.all(promises);
+        const allLoadedPromise = Promise.all(promises);
+
+        allLoadedPromise.then(() => this.emit("loadingSuccess"))
+        .catch(() => this.emit("loadingError"));
+
+        return allLoadedPromise;
     }
 }
+
+ModInterfaceContainer.LOADING_PROGRESS = Symbol("Chargement des ModInterface du conteneur en cours...");
+ModInterfaceContainer.LOADING_SUCCESS = Symbol("Tous les ModInterface du conteneur ont été chargés avec succès");
+ModInterfaceContainer.LOADING_ERROR = Symbol("Erreur de chargement d'au moins un ModInterface du conteneur");
 
 module.exports = ModInterfaceContainer;
