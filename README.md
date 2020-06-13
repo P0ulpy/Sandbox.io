@@ -2,8 +2,7 @@
 
 ## Principe
 
-L'objectif est de créer une plateforme multijoueur (en ligne) avec une base qui est la *sandbox*. 
-Sur cette base les utilisateurs pourront ajouter des mods qu'ils devront alors développer eux même sous certaines "contraintes". Il y aura une partie client à développer ainsi qu'une partie serveur.
+Plateforme de création et de diffusion de Jeux Vidéo multijoueur, les jeux qu'elle contient utiliseront la librairie "sandbox.io" pour pouvoir fonctionner avec le système, cette librairie prend en charge le fonctionnement des "rooms" et simplifie la synchronisation des données entre les clients et le serveur.
 
 ## Technologies 
 
