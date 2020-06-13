@@ -19,18 +19,20 @@ class HTTPManager extends LibraryComponent
 
         // reference au RoomManager
         this.RM = this.env.get('RoomManager');
-        
+
         this.setEvents();
     }
-
+    
     setEvents()
     {
-        /*this.app.get('/', (req, res) => this.getHome(req, res));
+        /*
+        this.app.get('/', (req, res) => this.getHome(req, res));
         this.app.get('/room', (req, res) => this.getRoom(req, res));
         this.app.get('/createRoom', (req, res) => res.redirect('/'));
         this.app.post('/createRoom', (req, res) => this.createRoom(req, res));
         this.app.get("/mod/:UID/class.js", (req, res) => this.sendClientMod(req, res));
-        this.app.get("/sandbox/:UID/infos", (req, res) => this.sendSandboxInfos(req, res));*/
+        this.app.get("/sandbox/:UID/infos", (req, res) => this.sendSandboxInfos(req, res));
+        */
     }
 
     getHome(req, res)

@@ -39,7 +39,7 @@ class ModParser extends LibraryComponent
         this.mods.forEach(modFolder =>
         {
             // Instanciation du mode et ajout à la liste des mods chargés
-            const promise = this.env.get("modLoader").instanciateFromFolder(modFolder);
+            const promise = this.env.get("ModLoader").instanciateFromFolder(modFolder);
             pendingPromises.push(promise);
 
             promise.then(modInstance =>

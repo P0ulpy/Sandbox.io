@@ -28,7 +28,9 @@ class Room extends LibraryComponent
 
         config.socketManager = this.socketManager;
 
-        this.sandbox = new this.constructors.Sandbox(config);
+        // TODO : ligne de generation de la sandbo
+
+        //this.sandbox = new this.constructors.Sandbox(config);
     }
     
     get data()

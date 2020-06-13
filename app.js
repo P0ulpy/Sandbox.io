@@ -6,6 +6,7 @@ const express = require("express");
 const http = require("http");
 
 const SandboxLibrary = require("./server/lib");
+
 const ModLoader = SandboxLibrary.constructors.ModLoader;
 const UIDManager = SandboxLibrary.constructors.UIDManager;
 const RoomLoader = SandboxLibrary.constructors.RoomLoader;
@@ -60,20 +61,22 @@ SandboxLibrary.env.get("UIDManager")
 
 //const roomsManager = new RoomsManager({httpServer: server, express: express, app:app});
 
-b = SandboxLibrary.env.get("ModInterfaceContainer");
+// code de test de chargement de mod
+
+//b = SandboxLibrary.env.get("ModInterfaceContainer");
 
 /*
-
-
 console.log(b.getSyncModconfig("001"));
 b.getModconfig("001").then(modConfig => console.log(modConfig));
 setTimeout(() => console.log(b.getSyncModconfig("001")), 1000);
-*/
+*/ 
+
+/*
 let a = null;
 
 b.getModInterface("001").then(m => a = m.instanciateSync())
 .catch(console.log);
-
+*/
 
 /*var modlo = SandboxLibrary.env.get("ModLoader");
 
@@ -81,8 +84,5 @@ b.getModInterface("001").then(m => a = m.instanciateSync())
 {
     res.sendFile(path.join(__dirname + '/client/game.html'));
 });*/
-
-server.listen(25565);
-
 
 server.listen(80);
