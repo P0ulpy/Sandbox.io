@@ -11,7 +11,7 @@ Sur cette base les utilisateurs pourront ajouter des mods qu'ils devront alors d
 Il y a plusieurs technologies misent en place dans ce projet 
 
 - NodeJS
-- Sandbox.io
+- Socket.io
 - NoSql
 
 Le projet est principalement écris en Javascript
