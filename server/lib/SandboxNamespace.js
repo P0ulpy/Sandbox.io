@@ -11,11 +11,11 @@ const constructors =
     UIDManager: "./UIDManager",
     RoomsManager: "./RoomsManager",
     Room: "./Room",
-    HTTPManager: "./HTTPManager",
     SandboxLoader: "./SandboxLoader",
     ModInterface: "./ModInterface",
     ModInterfaceContainer: "./ModInterfaceContainer",
     ModServer: "./ModServer",
+    RoutesManager: "./RoutesManager/RoutesManager.js"
 };
 
 const SandboxNamespace = 

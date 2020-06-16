@@ -1,0 +1,36 @@
+{
+    "static" :
+    [
+        "/client"
+    ],
+    "GET" : 
+    [
+        {
+            "route" : "/",
+            "methods" : ["getHome"]
+        },
+        {
+            "route" : "/room",
+            "methods" : ["getRoom"]
+        },
+        {
+            "route" : "/mod/:UID/class.js",
+            "methods" : ["sendClientMod"]
+        },
+        {
+            "route" : "/sandbox/:UID/infos",
+            "methods" : ["sendSandboxInfos"]
+        },
+        {
+            "route" : "/createRoom",
+            "methods" : null
+        }
+    ],
+    "POST" :
+    [
+        {
+            "route" : "/createRoom",
+            "methods" : ["createRoom"]
+        }
+    ]
+}

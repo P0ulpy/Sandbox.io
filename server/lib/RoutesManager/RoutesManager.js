@@ -1,11 +1,140 @@
-const express = require('express');
+const LibraryComponent = require('../LibraryComponent');
+const fs = require('fs');
 const path = require('path');
-const url = require('express');
+const express = require('express'); 
 
-const LibraryComponent = require('./LibraryComponent');
-
-class HTTPManager extends LibraryComponent
+class RoutesManager extends LibraryComponent
 {
+    constructor()
+    {
+        super();
+
+        this.methods = require("./RoutesMethods");
+        this.setupApp();
+
+
+        //this.debug("note", this.routes);
+        console.log(this.routes)
+
+        this.getRoutes()    
+        .then((routes) => 
+        {
+            this.routes = routes;
+            this.loadRoutes();
+        });
+    }
+
+    setupApp()
+    {
+        this.app = this.env.get("app");
+
+        this.app.use(express.urlencoded({ extended: false }));
+        this.app.set('view-engine', 'ejs');
+    }
+
+    getRoutes()
+    {
+        return new Promise((resolve, reject) => 
+        {
+            // get routes configuration file
+            fs.readFile(path.join(__dirname + '/routes.json'), (err, content) => 
+            {
+                if(err) reject(err);
+                else resolve(JSON.parse(content));
+            });
+        });
+    }
+
+    loadRoutes()
+    {
+        for(const staticRoute of this.routes.static)
+        {
+            // TODO : gerer bien le bouzin
+            this.app.use(express.static(path.join(__dirname + staticRoute)));
+        }
+
+        // GET
+
+        //TODO : reagarder pour les function(...)
+
+        for(const route of this.routes.GET)
+        {
+            if(route.methods)
+            {
+                const methods = this.getMethods(route.methods);
+
+                if(methods && methods.length > 0)
+                {
+                    this.app.get(route.route, methods);
+                }
+                else
+                {
+                    this.debug("error", "RouteManager : Impossible de trouver les methods " + route.methods);
+                }
+            }
+            else
+            {
+                this.app.get(route.route, (req, res) => 
+                {
+                    res.redirect('/');
+                })
+            }
+        }
+
+        // POST
+
+        for(const route of this.routes.POST)
+        {
+            if(route.methods)
+            {
+                const methods = this.getMethods(route.methods);
+
+                if(methods && methods.length > 0)
+                {
+                    this.app.post(route.route, methods);
+                }
+                else
+                {
+                    this.debug("error", "RouteManager : Impossible de trouver les methods " + route.methods);
+                }
+            }
+            else
+            {
+                this.app.post(route.route, (req, res) => 
+                {
+                    res.redirect('/');
+                })
+            }
+        }
+    }
+
+    getMethods(names = [])
+    {
+        const methods = [];
+
+        for(const name of names)
+        {
+            methods.push(this.methods[name]);
+        }
+
+        return methods;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     constructor()
     {
         super();
@@ -20,30 +149,35 @@ class HTTPManager extends LibraryComponent
         // reference au RoomManager
         this.RM = this.env.get('RoomManager');
 
+
+        //TODO : c'est la que tout commence
+
+
+
         this.setEvents();
     }
     
     setEvents()
     {
-        /*
+        
         this.app.get('/', (req, res) => this.getHome(req, res));
         this.app.get('/room', (req, res) => this.getRoom(req, res));
         this.app.get('/createRoom', (req, res) => res.redirect('/'));
         this.app.post('/createRoom', (req, res) => this.createRoom(req, res));
         this.app.get("/mod/:UID/class.js", (req, res) => this.sendClientMod(req, res));
         this.app.get("/sandbox/:UID/infos", (req, res) => this.sendSandboxInfos(req, res));
-        */
+        
     }
 
     getHome(req, res)
     {
-        res.render('joining.ejs', 
+            res.render('joining.ejs', 
         {
             rooms: this.RM.getRoomsData()
         });
     }
 
-    getRoom(req, res) 
+    getRoom(req, res)
     {
         const UID = req.query.UID;
 
@@ -127,7 +261,7 @@ class HTTPManager extends LibraryComponent
         {
             res.status(500).send({ status: false, errorMessage: "Invalid Sandbox UID", errorData: { UID: UID } });
         }
-    }
+    }*/
 }
 
-module.exports = HTTPManager;
+module.exports = RoutesManager;
