@@ -35,6 +35,8 @@ class ModInterfaceContainer extends LibraryComponent
             - on ne peut appeler qu'une fois load()
         */
 
+        this.isLoaded = false;
+
         this.modInterfaces = new Map();
     }
 
@@ -175,7 +177,12 @@ class ModInterfaceContainer extends LibraryComponent
             this.canLoad = false;
         }
 
-        return Promise.all(promises);
+        const allLoadedPromise = Promise.all(promises);
+
+        allLoadedPromise.then(() => this.isLoaded = true)
+        .catch(() => this.isLoaded = false);
+
+        return allLoadedPromise;
     }
 }
 

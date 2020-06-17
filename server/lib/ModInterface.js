@@ -34,13 +34,13 @@ class ModInterface extends LibraryComponent
     {
         super();
 
-        this.debug("note", `ModInterface #${UID} instancié.`)
-
         // Avant toute chose, on vérifie la validité de l'UID :
         if (!this.env.get("UIDManager").get("mod").isValid(UID))
         {
             throw new Error(`Invalid mod UID #${UID}`);
         }
+
+        this.debug("note", `ModInterface #${UID} instancié.`);
 
         this.UID = UID;
 
@@ -71,7 +71,7 @@ class ModInterface extends LibraryComponent
         // Le chargement d'UN élément s'est effectué avec succès
         this.on("elementLoadSuccess", () => this.checkLoadSuccess());
         // Toutes les dépendances ont été chargées correctement
-        this.on("loadAllDependencies", () => this.debug("note", `Successfully loaded ${this.dependencies.size} dependencies for Mod #${this.UID}`));
+        this.on("loadAllDependencies", () => this.debug("log", `Successfully loaded ${this.dependencies.size} dependencies for Mod #${this.UID}`));
         this.on("loadAllDependencies", () => this.checkLoadSuccess());
 
         // Récupération des évènements d'erreurs spécifiques pour émettre un évènement d'erreur générique
@@ -115,7 +115,7 @@ class ModInterface extends LibraryComponent
             // Tous les éléments ont été chargés correctement. L'objet ModInterface est utilisable.
             this.emit("loadSuccess");
 
-            this.debug("note", `Composants de MotInterface #${this.UID} chargés avec succès`);
+            this.debug("log", `Composants de MotInterface #${this.UID} chargés avec succès`);
         }
     }
 

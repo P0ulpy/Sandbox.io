@@ -1,6 +1,4 @@
 console.clear();
-// Couleurs de console : https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
-console.log("\x1b[31m%s\x1b[0m", "[--------------------------------]");
 
 const path = require("path");
 const socket = require("socket.io");
@@ -14,6 +12,8 @@ const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const HTTPManager = SandboxLibrary.constructors.HTTPManager;
 const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
+const SandboxInterface = SandboxLibrary.constructors.SandboxInterface;
+const ModInterface = SandboxLibrary.constructors.ModInterface;
 
 //const { ModInterfaceContainer } = require("./server/lib/ModInterface");
 const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;
@@ -77,17 +77,19 @@ console.log(b.getSyncModconfig("001"));
 b.getModconfig("001").then(modConfig => console.log(modConfig));
 setTimeout(() => console.log(b.getSyncModconfig("001")), 1000);
 */
-let a = null;
+/*let a = null;
 
 b.getModInterface("001").then(m => a = m.instanciateSync())
 .catch(console.log);
 
 
 const c = new ModInterfaceContainer();
-c.load([ "001", "002", "008" ])
+c.load([ "001", "002" ])
 .then(() => console.log("youpi"))
 .catch((err) => console.log("eh merde : " + err));
+*/
 
+const c = new SandboxInterface("001");
 
 /*var modlo = SandboxLibrary.env.get("ModLoader");
 

@@ -43,7 +43,8 @@ class SandboxInterface extends LibraryComponent
 
         // Données à charger
         this.sandboxConfig = null;
-        //MAP ?this.mods = new ModInterfaceContainer();
+
+        this.modInterfaces = new ModInterfaceContainer();
 
         this.startLoading();
     }
@@ -67,6 +68,9 @@ class SandboxInterface extends LibraryComponent
         this.on("sandboxconfigLoadSuccess", () => this.emit("elementLoadSuccess"));
         this.on("serverClassLoadSuccess", () => this.emit("elementLoadSuccess"));
 
+        // Lorsque la configuration de la Sandbox a été chargée, on commence à charger les mods
+        this.on("sandboxconfigLoadSuccess", () => this.loadMods());
+
         this.changeStatus(SandboxInterface.LOADING_PROGRESS);
 
         // Appel des méthodes de chargement des données
@@ -79,6 +83,7 @@ class SandboxInterface extends LibraryComponent
     {
         this.changeStatus(SandboxInterface.LOADING_ERROR);
         this.emit("loadError", err);
+        this.debug("error", `Impossible de charger SandboxInterface #${this.UID}`);
     }
 
     changeStatus(newStatus)
@@ -89,7 +94,7 @@ class SandboxInterface extends LibraryComponent
 
     checkLoadSuccess()
     {
-        if (this.sandboxConfig !== null && this.dependencies.hasAllLoaded())
+        if (this.sandboxConfig !== null && this.modInterfaces.isLoaded)
         {
             this.changeStatus(SandboxInterface.LOADING_SUCCESS);
 
@@ -147,6 +152,13 @@ class SandboxInterface extends LibraryComponent
         });
     }
 
+    loadMods()
+    {
+        this.modInterfaces.load(this.sandboxConfig.mods)
+        .then(() => this.emit("elementLoadSuccess"))
+        .catch(err => this.emit("elementLoadError", err));
+    }
+
     /* Instanciation synchrone d'un 'SandboxServer' à partir de l'instance de 'SandboxInterface' */
 
     instanciateSync()
@@ -158,6 +170,16 @@ class SandboxInterface extends LibraryComponent
             throw new Error(`Can't instanciate 'SandboxInterface' #${this.UID}, because 'SandboxInterface' isn't loaded`);
         }
         throw new Error("pas encore");//return new this.serverClass(this, null);
+    }
+
+    /* Instanciation asynchrone d'un 'SandboxServer' à partir de  l'instance de 'SandboxInterface' */
+
+    instanciate()
+    {
+        if (!this.hasSucceeded())
+        {
+            throw new Error(`Can't instanciate 'SandboxInterface' #${this.UID}, because 'SandboxInterface' isn't loaded`);
+        }
     }
 }
 

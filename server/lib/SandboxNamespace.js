@@ -15,6 +15,8 @@ const ModInterface = require("./ModInterface");
 const ModInterfaceContainer = require("./ModInterfaceContainer");
 const ModServer = require("./ModServer");
 
+const SandboxInterface = require("./SandboxInterface");
+
 const SandboxNamespace =
 {
     env:
@@ -52,6 +54,7 @@ SandboxNamespace.constructors.SandboxLoader = SandboxLoader;
 
 SandboxNamespace.constructors.ModInterface = ModInterface;
 SandboxNamespace.constructors.ModInterfaceContainer = ModInterfaceContainer;
+SandboxNamespace.constructors.SandboxInterface = SandboxInterface;
 
 
 SandboxNamespace.constructors.ModServer = ModServer;
