@@ -1,4 +1,5 @@
-console.clear();
+// désoler antoine mais ça fait bug mon nodemon quand j'utilise le terminal VS code
+//console.clear();
 
 const path = require("path");
 const socket = require("socket.io");
@@ -13,7 +14,7 @@ const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const RoutesManager = SandboxLibrary.constructors.RoutesManager;
 const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
-const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;
+const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;    
 
 const app = express();
 const server = http.createServer(app);

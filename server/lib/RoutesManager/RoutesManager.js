@@ -9,20 +9,22 @@ class RoutesManager extends LibraryComponent
     {
         super();
 
-        this.methods = require("./RoutesFunctions.js");
+        this.functions = require("./RoutesFunctions.js");
         this.setupApp();
 
-        this.getRoutes()    
+        this.getRoutesFile()
         .then((routes) => 
+        {   
+            this.loadStatic(routes);
+            this.loadRoutes('get', routes);
+            this.loadRoutes('post', routes);
+        })
+        .catch((err) => 
         {
-            this.routes = routes;
-            
-            this.debug("log", this.routes);
-            
-            //this.loadRoutes();
+            throw err;
         });
     }
-
+ 
     setupApp()
     {
         this.app = this.env.get("app");
@@ -31,7 +33,7 @@ class RoutesManager extends LibraryComponent
         this.app.set('view-engine', 'ejs');
     }
 
-    getRoutes()
+    getRoutesFile()
     {
         return new Promise((resolve, reject) => 
         {
@@ -44,17 +46,22 @@ class RoutesManager extends LibraryComponent
         });
     }
 
-    loadRoutes(method = "get")
+    loadStatic(routes)
     {
-        for(const staticRoute of this.routes.static)
+        for(const staticRoute of routes.static)
         {
-            // TODO : gerer bien le bouzin
+            // TODO : gerer bien le bouzin des path
             this.app.use(express.static(path.join(__dirname + staticRoute)));
         }
+    }
 
-        // GET
+    loadRoutes(method = "get", routes)
+    {
+        this.debug("log", `chargement des routes avec la method "${method}"`);
 
-        for(const route of this.routes[mehod])
+        const _routes = routes[method]; 
+
+        for(const route of _routes)
         {
             if(route.functions)
             {
@@ -62,59 +69,17 @@ class RoutesManager extends LibraryComponent
 
                 if(functions)
                 {
-                    this.app.get(route.route, ...functions);
+                    this.app[method](route.route, ...functions);
+                    this.debug("note", `functions [${route.functions}] appliquer a la route ${route.route}`);
                 }
                 else
                 {
-                    this.debug("error", )
-                }
-            }
-        }
-
-        for(const route of this.routes.GET)
-        {
-            if(route.methods)
-            {
-                const methods = this.getMethods(route.methods);
-
-                if(methods && methods.length > 0)
-                {
-                    this.app.get(route.route, ...methods);
-                }
-                else
-                {
-                    this.debug("error", "RouteManager : Impossible de trouver les methods " + route.methods);
+                    this.debug("error", `impossible d'appliquer les functions [${route.functions}] a la route ${route.route}`);
                 }
             }
             else
             {
-                this.app.get(route.route, (req, res) => 
-                {
-                    res.redirect('/');
-                })
-            }
-        }
-
-        // POST
-
-        for(const route of this.routes.POST)
-        {
-            if(route.methods)
-            {
-                const methods = this.getMethods(route.methods);
-
-                if(methods && methods.length > 0)
-                {
-                    this.app.post(route.route, ...methods);
-                }
-                else
-                {
-                    this.debug("error", "RouteManager : Impossible de trouver les methods " + route.methods);
-                }
-            }
-            else
-            {
-                this.app.post(route.route, (req, res) => 
+                this.app[method](route.route, (req, res) => 
                 {
                     res.redirect('/');
                 })
@@ -126,17 +91,18 @@ class RoutesManager extends LibraryComponent
     {
         const methods = [];
 
-        for(const functionsName of functionsNames)
+        for(const functionName of functionsNames)
         {
-            const _function = this.methods[functionsName];
+            const _function = this.functions[functionName];
 
             if(_function)
             {
-                methods.push(_function);
+                // pour que le this ne soit pas override
+                methods.push((req, res, next) => { _function(req, res, next); });
             }
             else
             {   
-                this.debug("error", `RouteManager : impossible de trouver la function "${name}"`);
+                this.debug("error", `RouteManager : impossible de trouver la function "${functionName}"`);
             }
         }
 
