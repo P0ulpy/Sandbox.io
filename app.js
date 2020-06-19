@@ -36,28 +36,6 @@ SandboxLibrary.env.set("ModInterfaceContainer", new ModInterfaceContainer());
 
 app.use(express.static(path.join(__dirname + '/client')));
 
-/* BEGINNING OF DEGUEULASSE CODE */
-function basicIterator()
-{
-    const next = this.get("lastValue") + 1;
-
-    this.persist("lastValue", next);
-
-    return (`00${next}`).slice(-3);
-};
-
-function checkValidity(uniqueID)
-{
-    // Chaîne de caractère qui représente un nombre allant de 000 à 999
-    return /^[0-9]{3}$/.test(uniqueID);
-}
-
-// Création de générateurs d'UID : 1 pour les sandboxes, 1 pour les mods
-SandboxLibrary.env.get("UIDManager")
-.create("sandbox", basicIterator, checkValidity, { lastValue: 0 })
-.create("mod", basicIterator, checkValidity, { lastValue: 0 });
-/* END OF DEGUEULASSE CODE */
-
 //const room = SandboxLibrary.env.get("sandboxLoader").instanciateFromFolder("001");
 
 //const roomsManager = new RoomsManager({httpServer: server, express: express, app:app});
