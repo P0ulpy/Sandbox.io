@@ -1,0 +1,6 @@
+{
+    "UID": "001",
+    "name": "myMod1",
+    "version": "0.1.0",
+    "dependencies": [ "002", "003", "004" ]
+}
