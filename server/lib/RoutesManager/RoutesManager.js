@@ -9,18 +9,17 @@ class RoutesManager extends LibraryComponent
     {
         super();
 
-        this.methods = require("./RoutesMethods");
+        this.methods = require("./RoutesFunctions.js");
         this.setupApp();
-
-
-        //this.debug("note", this.routes);
-        console.log(this.routes)
 
         this.getRoutes()    
         .then((routes) => 
         {
             this.routes = routes;
-            this.loadRoutes();
+            
+            this.debug("log", this.routes);
+            
+            //this.loadRoutes();
         });
     }
 
@@ -45,7 +44,7 @@ class RoutesManager extends LibraryComponent
         });
     }
 
-    loadRoutes()
+    loadRoutes(method = "get")
     {
         for(const staticRoute of this.routes.static)
         {
@@ -55,7 +54,22 @@ class RoutesManager extends LibraryComponent
 
         // GET
 
-        //TODO : reagarder pour les function(...)
+        for(const route of this.routes[mehod])
+        {
+            if(route.functions)
+            {
+                const functions = this.getFunctions(route.functions);
+
+                if(functions)
+                {
+                    this.app.get(route.route, ...functions);
+                }
+                else
+                {
+                    this.debug("error", )
+                }
+            }
+        }
 
         for(const route of this.routes.GET)
         {
@@ -65,7 +79,7 @@ class RoutesManager extends LibraryComponent
 
                 if(methods && methods.length > 0)
                 {
-                    this.app.get(route.route, methods);
+                    this.app.get(route.route, ...methods);
                 }
                 else
                 {
@@ -91,7 +105,7 @@ class RoutesManager extends LibraryComponent
 
                 if(methods && methods.length > 0)
                 {
-                    this.app.post(route.route, methods);
+                    this.app.post(route.route, ...methods);
                 }
                 else
                 {
@@ -108,16 +122,26 @@ class RoutesManager extends LibraryComponent
         }
     }
 
-    getMethods(names = [])
+    getFunctions(functionsNames = [""])
     {
         const methods = [];
 
-        for(const name of names)
+        for(const functionsName of functionsNames)
         {
-            methods.push(this.methods[name]);
+            const _function = this.methods[functionsName];
+
+            if(_function)
+            {
+                methods.push(_function);
+            }
+            else
+            {   
+                this.debug("error", `RouteManager : impossible de trouver la function "${name}"`);
+            }
         }
 
-        return methods;
+        // si il n'y a pas de funtions trouvé return null
+        return (methods.length > 0) ? methods : null;
     }
 
 

@@ -7,30 +7,30 @@
     [
         {
             "route" : "/",
-            "methods" : ["getHome"]
+            "functions" : ["getHome"]
         },
         {
             "route" : "/room",
-            "methods" : ["getRoom"]
+            "functions" : ["getRoom"]
         },
         {
             "route" : "/mod/:UID/class.js",
-            "methods" : ["sendClientMod"]
+            "functions" : ["sendClientMod"]
         },
         {
             "route" : "/sandbox/:UID/infos",
-            "methods" : ["sendSandboxInfos"]
+            "functions" : ["sendSandboxInfos"]
         },
         {
             "route" : "/createRoom",
-            "methods" : null
+            "functions" : null
         }
     ],
     "POST" :
     [
         {
             "route" : "/createRoom",
-            "methods" : ["createRoom"]
+            "functions" : ["createRoom"]
         }
     ]
 }
