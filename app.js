@@ -14,7 +14,11 @@ const RoomLoader = SandboxLibrary.constructors.RoomLoader;
 const RoomsManager = SandboxLibrary.constructors.RoomsManager;
 const RoutesManager = SandboxLibrary.constructors.RoutesManager;
 const SandboxLoader = SandboxLibrary.constructors.SandboxLoader;
-const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;    
+const SandboxInterface = SandboxLibrary.constructors.SandboxInterface;
+const ModInterface = SandboxLibrary.constructors.ModInterface;
+
+//const { ModInterfaceContainer } = require("./server/lib/ModInterface");
+const ModInterfaceContainer = SandboxLibrary.constructors.ModInterfaceContainer;
 
 const app = express();
 const server = http.createServer(app);
@@ -32,9 +36,34 @@ SandboxLibrary.env.set("ModLoader", new ModLoader());
 SandboxLibrary.env.set("RoomLoader", new RoomLoader());
 SandboxLibrary.env.set("RoutesManager", new RoutesManager());
 SandboxLibrary.env.set("SandboxLoader", new SandboxLoader());
-SandboxLibrary.env.set("ModInterfaceContainer", new ModInterfaceContainer());
+SandboxLibrary.env.set("ModInterfaceContainer", new ModInterfaceContainer(true));
 
 app.use(express.static(path.join(__dirname + '/client')));
+
+app.use(express.static(path.join(__dirname, '/client')));
+
+
+/* BEGINNING OF DEGUEULASSE CODE */
+function basicIterator()
+{
+    const next = this.get("lastValue") + 1;
+
+    this.persist("lastValue", next);
+
+    return (`00${next}`).slice(-3);
+};
+
+function checkValidity(uniqueID)
+{
+    // Chaîne de caractère qui représente un nombre allant de 000 à 999
+    return /^[0-9]{3}$/.test(uniqueID);
+}
+
+// Création de générateurs d'UID : 1 pour les sandboxes, 1 pour les mods
+SandboxLibrary.env.get("UIDManager")
+.create("sandbox", basicIterator, checkValidity, { lastValue: 0 })
+.create("mod", basicIterator, checkValidity, { lastValue: 0 });
+/* END OF DEGUEULASSE CODE */
 
 //const room = SandboxLibrary.env.get("sandboxLoader").instanciateFromFolder("001");
 
@@ -48,14 +77,21 @@ app.use(express.static(path.join(__dirname + '/client')));
 console.log(b.getSyncModconfig("001"));
 b.getModconfig("001").then(modConfig => console.log(modConfig));
 setTimeout(() => console.log(b.getSyncModconfig("001")), 1000);
-*/ 
-
-/*
-let a = null;
+*/
+/*let a = null;
 
 b.getModInterface("001").then(m => a = m.instanciateSync())
 .catch(console.log);
 */
+
+
+const c = new ModInterfaceContainer();
+c.load([ "001", "002" ])
+.then(() => console.log("youpi"))
+.catch((err) => console.log("eh merde : " + err));
+*/
+
+const c = new SandboxInterface("001");
 
 /*var modlo = SandboxLibrary.env.get("ModLoader");
 

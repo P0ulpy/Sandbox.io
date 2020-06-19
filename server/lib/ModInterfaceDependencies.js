@@ -35,6 +35,11 @@ class ModInterfaceDependencies extends LibraryComponent
         this.modInterface.on("modconfigLoadSuccess", () => this.loadDependencies());
     }
 
+    get size()
+    {
+        return this.dependencies.size;
+    }
+
     hasAllLoaded()
     {
         return (this.toLoad.length === this.dependencies.size);
