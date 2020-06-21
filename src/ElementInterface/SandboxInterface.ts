@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 
 import { SandboxUID, ModUID, getModUID, getSandboxUID } from "../UID";
-import ElementInterface, { LoadingStatus } from "./ElementInterface";
+import ElementInterface from "./ElementInterface";
+import Sandbox from "../Sandbox";
 
 import ModInterfaceContainer from "../Containers/ModInterfaceContainer";
 
@@ -138,11 +139,14 @@ export default class SandboxInterface extends ElementInterface
 
     /* Instanciation asynchrone d'un 'SandboxServer' à partir de  l'instance de 'SandboxInterface' */
 
-    instanciate()
+    instanciate(): Promise<Sandbox>
     {
-        if (!this.hasSucceeded())
-        {
-            throw new Error(`Can't instanciate 'SandboxInterface' #${this.UID}, because 'SandboxInterface' isn't loaded`);
-        }
+        // @TODO on instancie tous les modsitnerface via une ModInterfaceContainer::instanciate
+        // qui retourne un modcollection et on instancie la sandbox à aprtir de ça
+        return new Promise<Sandbox>((resolve, reject) => {
+            this.loadingPromise.then((sandboxInterface) => {
+
+            });
+        });
     }
 }

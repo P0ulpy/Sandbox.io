@@ -1,9 +1,11 @@
 import LibraryComponent from "../LibraryComponent";
-import { ModUID, getModUID } from "../UID";
+import { ModUID, getModUID, UID } from "../UID";
 import ModInterface, { ModConfig } from "../ElementInterface/ModInterface";
 
 import env from "../Environment";
-import { promises } from "fs";
+import { ModsCollection } from "../Mod";
+import ModServer from "../Mod";
+import { ModInterfaceDependencies } from "../ElementInterface";
 
 /*
     Cette classe fonctionne avec 'ModInterface'. 'ModInterfaceContainer' est un conteneur d'instances
@@ -188,6 +190,47 @@ export default class ModInterfaceContainer extends LibraryComponent
 
         return allLoadedPromise;
     }
-}
 
-module.exports.default = ModInterfaceContainer;
+    instanciate(): Promise<ModsCollection>
+    {
+        // @TODO pas ouf, faudrait avoir GlobalModInterfaceContainer et ModInterfaceContainer
+        const mods: ModsCollection = new ModsCollection();
+        // Si plusieurs mods ont la même dépendance, alors on ne l'instancie pas plusieurs fois
+        const deps: Map<ModUID, ModServer> = new Map<ModUID, ModServer>();
+
+        return new Promise<ModsCollection>((resolve, reject) => {
+
+            for (const [ UID, modInterface ] of this.modInterfaces.entries())
+            {
+                modInterface.dependencies.dependencies
+            }
+
+        });
+    }
+
+    // @TODO pas ouf et pas opti mais fonctionne
+    private instanciateRecursiveDeps(): Promise<Map<ModUID, ModServer>>
+    {
+        const deps: Map<ModUID, ModServer> = new Map<ModUID, ModServer>();
+
+        function i(modInterfaceDependencies: ModInterfaceDependencies)
+        {
+            for (const [ UID, modInterface ] of modInterfaceDependencies.dependencies.entries())
+            {
+
+            }
+        }
+
+        // Pour chaque modinterface du conteneur : this.modInterfaces
+        // On récupère ses dépendances.
+
+        for (const [ UID, modInterface ] of this.modInterfaces.entries())
+        {
+
+        }
+
+        return new Promise<Map<ModUID, ModServer>>((resolve, reject) => {
+
+        });
+    }
+}

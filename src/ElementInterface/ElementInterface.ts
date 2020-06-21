@@ -1,7 +1,5 @@
 import LibraryComponent from "../LibraryComponent";
 import { UID } from "../UID";
-import { SandboxInterface } from ".";
-
 
 export type LoadingStatus = "not started" | "in progress" | "success" | "error";
 

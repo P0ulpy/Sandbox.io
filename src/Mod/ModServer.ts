@@ -1,5 +1,7 @@
 import LibraryComponent from "../LibraryComponent";
 import ModInterface from "../ElementInterface/ModInterface";
+import { ModUID } from "../UID";
+import Sandbox from "../Sandbox";
 
 /*
     Un objet 'ModServer' désigne une instance d'un mod, qui peut être intégrée dans une Sandbox. Il est crée à partir d'un
@@ -14,11 +16,12 @@ import ModInterface from "../ElementInterface/ModInterface";
 
 export default class ModServer extends LibraryComponent
 {
+    public UID: ModUID;
     public modInterface: ModInterface;
-    public sandbox: any;
-    public dependencies: Map<string, any> = new Map<string, any>();
+    public sandbox: Sandbox;
+    public dependencies: Map<string, ModServer> = new Map<string, ModServer>();
 
-    constructor(modInterface: ModInterface, sandbox: any)
+    constructor(modInterface: ModInterface, sandbox: Sandbox)
     {
         super();
 
@@ -26,6 +29,8 @@ export default class ModServer extends LibraryComponent
         {
             throw new Error("Can't instanciate a ModServer which ModInterface isn't loaded");
         }
+
+        this.UID = modInterface.UID;
 
         this.modInterface = modInterface;
 

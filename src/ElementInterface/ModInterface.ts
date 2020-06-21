@@ -3,9 +3,7 @@ import path from "path";
 
 import ElementInterface, { ModInterfaceDependencies } from "./index";
 import { ModUID, getModUID } from "../UID";
-
 import ModServer from "../Mod/ModServer";
-
 import env from "../Environment";
 
 export type ModConfig =  {
@@ -14,7 +12,6 @@ export type ModConfig =  {
     version: string,
     dependencies: ModUID[]
 };
-
 
 /* Cette classe ainsi que ModInterfaceContainer sont le résultat de la réécriture complète de
 ModLoader et de ModParser, de manière beaucoup plus propre, le but étant qu'elles soient le plus
