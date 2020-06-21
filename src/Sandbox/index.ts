@@ -1,3 +1,7 @@
-import Sandbox from "./Sandbox";
+import { SandboxUID } from "../UID";
+import LoadingSandbox from "./LoadingSandbox";
 
-export default Sandbox;
+export function create(UID: SandboxUID)
+{
+
+}

@@ -3,6 +3,10 @@
     "size": 5,
     "name": "mySandbox1",
     "MOTD": "Welcome to mySandbox1",
-    "mods": [ "001", "002" ],
-    "updateRate": 1000
+    "updateRate": 1000,
+    "mods": {
+        "gameplay": "001",
+        "overlay": "001",
+        "environment": "001"
+    }
 }
