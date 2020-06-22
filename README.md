@@ -22,4 +22,4 @@ Travaillant sur le projet
 
 - Flex Sans Pretexte
 - Poulpy
-- Diplo
+- DiplO

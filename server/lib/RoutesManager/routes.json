@@ -7,7 +7,15 @@
     [
         {
             "route" : "/",
-            "functions" : ["getHome"]
+            "functions" : ["getHomePage"]
+        },
+        {
+            "route" : "/login",
+            "functions" : ["getLoginPage"]
+        },
+        {
+            "route" : "/register",
+            "functions" : ["getRegisterPage"]
         },
         {
             "route" : "/room",
@@ -20,10 +28,6 @@
         {
             "route" : "/sandbox/:UID/infos",
             "functions" : ["sendSandboxInfos"]
-        },
-        {
-            "route" : "/createRoom",
-            "functions" : null
         }
     ],
     "post" :
@@ -31,6 +35,14 @@
         {
             "route" : "/createRoom",
             "functions" : ["createRoom"]
+        },
+        {
+            "route" : "/register",
+            "functions" : ["register"]
+        },
+        {
+            "route" : "/login",
+            "functions" : ["login"]
         }
     ]
 }

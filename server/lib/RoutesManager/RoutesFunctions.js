@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const bcrypt = require('bcrypt');
 const LibraryComponent = require('../LibraryComponent');
 
 class RoutesFunctions extends LibraryComponent
@@ -7,27 +8,76 @@ class RoutesFunctions extends LibraryComponent
     constructor()
     {
         super();
-
+        
         // reference au RoomManager
-        this.RM = this.env.get('RoomManager');
+        this.RM = this.env.get('RoomsManager');
+
+        this.users = [];
     }
 
-    getHome(req, res)
+    getHomePage(req, res)
     {
         res.render('home.ejs');
     }
-    
+
+    getLoginPage(req, res)
+    {
+        res.render('login.ejs');
+    }
+
+    getRegisterPage(req, res, next)
+    {
+        res.render('register.ejs');
+    }
+
+    async register(req, res)
+    {
+        console.log(req.body);
+
+        try
+        {
+            const hachedPassword = await bcrypt.hash(req.body.password, 10);
+
+            // TODO : utiliser le genrateur d'id de Antoine ou gerer directement les key depuis la DB
+            // TODO : verifier si l'utilisateur n'existe pas deja
+            // TODO : verifier si le format de l'email est bon 
+
+            this.users.push({
+                id : Date.now().toString(),
+                name: req.body.name,
+                name: req.body.email,
+                password: hachedPassword
+            });
+
+            //res.send({ success : true });
+            res.redirect('/login');
+
+            console.log(this.users);
+        }
+        catch (err)
+        {
+            this.debug('error', `register error ${err}`);
+            res.status(500).send({ success : false, errorMessage: `internal error`});
+        }
+    }
+
+    login(req, res)
+    {
+        console.log(req.body);
+    }
+
     getRoom(req, res)
     {
         const UID = req.query.UID;
-
+        
         if(this.RM.has(UID))
         {
             res.render('room.ejs', this.RM.get(UID).data);
         }
         else
         {
-            res.redirect('/');
+            this.debug("error", `can't get room : invalid UID (${UID})`);
+            res.status(500).send({ success : false, errorMessage: `can't get room : invalid UID`, UID:UID});
         }
     }
 
@@ -57,7 +107,7 @@ class RoutesFunctions extends LibraryComponent
         }
         else
         {
-            this.debug("error", `can't create room`);
+            this.debug("error", `can't create room : Duplicated UID (${UID})`);
             res.status(500).send({ success : false, errorMessage: `can't create room`});
         }
     }

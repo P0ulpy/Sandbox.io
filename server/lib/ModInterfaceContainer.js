@@ -23,7 +23,7 @@ class ModInterfaceContainer extends LibraryComponent
     {
         super();
 
-        this.isEnvironmentContainer = isEnvironmentContainer ?? false;
+        //this.isEnvironmentContainer = isEnvironmentContainer ?? false;
         /* Si à true, alors :
             - un appel à add() va instancier le 'ModInterface' correspondant s'il ne l'est pas déjà au
             sein du conteneur
