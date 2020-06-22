@@ -1,8 +1,26 @@
+/*
+le fonctionement du RouteManager est en 3 temps :
+
+- la première partie c'est routes.json qui en somme contien toutes les informations nécéssaire a faire la liaison 
+entre method (GET / POST) route ("/", "/home", ect...) et functions la premère etapes lorque l'on ajoute une route
+c'est de remplir routes.json
+
+- la deuxième partie de ce RouteManager c'est RoutesFunctions qui en soit est le fichier le plus simple 
+c'est simplement un obj qui contient des functions, lorsque l'on veut rajouter une route c'est dans 
+RoutesFunction.js que l'on vas rajouter le/les function(s) nécessaire au fonctionnement de la route 
+
+- la dernière partie et le coeur du système c'est ce fichier RouteManager.js qui permet de géré
+l'ajout de toutes les routes a une method (POST/GET) et les functions associer au routes, 
+il permet aussi de géré les routes static et toutes les initialisations de app
+
+voila vous etes complement armé pour utiliser RouteManager have fun
+
+*/
+
 const LibraryComponent = require('../LibraryComponent');
 const fs = require('fs');
 const path = require('path');
 const express = require('express'); 
-const { type } = require('os');
 
 class RoutesManager extends LibraryComponent
 {

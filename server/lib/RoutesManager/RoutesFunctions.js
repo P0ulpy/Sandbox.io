@@ -12,7 +12,16 @@ class RoutesFunctions extends LibraryComponent
         // reference au RoomManager
         this.RM = this.env.get('RoomsManager');
 
-        this.users = [];
+        // TODO : TEMPORAIRE
+
+        this.users = 
+        [
+            {
+                id: '1592865086647',
+                name: 'admin@admin',
+                password: '$2b$10$6fcwZXN1RuyIH6N.1tKc.OD00vOPD4UKcZWuk6JdOCuiXrKxNGXzq'
+            }
+        ];
     }
 
     getHomePage(req, res)
@@ -32,13 +41,11 @@ class RoutesFunctions extends LibraryComponent
 
     async register(req, res)
     {
-        console.log(req.body);
-
         try
         {
             const hachedPassword = await bcrypt.hash(req.body.password, 10);
 
-            // TODO : utiliser le genrateur d'id de Antoine ou gerer directement les key depuis la DB
+            // TODO : utiliser le generateur d'id de Antoine ou gerer directement les key depuis la DB
             // TODO : verifier si l'utilisateur n'existe pas deja
             // TODO : verifier si le format de l'email est bon 
 
@@ -49,7 +56,6 @@ class RoutesFunctions extends LibraryComponent
                 password: hachedPassword
             });
 
-            //res.send({ success : true });
             res.redirect('/login');
 
             console.log(this.users);
