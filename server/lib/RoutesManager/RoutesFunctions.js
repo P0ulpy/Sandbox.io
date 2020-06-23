@@ -1,7 +1,81 @@
 const path = require('path');
 const express = require('express');
-const bcrypt = require('bcrypt');
 const LibraryComponent = require('../LibraryComponent');
+
+
+/* CODE (dégeu) TEMPORAIRE LE TEMPS DE MERGE*/
+ 
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+const localStrategy = require('passport-local').Strategy;
+const expressFlash = require('express-flash');
+const session = require('express-session');
+
+const users = 
+[
+    {
+        id: '1592865086647',
+        username: 'admin',
+        email: 'admin@admin',
+        password: '$2b$10$6fcwZXN1RuyIH6N.1tKc.OD00vOPD4UKcZWuk6JdOCuiXrKxNGXzq'
+    }
+];
+
+function getUserByEmail(email)
+{
+    return users.find(user => user.email === email);
+}
+
+function getUserByID(id)
+{
+    return users.find(user => user.id === id);
+}
+
+function initPassport(app)
+{
+    app.use(expressFlash());
+        
+    app.use(session({
+        secret: 'secret',   // TODO : faire un vrais secret random
+        resave: false,
+        saveUninitialized: false
+    }));
+
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    // la fonction sert de verification d'autentification
+    passport.use(new localStrategy({ usernameField: 'email' }, async(email, password, done) => 
+    {
+        const user = getUserByEmail(email);
+
+        if(user == null)    
+        {
+            return done(null, false, { message : 'No user with that email'});
+        }
+
+        try 
+        {
+            if(await bcrypt.compare(password, user.password))
+            {
+                return done(null, user);
+            }
+            else
+            {
+                return done(null, false, { message : 'Password incorrect' });
+            }
+        }
+        catch(err)
+        {
+            return done(err);
+        }       
+    }));
+
+    passport.serializeUser((user, done) => done(null, user.id));
+    passport.deserializeUser((id, done) => done(null, getUserByID(id)));
+}
+
+/*FIN DU CODE TEMPORAIRE LE TEMPS DE MERGE*/
 
 class RoutesFunctions extends LibraryComponent
 {
@@ -11,17 +85,8 @@ class RoutesFunctions extends LibraryComponent
         
         // reference au RoomManager
         this.RM = this.env.get('RoomsManager');
-
-        // TODO : TEMPORAIRE
-
-        this.users = 
-        [
-            {
-                id: '1592865086647',
-                name: 'admin@admin',
-                password: '$2b$10$6fcwZXN1RuyIH6N.1tKc.OD00vOPD4UKcZWuk6JdOCuiXrKxNGXzq'
-            }
-        ];
+        
+        initPassport(this.env.get('app'));
     }
 
     getHomePage(req, res)
@@ -39,26 +104,72 @@ class RoutesFunctions extends LibraryComponent
         res.render('register.ejs');
     }
 
+    getMypanelPage(req, res)
+    {
+        res.render('panel.ejs', 
+        {
+            userData: 
+            {
+                name: req.user.username
+            }
+        });
+    }
+
+    getMypanel(req, res)
+    {
+        res.send(
+            {
+                userData: 
+                {
+                    name: req.user.name
+                } 
+            }
+        );
+    }
+
+    checkAuthenticated(req, res, next)
+    {
+        if(req.isAuthenticated())
+        {
+            return next();
+        }
+
+        res.redirect('/login');
+    }
+
+    checkNotAuthenticated(req, res, next)
+    {
+        if(req.isAuthenticated())
+        {
+            res.redirect('/mypanel');
+        }
+        else
+        {
+            next();
+        }
+    }
+
     async register(req, res)
     {
         try
         {
             const hachedPassword = await bcrypt.hash(req.body.password, 10);
 
-            // TODO : utiliser le generateur d'id de Antoine ou gerer directement les key depuis la DB
             // TODO : verifier si l'utilisateur n'existe pas deja
             // TODO : verifier si le format de l'email est bon 
 
-            this.users.push({
+            // TODO : TEMPORAIRE
+
+            users.push({
                 id : Date.now().toString(),
-                name: req.body.name,
-                name: req.body.email,
+                username: req.body.username,
+                email: req.body.email,
                 password: hachedPassword
             });
 
             res.redirect('/login');
 
-            console.log(this.users);
+            console.log(users);
         }
         catch (err)
         {
@@ -67,12 +178,43 @@ class RoutesFunctions extends LibraryComponent
         }
     }
 
-    login(req, res)
+    login(req, res, next)
     {
-        console.log(req.body);
+        // on utiliser le middleware de passport
+
+        passport.authenticate('local', 
+        {
+            successRedirect: '/mypanel',
+            failureRedirect: '/login',
+            failureFlash: true
+        })(req, res, next);
     }
 
-    getRoom(req, res)
+    logout(req, res)
+    {
+        req.logOut();
+        res.redirect('/login');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*getRoom(req, res)
     {
         const UID = req.query.UID;
         
@@ -157,7 +299,7 @@ class RoutesFunctions extends LibraryComponent
         {
             res.status(500).send({ status: false, errorMessage: "Invalid Sandbox UID", errorData: { UID: UID } });
         }
-    }
+    }*/
 }
 
 module.exports = new RoutesFunctions();
