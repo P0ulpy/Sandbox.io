@@ -22,6 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express'); 
 
+
 class RoutesManager extends LibraryComponent
 {
     constructor()
@@ -52,12 +53,12 @@ class RoutesManager extends LibraryComponent
         this.app.set('view-engine', 'ejs');
     }
 
-    getRoutesFile()
+    getRoutesFile(filepath = "/routes.json")
     {
         return new Promise((resolve, reject) => 
         {
             // get routes configuration file
-            fs.readFile(path.join(__dirname + '/routes.json'), (err, content) => 
+            fs.readFile(path.join(__dirname + filepath), (err, content) => 
             {
                 if(err) reject(err);
                 else resolve(JSON.parse(content));
@@ -78,7 +79,7 @@ class RoutesManager extends LibraryComponent
     {
         this.debug("log", `chargement des routes avec la method "${method}"`);
 
-        const _routes = routes[method]; 
+        const _routes = routes[method];
 
         for(const route of _routes)
         {

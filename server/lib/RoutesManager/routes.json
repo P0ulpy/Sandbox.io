@@ -11,31 +11,23 @@
         },
         {
             "route" : "/login",
-            "functions" : ["getLoginPage"]
+            "functions" : ["checkNotAuthenticated", "getLoginPage"]
         },
         {
             "route" : "/register",
-            "functions" : ["getRegisterPage"]
+            "functions" : ["checkNotAuthenticated", "getRegisterPage"]
         },
         {
-            "route" : "/room",
-            "functions" : ["getRoom"]
+            "route" : "/mypanel",
+            "functions" : ["checkAuthenticated", "getMypanelPage"]    
         },
         {
-            "route" : "/mod/:UID/class.js",
-            "functions" : ["sendClientMod"]
-        },
-        {
-            "route" : "/sandbox/:UID/infos",
-            "functions" : ["sendSandboxInfos"]
+            "route" : "/mypanelAPI",
+            "functions" : ["checkAuthenticated", "getMypanel"]    
         }
     ],
     "post" :
     [
-        {
-            "route" : "/createRoom",
-            "functions" : ["createRoom"]
-        },
         {
             "route" : "/register",
             "functions" : ["register"]
@@ -43,6 +35,10 @@
         {
             "route" : "/login",
             "functions" : ["login"]
+        },
+        {
+            "route" : "/logout",
+            "functions" : ["checkAuthenticated", "logout"]
         }
     ]
 }
