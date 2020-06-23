@@ -24,6 +24,7 @@ type SandboxMods = {
     environment: ModUID;
 }
 
+// @TODO utiliser interface PromiseLike<T>
 export default class LoadingSandbox
 {
     private static configFileName = "sandboxconfig.json";
@@ -62,8 +63,8 @@ export default class LoadingSandbox
 
                 // Instances des mods
                 const gameplayMod: GameplayMod = await this.getGameplayMod(mods.gameplay);
-                const overlayMod: OverlayMod = await this.getOverlayMod(mods.gameplay);
-                const environmentMod: EnvironmentMod = await this.getEnvironmentMod(mods.gameplay);
+                const overlayMod: OverlayMod = await this.getOverlayMod(mods.overlay);
+                const environmentMod: EnvironmentMod = await this.getEnvironmentMod(mods.environment);
 
                 // Maintenant qu'on a tout : la configuration de la sandbox et ses instances de
                 // mods, on peut l'instancier
@@ -109,10 +110,10 @@ export default class LoadingSandbox
     }
 
     // @TODO pas propre les any mais pratique
-    public catch(callback: any): Promise<any>
+    /*public catch(callback: any): Promise<any>
     {
         return this.loadingPromise.catch(callback);
-    }
+    }*/
 
     private loadConfigFile(): Promise<string>
     {

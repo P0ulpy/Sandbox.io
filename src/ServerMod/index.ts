@@ -1,7 +1,11 @@
-import ServerMod from "./ServerMod";
-import GameplayMod from "./GameplayMod";
-import EnvironmentMod from "./EnvironmentMod";
-import OverlayMod from "./OverlayMod";
+import ServerMod, { ServerModPublicData } from "./ServerMod";
+import GameplayMod, { GameplayModPublicData } from "./GameplayMod";
+import EnvironmentMod, { EnvironmentModPublicData } from "./EnvironmentMod";
+import OverlayMod, { OverlayModPublicData } from "./OverlayMod";
 
-export { GameplayMod, EnvironmentMod, OverlayMod };
-export default ServerMod;
+export {
+    ServerMod, ServerModPublicData,
+    GameplayMod, GameplayModPublicData,
+    EnvironmentMod, EnvironmentModPublicData,
+    OverlayMod, OverlayModPublicData
+};

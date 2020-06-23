@@ -3,7 +3,7 @@ import { readFile, access } from "fs/promises";
 
 import { ModUID } from "../UID";
 import env from "../Environment";
-import ServerMod, { GameplayMod, OverlayMod, EnvironmentMod } from "../ServerMod/";
+import { ServerMod, GameplayMod, OverlayMod, EnvironmentMod } from "../ServerMod/";
 
 export type ModCategory = "gameplay" | "overlay" | "environment";
 
@@ -57,6 +57,7 @@ export default abstract class LoadingMod
             try
             {
                 const config: ModConfig = await this.getConfig();
+
                 await this.checkClientFileAccess();
 
                 // Récupération de la classe serveur
@@ -65,7 +66,7 @@ export default abstract class LoadingMod
                 // On se retrouve avec la classe du Mod, qu'il nous suffit d'instancier
                 const ServerModClass = require(this.serverClassFilePath)(baseModClass);
 
-                const modInstance = new ServerModClass();
+                const modInstance = new ServerModClass(config);
 
                 resolve(modInstance);
             }

@@ -4,6 +4,7 @@ import express from "express";
 import path from "path";
 
 import { Logger, LogLevel } from "../Tools";
+import { RoomsManager } from "../Room";
 
 export type Environment = {
     logLevel: LogLevel;
@@ -13,6 +14,7 @@ export type Environment = {
     httpServer: http.Server;
     socketServer: socket.Server;
     app: express.Application;
+    roomsManager: RoomsManager;
 }
 
 let isEnvironmentInitialized = false;
@@ -41,6 +43,7 @@ export function initEnv(): void
     env.httpServer = server;
     env.app = app;
     env.socketServer = socketServer;
+    env.roomsManager = new RoomsManager();
 
     isEnvironmentInitialized = true;
 }
