@@ -6,7 +6,8 @@ env.httpServer.listen(8080);
 
 import LoadingSandbox from "./Sandbox/LoadingSandbox";
 import { getSandboxUID, getModUID } from "./UID";
-import RoutesManager from "./RoutesManager";
+import { Request, Response } from "express";
+import { RoutesManager } from "./RoutesManager";
 
 /*let a = new LoadingSandbox(getSandboxUID("001"))
 .then((a: any) => { console.log("Résolu", a) })

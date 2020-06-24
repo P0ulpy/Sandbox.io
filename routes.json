@@ -1,44 +1,48 @@
 {
-    "get" : 
+    "get":
     [
         {
-            "route" : "/",
-            "functions" : [ "getHomePage" ]
+            "route": "/",
+            "handlers": [ "getHomePage" ]
         },
         {
-            "route" : "/login",
-            "functions" : [ "getLoginPage" ]
+            "route": "/login",
+            "handlers": [ "getLoginPage" ]
         },
         {
-            "route" : "/register",
-            "functions" : [ "getRegisterPage" ]
+            "route": "/register",
+            "handlers": [ "getRegisterPage" ]
         },
         {
-            "route" : "/room",
-            "functions" : [ "getRoom" ]
+            "route": "/room",
+            "handlers": [ "getRoom" ]
         },
         {
-            "route" : "/mod/:UID/class.js",
-            "functions" : [ "sendClientMod" ]
+            "route": "/mod/:UID/class.js",
+            "handlers": [ "sendClientMod" ]
         },
         {
-            "route" : "/sandbox/:UID/infos",
-            "functions" : [ "sendSandboxInfos" ]
+            "route": "/sandbox/:UID/infos",
+            "handlers": [ "sendSandboxInfos" ]
+        },
+        {
+            "route": "/test",
+            "handlers": [ "test" ]
         }
     ],
-    "post" :
+    "post":
     [
         {
-            "route" : "/createRoom",
-            "functions" : [ "createRoom" ]
+            "route": "/createRoom",
+            "handlers": [ "createRoom" ]
         },
         {
-            "route" : "/register",
-            "functions" : [ "register" ]
+            "route": "/register",
+            "handlers": [ "register" ]
         },
         {
-            "route" : "/login",
-            "functions" : [ "login" ]
+            "route": "/login",
+            "handlers": [ "first", "login" ]
         }
     ]
 }

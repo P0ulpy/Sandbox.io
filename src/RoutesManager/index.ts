@@ -1,3 +1,4 @@
 import RoutesManager from "./RoutesManager";
+import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer"
 
-export default RoutesManager;
+export { RoutesManager, RoutesHandlersContainer, ExpressHandler }

@@ -18,34 +18,37 @@ voila vous etes complement armé pour utiliser RouteManager have fun
 */
 
 import { readFile } from "fs/promises";
-import path from "path";
-import express, { Request, Response } from "express";
+import { IRouterMatcher } from "express";
 
 import env from "../Environment";
-import RoutesFunctions = require("./RoutesFunctions");
 import { EventEmitter } from "events";
-
-const allowedHTTPMethods = [ "get", "post" ];
-
-function isHTTPMethodAllowed(method: string): boolean
-{
-    return (allowedHTTPMethods.includes(method));
-}
-
-type RoutesDefinitions = {
-    get: Route[];
-    post: Route[];
-}
+import handlersDefinitions from "./RoutesHandlersDefinitions";
 
 type Route = {
     route: string;
-    functions: (req: Request, res: Response, next: );
+    handlers: string[]
 }
+
+class RoutesManagerError extends Error {}
+
+function isHTTPMethodAllowed(method: string): boolean
+{
+    const allowedHTTPMethods = [ "get", "post" ];
+
+    return allowedHTTPMethods.includes(method);
+}
+
+type RoutesDefinitions = {
+    [ HTTPmethod: string ]: Route[]
+}
+
+const addHandlerMethods: Map<string, IRouterMatcher<Express.Application>> = new Map([
+    [ "get", env.app.get ],
+    [ "post", env.app.post ]
+]);
 
 export default class RoutesManager extends EventEmitter
 {
-    private routesDefinitions: RoutesDefinitions | null = null;
-
     constructor()
     {
         super();
@@ -77,46 +80,7 @@ export default class RoutesManager extends EventEmitter
         }
     }
 
-    private getFunctions(functionsNames: string[])
-    {
-        for (const functionName of functionsNames)
-        {
-            // @ts-ignore
-            if (typeof RoutesFunctions[functionName] === "function")
-            {
-
-            }
-        }
-    }
-
-    private applyRoutesDefinitions(routesDefinitions: RoutesDefinitions)
-    {
-        // @TODO code nul
-        for (const method in routesDefinitions)
-        {
-            if (isHTTPMethodAllowed(method))
-            {
-                // @TODO nul nul nul nul nul
-                const routeDefinition = routesDefinitions[method as "get" | "post"];
-
-            }
-            else
-            {
-                env.logger.warning(`HTTP method not allowed ${method}`);
-            }
-        }
-    }
-
-    private applyRoutes(method: string, routes: Route)
-    {
-        switch (method)
-        {
-            case "get":
-                env.app.get(routes.route, );
-        }
-    }
-
-    private async loadRoutesDefinition()
+    private async loadRoutesDefinition(): Promise<void>
     {
         try
         {
@@ -130,6 +94,71 @@ export default class RoutesManager extends EventEmitter
         catch (error)
         {
             this.endWithError(error);
+        }
+    }
+
+    private applyRoutesDefinitions(definitions: RoutesDefinitions): void
+    {
+        for (const method in definitions)
+        {
+            if (isHTTPMethodAllowed(method))
+            {
+                // Liste des routes à attacher
+                const routes: Route[] = definitions[method];
+
+                this.attachHandlers(method, routes);
+            }
+            else
+            {
+                env.logger.warning(`Trying to add handlers on forbidden HTTP method ${method}`);
+            }
+        }
+    }
+
+    //private getHandlersDefinitions()
+
+    private attachHandlers(method: string, routes: Route[]): void
+    {
+        for (const r of routes)
+        {
+            // Chemin de la route : "/", "/test/:id", etc.
+            const route = r.route;
+            // Noms des handlers à appliquer : "getHomePage", etc.
+            const handlersNames = r.handlers;
+            
+            // @TODO attention, applique chaque handler 1 à 1. Bonne idée ?
+            for (const name of handlersNames)
+            {
+                // Récupère la définition (fonction) du nom du handler
+                const handler = handlersDefinitions.get(name);
+
+                if (!handler)
+                {
+                    //const error = new RoutesManagerError(`Can't find definition of handler ${name}`);
+                    //env.logger.error(error);
+                    //throw error;
+                    env.logger.warning(`Can't find definition of handler ${name}`);
+                }
+                else
+                {
+                    if (method === "get")
+                    {
+                        env.logger.info(`Successfully added handler ${name} on HTTP method ${method}`);
+                        env.app.get(route, handler);
+                    }
+                    else if (method === "post")
+                    {
+                        env.logger.info(`Successfully added handler ${name} on HTTP method ${method}`);
+                        env.app.post(route, handler);
+                    }
+                    else
+                    {
+                        env.logger.warning(`Try to add handler on forbidden HTTP method ${method}`);
+                    }
+                }
+
+                //getHandlersDefinitions ??
+            }
         }
     }
 }
