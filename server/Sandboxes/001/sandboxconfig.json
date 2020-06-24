@@ -1,8 +1,0 @@
-{
-    "UID": "001",
-    "size": 5,
-    "name": "mySandbox1",
-    "MOTD": "Welcome to mySandbox1",
-    "mods": [ "001", "002", "004" ],
-    "updateRate": 1000
-}
