@@ -77,6 +77,8 @@ export default class LoadingSandbox
 
                 const serverSandbox = new ServerSandbox(serverSandboxConfig);
 
+                env.logger.info(`Successfully created Sandbox #${UID}`);
+
                 resolve(serverSandbox);
             }
             catch (error)

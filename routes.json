@@ -1,0 +1,44 @@
+{
+    "get" : 
+    [
+        {
+            "route" : "/",
+            "functions" : [ "getHomePage" ]
+        },
+        {
+            "route" : "/login",
+            "functions" : [ "getLoginPage" ]
+        },
+        {
+            "route" : "/register",
+            "functions" : [ "getRegisterPage" ]
+        },
+        {
+            "route" : "/room",
+            "functions" : [ "getRoom" ]
+        },
+        {
+            "route" : "/mod/:UID/class.js",
+            "functions" : [ "sendClientMod" ]
+        },
+        {
+            "route" : "/sandbox/:UID/infos",
+            "functions" : [ "sendSandboxInfos" ]
+        }
+    ],
+    "post" :
+    [
+        {
+            "route" : "/createRoom",
+            "functions" : [ "createRoom" ]
+        },
+        {
+            "route" : "/register",
+            "functions" : [ "register" ]
+        },
+        {
+            "route" : "/login",
+            "functions" : [ "login" ]
+        }
+    ]
+}

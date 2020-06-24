@@ -15,6 +15,7 @@ export type Environment = {
     socketServer: socket.Server;
     app: express.Application;
     roomsManager: RoomsManager;
+    routesDefinitionFile: string;
 }
 
 let isEnvironmentInitialized = false;
@@ -44,6 +45,7 @@ export function initEnv(): void
     env.app = app;
     env.socketServer = socketServer;
     env.roomsManager = new RoomsManager();
+    env.routesDefinitionFile = path.join(__dirname, "../../routes.json");
 
     isEnvironmentInitialized = true;
 }
