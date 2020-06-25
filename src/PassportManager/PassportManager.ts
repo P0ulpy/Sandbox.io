@@ -1,12 +1,12 @@
 import env from "../Environment";
 
-import passport from "passport";
 import passportLocal  from "passport-local";
 import expressFlash  from "express-flash";
 import session from "express-session";
 import { Response, Request } from "express";
 import bcrypt from "bcrypt";
 
+const passport = require("passport");
 const express = require("express")
 
 const LocalStrategy = passportLocal.Strategy;
@@ -22,7 +22,7 @@ export default class PassportManager
 {
     //TODO temporaire le temps d'avoir une BDD
 
-    public passport: any = passport;
+    public Passport: any = passport;
 
     public users: any[] =
     [
@@ -53,8 +53,8 @@ export default class PassportManager
 
     private initStrategy()
     {
-        passport.serializeUser((user: any, done) => done(null, user.id));
-        passport.deserializeUser((id: string, done) => done(null, this.getUserByID(id)));
+        passport.serializeUser((user: any, done: any) => done(null, user.id));
+        passport.deserializeUser((id: string, done: any) => done(null, this.getUserByID(id)));
 
         passport.use(new LocalStrategy({ usernameField: 'email' }, async(email, password, done) => 
         {
@@ -62,6 +62,7 @@ export default class PassportManager
 
             if(user == null)    
             {
+                env.logger.error('No user with that email');
                 return done(null, false, { message : 'No user with that email'});
             }
             
@@ -73,13 +74,14 @@ export default class PassportManager
                 }
                 else
                 {
+                    env.logger.error('Password incorrect');
                     return done(null, false, { message : 'Password incorrect' });
                 }
             }
             catch(err)
             {
                 return done(err);
-            }       
+            }
         }));
 
         env.logger.info(`Successfully initilialized PassportManager`);

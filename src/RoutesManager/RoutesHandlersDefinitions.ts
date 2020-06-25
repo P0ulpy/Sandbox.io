@@ -1,7 +1,6 @@
 import env from "../Environment";
 
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
 
 import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
 
@@ -50,7 +49,7 @@ handlersDefinitions
 {
     res.send(
         {
-
+            home: null
         }
     );
 })
@@ -65,23 +64,47 @@ handlersDefinitions
     });
 })
 
+// on utiliser le middleware de passport
 
-.set('login', (req: Request, res: Response, next: any) =>
+.set('login', (req : Request, res: Response, next: any) => 
 {
-    // on utiliser le middleware de passport
+    console.log(req.body);
 
-    env.passportManager.passport.authenticate('local', 
+    env.passportManager.Passport.authenticate('local', 
+    function(err: any, user?: any, options?: any) 
     {
-        successRedirect: '/mypanel',
-        failureRedirect: '/login',
-        failureFlash: true
-    })(req, res, next);
+
+        if(options && options.message)
+        {
+            env.logger.note(`connection message : ${options.message}`);
+        }
+
+        if (err) 
+        { 
+            return next(err); 
+        }
+        if (!user) 
+        { 
+            return res.send('pas ouf le mdp/email la'); 
+        }
+        
+        req.logIn(user, function(err) 
+        {
+            if (err) 
+            { 
+                return next(err); 
+            }
+            
+            return res.send('putain truc de ouf t est co');
+        });
+
+    })
+    (req, res, next);
 })
 
 .set('logout', (req: Request, res: Response) =>
 {
 
 })
-
 
 export default handlersDefinitions;

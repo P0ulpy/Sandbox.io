@@ -20,7 +20,6 @@ export type Environment = {
     routesDefinitionFile: string;
     passportManager: PassportManager;
     routesManager: RoutesManager;
-    
 }
 
 let isEnvironmentInitialized = false;

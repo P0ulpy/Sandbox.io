@@ -14,7 +14,7 @@
     [
         {
             "route": "/register",
-            "handlers": [ "register" ]
+            "handlers": ["register"]
         },
         {
             "route": "/login",
