@@ -27,7 +27,7 @@ export default class Room extends EventEmitter
 
         this.loadingSandbox = new LoadingSandbox(UID);
 
-        this.loadingSandbox
+        this.loadingSandbox.promise
         .then((serverSandbox: ServerSandbox) =>
         {
             this.loadingStatus = "success";
@@ -90,6 +90,7 @@ export default class Room extends EventEmitter
         env.logger.error(error.message);
         throw error;
     }
+
     // @TODO route manager :
     /*
     try {

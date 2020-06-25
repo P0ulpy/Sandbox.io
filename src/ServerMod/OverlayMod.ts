@@ -14,9 +14,11 @@ export default class OverlayMod extends ServerMod
     public get publicData(): OverlayModPublicData
     {
         return {
-            UID: this.UID,
+            UID: this.UID.value,
             name: this.name,
-            description: this.description
+            description: this.description,
+            version: this.version,
+            resources: this.resources
         }
     }
 }

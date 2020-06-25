@@ -1,0 +1,56 @@
+{
+    "get":
+    [
+        {
+            "route": "/",
+            "handlers": [ "getHomePage" ]
+        },
+        {
+            "route": "/login",
+            "handlers": [ "getLoginPage" ]
+        },
+        {
+            "route": "/register",
+            "handlers": [ "getRegisterPage" ]
+        },
+        {
+            "route": "/room",
+            "handlers": [ "getRoom" ]
+        },
+        {
+            "route": "/mod/:UID/class.js",
+            "handlers": [ "sendClientMod" ]
+        },
+        {
+            "route": "/sandbox/:UID/infos",
+            "handlers": [ "sendSandboxInfos" ]
+        },
+        {
+            "route": "/test",
+            "handlers": [ "test" ]
+        },
+        {
+            "route": "/createRoom",
+            "handlers": [ "createRoom" ]
+        },
+        {
+            "route": "/rooms/:UID/publicData",
+            "handlers": [ "getRoomPublicData" ]
+        },
+        {
+            "route": "/rooms/:UID/ressources/:modCategory/:name",
+            "handlers": [ "getRoomResource" ]
+        }
+    ],
+    "post":
+    [
+        {
+            "route": "/register",
+            "handlers": [ "register" ]
+        },
+        {
+            "route": "/login",
+            "handlers": [ "first", "login" ]
+        }
+    ]
+}
