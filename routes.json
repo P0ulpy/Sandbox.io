@@ -28,14 +28,22 @@
         {
             "route": "/test",
             "handlers": [ "test" ]
-        }
-    ],
-    "post":
-    [
+        },
         {
             "route": "/createRoom",
             "handlers": [ "createRoom" ]
         },
+        {
+            "route": "/rooms/:UID/publicData",
+            "handlers": [ "getRoomPublicData" ]
+        },
+        {
+            "route": "/rooms/:UID/ressources/:modCategory/:name",
+            "handlers": [ "getRoomResource" ]
+        }
+    ],
+    "post":
+    [
         {
             "route": "/register",
             "handlers": [ "register" ]

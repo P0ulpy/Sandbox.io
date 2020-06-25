@@ -1,6 +1,14 @@
 {
     "UID": "001",
-    "name": "myMod1",
+    "name": "overlay mod",
     "version": "0.1.0",
-    "dependencies": [ "002", "003", "004" ]
+    "description": "First overlay mod",
+    "resources":
+    [
+        {
+            "name": "mainOveImg",
+            "type": "image",
+            "filename": "oveImg.png"
+        }
+    ]
 }

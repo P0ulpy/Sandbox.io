@@ -28,7 +28,7 @@ type Route = {
     route: string;
     handlers: string[]
 }
-
+8
 class RoutesManagerError extends Error {}
 
 function isHTTPMethodAllowed(method: string): boolean
@@ -41,11 +41,6 @@ function isHTTPMethodAllowed(method: string): boolean
 type RoutesDefinitions = {
     [ HTTPmethod: string ]: Route[]
 }
-
-const addHandlerMethods: Map<string, IRouterMatcher<Express.Application>> = new Map([
-    [ "get", env.app.get ],
-    [ "post", env.app.post ]
-]);
 
 export default class RoutesManager extends EventEmitter
 {
@@ -115,8 +110,6 @@ export default class RoutesManager extends EventEmitter
         }
     }
 
-    //private getHandlersDefinitions()
-
     private attachHandlers(method: string, routes: Route[]): void
     {
         for (const r of routes)
@@ -134,9 +127,6 @@ export default class RoutesManager extends EventEmitter
 
                 if (!handler)
                 {
-                    //const error = new RoutesManagerError(`Can't find definition of handler ${name}`);
-                    //env.logger.error(error);
-                    //throw error;
                     env.logger.warning(`Can't find definition of handler ${name}`);
                 }
                 else
@@ -156,81 +146,7 @@ export default class RoutesManager extends EventEmitter
                         env.logger.warning(`Try to add handler on forbidden HTTP method ${method}`);
                     }
                 }
-
-                //getHandlersDefinitions ??
             }
         }
     }
 }
-
-/*export default class RoutesManager2
-{
-    constructor()
-    {
-        this.functions = require("./RoutesFunctions.js");
-        this.initApp();
-
-        this.getRoutesFile()
-        .then((routes) => 
-        {   
-            this.loadStatics(routes);
-            this.loadRoutes('get', routes);
-            this.loadRoutes('post', routes);
-        })
-        .catch((err) => 
-        {
-            throw err;
-        });
-    }
-
-
-    loadRoutes(method = "get", routes)
-    {
-        this.debug("log", `chargement des routes avec la method "${method}"`);
-
-        const _routes = routes[method]; 
-
-        for(const route of _routes)
-        {
-            if(route.functions)
-            {
-                const functions = this.getFunctions(route.functions);
-
-                if(functions)
-                {
-                    this.app[method](route.route, ...functions);
-                    this.debug("note", `functions [${route.functions}] appliquer a la route "${route.route}"`);
-                }
-                else
-                {
-                    this.debug("error", `impossible d'appliquer les functions [${route.functions}] a la route "${route.route}"`);
-                }
-            }
-            else
-            {
-                this.debug('error', `aucune function lié a la route ${route.route} avec la method ${method}`);
-            }
-        }
-    }
-
-    getFunctions(functionsNames = [""])
-    {
-        const methods = [];
-
-        for(const functionName of functionsNames)
-        {
-            if(this.functions[functionName] && typeof(this.functions[functionName]) === 'function')
-            {
-                // pour que le this ne soit pas override
-                methods.push((req, res, next) => { this.functions[functionName](req, res, next); });
-            }
-            else
-            {   
-                this.debug("error", `RouteManager : impossible de trouver la function "${functionName}"`);
-            }
-        }
-
-        // si il n'y a pas de funtions return null
-        return (methods.length > 0) ? methods : null;
-    }
-}*/

@@ -5,6 +5,7 @@ import path from "path";
 
 import { Logger, LogLevel } from "../Tools";
 import { RoomsManager } from "../Room";
+import { RoutesManager } from "../RoutesManager";
 
 export type Environment = {
     logLevel: LogLevel;
@@ -16,6 +17,7 @@ export type Environment = {
     app: express.Application;
     roomsManager: RoomsManager;
     routesDefinitionFile: string;
+    routesManager: RoutesManager;
 }
 
 let isEnvironmentInitialized = false;
@@ -46,6 +48,7 @@ export function initEnv(): void
     env.socketServer = socketServer;
     env.roomsManager = new RoomsManager();
     env.routesDefinitionFile = path.join(__dirname, "../../routes.json");
+    env.routesManager = new RoutesManager();
 
     isEnvironmentInitialized = true;
 }

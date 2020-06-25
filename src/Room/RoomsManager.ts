@@ -35,7 +35,9 @@ export default class RoomsManager extends EventEmitter
     {
         if (this.has(UID))
         {
-            env.logger.warning(`Can't recreate Room ${UID} which already exists`);
+            const error = new RoomsManagerError(`Can't recreate Room ${UID} which already exists`);
+            env.logger.error(error.message);
+            throw error;
         }
         else
         {

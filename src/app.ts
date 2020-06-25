@@ -1,13 +1,20 @@
 import env, { initEnv } from "./Environment";
 
+import { join } from "path";
+import express from "express";
+
 initEnv();
 
-env.httpServer.listen(8080);
+const path = join(__dirname, "../testclient");
+env.app.use("/", express.static(path));
 
-import LoadingSandbox from "./Sandbox/LoadingSandbox";
+env.httpServer.listen(80);
+
+
+/*import LoadingSandbox from "./Sandbox/LoadingSandbox";
 import { getSandboxUID, getModUID } from "./UID";
 import { Request, Response } from "express";
-import { RoutesManager } from "./RoutesManager";
+import { RoutesManager } from "./RoutesManager";*/
 
 /*let a = new LoadingSandbox(getSandboxUID("001"))
 .then((a: any) => { console.log("Résolu", a) })
@@ -19,5 +26,3 @@ import { RoutesManager } from "./RoutesManager";
 const t = env.roomsManager.get(getSandboxUID("001"));
 
 t.then(() => console.log(t.publicData));*/
-
-let a = new RoutesManager();

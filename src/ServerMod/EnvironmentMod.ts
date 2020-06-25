@@ -14,9 +14,11 @@ export default class EnvironmentMod extends ServerMod
     public get publicData(): EnvironmentModPublicData
     {
         return {
-            UID: this.UID,
+            UID: this.UID.value,
             name: this.name,
-            description: this.description
+            description: this.description,
+            version: this.version,
+            resources: this.resources
         }
     }
 }

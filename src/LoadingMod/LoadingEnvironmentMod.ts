@@ -7,7 +7,7 @@ export default class LoadingEnvironmentMod extends LoadingMod
 {
     constructor(UID: ModUID)
     {
-        super(UID, "overlay");
+        super(UID, "environment");
     }
 
     protected async getConfig(): Promise<EnvironmentModConfig>

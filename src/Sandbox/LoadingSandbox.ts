@@ -24,26 +24,25 @@ type SandboxMods = {
     environment: ModUID;
 }
 
+class LoadingSandboxError extends Error{}
+
 // @TODO utiliser interface PromiseLike<T>
 export default class LoadingSandbox
 {
     private static configFileName = "sandboxconfig.json";
 
-    private loadingPromise: Promise<ServerSandbox>;
+    private loadingPromise: Promise<ServerSandbox> | null;
     private UID: SandboxUID;
     private folderName: string;
+    private error: LoadingSandboxError | null = null;
 
     constructor(UID: SandboxUID)
     {
         if (!UID.isValid())
         {
-            const err = new Error(`Can't load Sandbox #${UID} : invalid UID`);
-
-            env.logger.error(err.message);
-            this.loadingPromise = Promise.reject<ServerSandbox>(err);
-
-            // @TODO vraiment nécessaire ?
-            throw err;
+            this.error = new LoadingSandboxError(`Can't load Sandbox #${UID} : invalid UID`);
+            env.logger.error(this.error.message);
+            throw this.error;
         }
 
         this.UID = UID;
@@ -92,7 +91,12 @@ export default class LoadingSandbox
 
     public get promise(): Promise<ServerSandbox>
     {
-        return this.loadingPromise;
+        if (this.loadingPromise)
+        {
+            return this.loadingPromise;
+        }
+
+        return Promise.reject<ServerSandbox>(this.error);
     }
 
     private get sandboxPath(): string
@@ -106,10 +110,10 @@ export default class LoadingSandbox
     }
 
     // @TODO pas propre les any mais pratique
-    public then(callback: any): Promise<any>
+    /*public then(callback: any): Promise<any>
     {
         return this.loadingPromise.then(callback);
-    }
+    }*/
 
     // @TODO pas propre les any mais pratique
     /*public catch(callback: any): Promise<any>

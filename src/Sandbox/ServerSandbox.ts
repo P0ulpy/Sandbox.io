@@ -10,7 +10,7 @@ export type ServerSandboxConfig = {
 }
 
 export type ServerSandboxPublicData = {
-    UID: SandboxUID;
+    UID: string;
     size: number;
     name: string;
     MOTD: string;
@@ -22,6 +22,7 @@ type SandboxModsPublicData = {
     environment: EnvironmentModPublicData;
     gameplay: GameplayModPublicData;
 }
+
 
 export default class ServerSandbox
 {
@@ -59,7 +60,7 @@ export default class ServerSandbox
     public get publicData(): ServerSandboxPublicData
     {
         return {
-            UID: this.UID,
+            UID: this.UID.value,
             size: this.size,
             name: this.name,
             MOTD: this.MOTD,

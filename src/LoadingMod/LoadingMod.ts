@@ -7,10 +7,20 @@ import { ServerMod, GameplayMod, OverlayMod, EnvironmentMod } from "../ServerMod
 
 export type ModCategory = "gameplay" | "overlay" | "environment";
 
+type ResourceType = "image"
+
+export type Resource = {
+    name: string;
+    filename: string;
+    type: ResourceType
+}
+
 export interface ModConfig {
     UID: ModUID;
     name: string;
     description: string;
+    version: string;
+    resources: Resource[]
 }
 
 export default abstract class LoadingMod

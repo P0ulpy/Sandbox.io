@@ -1,54 +1,127 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
+import { join } from "path";
 
 import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
+import env from "../Environment";
+import { getSandboxUID } from "../UID";
+import { Resource } from "../LoadingMod";
+
 
 const handlersDefinitions = new RoutesHandlersContainer();
 
-handlersDefinitions.set("register", async (req: Request, res: Response) =>
+function statusOK(data: any): { status: "OK", data: any }
+{
+    return { status: "OK", data: data };
+}
+
+function statusError(data: any): { status: "KO", data: any }
+{
+    return { status: "KO", data: data };
+}
+
+function createRoom(req: Request, res: Response)
 {
     try
     {
-        const hachedPassword = await bcrypt.hash(req.body.password, 10);
+        const UID = req.query.UID as string;
 
-        // TODO : utiliser le generateur d'id de Antoine ou gerer directement les key depuis la DB
-        // TODO : verifier si l'utilisateur n'existe pas deja
-        // TODO : verifier si le format de l'email est bon 
+        if (typeof UID === "undefined")
+        {
+            throw new Error("Can't retrieve UID GET param");
+        }
+        env.roomsManager.create(getSandboxUID(UID));
 
-        /*this.users.push({
-            id : Date.now().toString(),
-            name: req.body.name,
-            name: req.body.email,
-            password: hachedPassword
-        });
-
-        res.redirect('/login');
-
-        console.log(this.users);*/
+        // @TODO gère les erreurs immédiates, mais pas celles liées au chargement de la room
+        res.send(statusOK(UID));
     }
-    catch (err)
+    catch (error)
     {
-        //this.debug('error', `register error ${err}`);
-        //res.status(500).send({ success : false, errorMessage: `internal error`});
+        res.status(500).send(statusError(error.message));
     }
-})
+}
 
-.set("login", (req: Request, res: Response) =>
-{
-    console.log("login");
-    res.send("login");
-})
 
-.set("test", (req: Request, res: Response) =>
+function getRoomPublicData(req: Request, res: Response)
 {
-    res.end("test");
-})
+    try
+    {
+        const UID = req.params.UID;
+        const room = env.roomsManager.get(getSandboxUID(UID));
 
-.set("first", (req: Request, res: Response, next: any) =>
+        res.send(statusOK(room.publicData));
+    }
+    catch (error)
+    {
+        res.status(500).send(statusError(error.message));
+    }
+}
+
+function getRoomResource(req: Request, res: Response)
 {
-    console.log("first");
-    res.send("first");
-    next();
-})
+    const UID = req.params.UID;
+    const modCategory = req.params.modCategory;
+    const resourceName = req.params.name;
+
+    try
+    {
+        const room = env.roomsManager.get(getSandboxUID(UID));
+        const modsPublicData = room.publicData.mods;
+        let resources: Resource[] | null = null;
+        let resourceFile: string | null = null;
+
+        // @TODO pas ouf
+        if (modCategory === "overlay")
+        {
+            resources = modsPublicData.overlay.resources;
+        }
+        else if (modCategory === "environment")
+        {
+            resources = modsPublicData.environment.resources;
+        }
+        else if (modCategory === "gameplay")
+        {
+            resources = modsPublicData.gameplay.resources;
+        }
+        else
+        {
+            throw new Error(`Unknown mod category ${modCategory}`);
+        }
+
+        // On cherche la ressource
+        for (const res of resources)
+        {
+            if (res.name === resourceName)
+            {
+                resourceFile = res.filename;
+                break;
+            }
+        }
+
+        if (!resourceFile)
+        {
+            throw new Error(`Can't find resource ${resourceName} of ${modCategory} mod in #${UID} room`);
+        }
+        
+        const resourcePath = join(env.modPath, modCategory, UID, "resources", resourceFile);
+
+        // Envoi du fichier, et vérification d'une éventuelle erreur
+        res.sendFile(resourcePath, (err) =>
+        {
+            if (err)
+            {
+                env.logger.error(`Can't find resource file : ${err.message}`);
+                res.status(500).send(statusError("Can't find resource file"));
+            }
+        });
+    }
+    catch (error)
+    {
+        res.status(500).send(statusError(error.message));
+    }
+}
+
+handlersDefinitions.set("createRoom", createRoom)
+.set("getRoomPublicData", getRoomPublicData)
+.set("getRoomResource", getRoomResource);
 
 export default handlersDefinitions;
