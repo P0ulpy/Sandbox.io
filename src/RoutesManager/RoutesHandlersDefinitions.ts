@@ -1,3 +1,5 @@
+import env from "../Environment";
+
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
@@ -5,50 +7,81 @@ import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContain
 
 const handlersDefinitions = new RoutesHandlersContainer();
 
-handlersDefinitions.set("register", async (req: Request, res: Response) =>
+handlersDefinitions
+
+.set('denyNotAuthenticated', (req: Request, res: Response, next: any) => 
 {
-    try
+    if(req.isAuthenticated())
     {
-        const hachedPassword = await bcrypt.hash(req.body.password, 10);
-
-        // TODO : utiliser le generateur d'id de Antoine ou gerer directement les key depuis la DB
-        // TODO : verifier si l'utilisateur n'existe pas deja
-        // TODO : verifier si le format de l'email est bon 
-
-        /*this.users.push({
-            id : Date.now().toString(),
-            name: req.body.name,
-            name: req.body.email,
-            password: hachedPassword
-        });
-
-        res.redirect('/login');
-
-        console.log(this.users);*/
+        next();
     }
-    catch (err)
+    else
     {
-        //this.debug('error', `register error ${err}`);
-        //res.status(500).send({ success : false, errorMessage: `internal error`});
+        res.status(403).send({ success: false, errorMessage: "forbidden access"});
     }
 })
 
-.set("login", (req: Request, res: Response) =>
+.set('denyAuthenticated', (req: Request, res: Response, next: any) => 
 {
-    console.log("login");
-    res.send("login");
+    if(req.isAuthenticated())
+    {
+        res.status(403).send({ success: false, errorMessage: "forbidden access"});
+    }
+    else
+    {
+        next();
+    }
 })
 
-.set("test", (req: Request, res: Response) =>
+.set('mypanel', (req: any, res: Response) => 
 {
-    res.end("test");
+    res.send(
+        {
+            user:
+            {
+                name: req.user.username
+            },
+            mods:[]
+        }
+    );
 })
 
-.set("first", (req: Request, res: Response, next: any) =>
+.set('home', (req: Request, res: Response) => 
 {
-    console.log("first");
-    res.send("first");
-    next();
+    res.send(
+        {
+
+        }
+    );
 })
+
+.set('register', async (req: Request, res: Response) =>
+{
+    env.passportManager.register(req, res, 
+    {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+    });
+})
+
+
+.set('login', (req: Request, res: Response, next: any) =>
+{
+    // on utiliser le middleware de passport
+
+    env.passportManager.passport.authenticate('local', 
+    {
+        successRedirect: '/mypanel',
+        failureRedirect: '/login',
+        failureFlash: true
+    })(req, res, next);
+})
+
+.set('logout', (req: Request, res: Response) =>
+{
+
+})
+
 
 export default handlersDefinitions;

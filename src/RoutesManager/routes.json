@@ -1,0 +1,28 @@
+{
+    "get":
+    [
+        {
+            "route": "/",
+            "handlers" : ["home"]
+        },
+        {
+            "route": "/mypanel",
+            "handlers" : ["denyNotAuthenticated", "mypanel"]
+        }
+    ],
+    "post":
+    [
+        {
+            "route": "/register",
+            "handlers": [ "register" ]
+        },
+        {
+            "route": "/login",
+            "handlers": ["login"]
+        },
+        {
+            "route" : "/logout",
+            "handlers" : ["denyNotAuthenticated", "logout"]
+        }
+    ]
+}

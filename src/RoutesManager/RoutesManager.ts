@@ -17,12 +17,15 @@ voila vous etes complement armé pour utiliser RouteManager have fun
 
 */
 
+import env from "../Environment";
+
 import { readFile } from "fs/promises";
 import { IRouterMatcher } from "express";
 
-import env from "../Environment";
 import { EventEmitter } from "events";
 import handlersDefinitions from "./RoutesHandlersDefinitions";
+
+import express from "express";
 
 type Route = {
     route: string;
@@ -42,10 +45,10 @@ type RoutesDefinitions = {
     [ HTTPmethod: string ]: Route[]
 }
 
-const addHandlerMethods: Map<string, IRouterMatcher<Express.Application>> = new Map([
+/*const addHandlerMethods: Map<string, IRouterMatcher<Express.Application>> = new Map([
     [ "get", env.app.get ],
     [ "post", env.app.post ]
-]);
+]);*/
 
 export default class RoutesManager extends EventEmitter
 {
@@ -71,7 +74,7 @@ export default class RoutesManager extends EventEmitter
     {
         try
         {
-            // @TODO pas de vérif, on part du principe que le format est bon
+            // TODO pas de vérif, on part du principe que le format est bon
             return JSON.parse(JSONData);
         }
         catch (error)
@@ -105,7 +108,6 @@ export default class RoutesManager extends EventEmitter
             {
                 // Liste des routes à attacher
                 const routes: Route[] = definitions[method];
-
                 this.attachHandlers(method, routes);
             }
             else
@@ -126,6 +128,12 @@ export default class RoutesManager extends EventEmitter
             // Noms des handlers à appliquer : "getHomePage", etc.
             const handlersNames = r.handlers;
             
+            if(typeof(handlersNames) != typeof([""]))
+            {
+                env.logger.error(`invalid handlersNames for ${r.route}`);
+                return;
+            }
+
             // @TODO attention, applique chaque handler 1 à 1. Bonne idée ?
             for (const name of handlersNames)
             {

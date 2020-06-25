@@ -4,82 +4,8 @@ import env from "../Environment";
 
 export type ExpressHandler = (req: Request, res: Response, next?: any) => void;
 
-// Route: string, Handlers: ExpressHandler[]
 type RoutesContainer = Map<string, ExpressHandler[]>;
-
 type AllowedHTTPMethod = "get" | "post";
-
-/*export class RoutesHandlers
-{
-    private GETHandlers: RoutesContainer = new Map<string, Array<ExpressHandler>>();
-    private POSTHandlers: RoutesContainer = new Map<string, Array<ExpressHandler>>();
-
-    private addHandler(container: RoutesContainer, route: string, handler: ExpressHandler): void
-    {
-        if (!container.has(route))
-        {
-            container.set(route, new Array<ExpressHandler>());
-        }
-        container.get(route)?.push(handler);
-    }
-
-    private getContainerByMethod(method: AllowedHTTPMethod): RoutesContainer | void
-    {
-        if (method === "get")
-        {
-            return this.GETHandlers;
-        }
-        else if (method === "post")
-        {
-            return this.POSTHandlers;
-        }
-        env.logger.warning(`RoutesHandlers : Try to access Routes of forbidden HTTP method ${method}`);
-    }
-
-    public add(method: AllowedHTTPMethod, route: string, handler: ExpressHandler): this
-    {
-        const routesContainer = this.getContainerByMethod(method);
-
-        if (routesContainer)
-        {
-            this.addHandler(routesContainer, route, handler);
-        }
-    
-        return this;
-    }
-
-    // Retourne undefined si le tableau n'existe pas ou s'il est vide : aucune route enregistrée
-    private getHandlers(method: AllowedHTTPMethod, route: string): ExpressHandler[] | void
-    {
-        const routesContainer = this.getContainerByMethod(method);
-
-        if (routesContainer)
-        {
-            const handlers: ExpressHandler[] | undefined = routesContainer?.get(route);
-            
-            if (handlers && handlers.length > 0)
-            {
-                return handlers;
-            }
-        }
-    }
-
-    public get(route: string): ExpressHandler[] | void
-    {
-        return this.getHandlers("get", route);
-    }
-
-    public post(route: string): ExpressHandler[] | void
-    {
-        return this.getHandlers("post", route);
-    }
-}
-
-const routesHandlers = new RoutesHandlers();
-
-routesHandlers.add("get", )
-
-export default routesHandlers;*/
 
 export default class RoutesHandlersContainer
 {
