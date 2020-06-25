@@ -1,8 +1,12 @@
 import env from "../Environment";
 
-import { Request, Response } from "express";
+import { join } from "path";
 
+import { Request, Response } from "express";
 import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
+
+import { getSandboxUID } from "../UID";
+import { Resource } from "../LoadingMod";
 
 const handlersDefinitions = new RoutesHandlersContainer();
 
@@ -107,19 +111,7 @@ handlersDefinitions
 .set('logout', (req: Request, res: Response) =>
 {
 
-})
-
-export default handlersDefinitions;
-import { Request, Response } from "express";
-import { join } from "path";
-
-import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
-import env from "../Environment";
-import { getSandboxUID } from "../UID";
-import { Resource } from "../LoadingMod";
-
-
-const handlersDefinitions = new RoutesHandlersContainer();
+});
 
 function statusOK(data: any): { status: "OK", data: any }
 {
@@ -131,7 +123,9 @@ function statusError(data: any): { status: "KO", data: any }
     return { status: "KO", data: data };
 }
 
-function createRoom(req: Request, res: Response)
+handlersDefinitions
+
+.set('createRoom', (req: Request, res: Response) =>
 {
     try
     {
@@ -150,10 +144,10 @@ function createRoom(req: Request, res: Response)
     {
         res.status(500).send(statusError(error.message));
     }
-}
+})
 
 
-function getRoomPublicData(req: Request, res: Response)
+.set('getRoomPublicData', (req: Request, res: Response) =>
 {
     try
     {
@@ -166,9 +160,9 @@ function getRoomPublicData(req: Request, res: Response)
     {
         res.status(500).send(statusError(error.message));
     }
-}
+})
 
-function getRoomResource(req: Request, res: Response)
+.set('getRoomResource', (req: Request, res: Response) =>
 {
     const UID = req.params.UID;
     const modCategory = req.params.modCategory;
@@ -230,10 +224,6 @@ function getRoomResource(req: Request, res: Response)
     {
         res.status(500).send(statusError(error.message));
     }
-}
-
-handlersDefinitions.set("createRoom", createRoom)
-.set("getRoomPublicData", getRoomPublicData)
-.set("getRoomResource", getRoomResource);
+});
 
 export default handlersDefinitions;
