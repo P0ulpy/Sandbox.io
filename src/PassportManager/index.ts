@@ -1,3 +1,3 @@
-import PassportManager from "./PassportManager";
-export { PassportManager };
+import { PassportManager, RegisterData } from "./PassportManager";
+export { PassportManager, RegisterData };
 export default PassportManager;

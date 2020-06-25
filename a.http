@@ -1,5 +1,25 @@
+### LOGIN
+
 POST http://localhost/login
 Content-Type: application/x-www-form-urlencoded
 
 email=admin@admin
-&password=adminaa
+&password=admin
+
+### REGISTER
+
+POST http://localhost/register
+Content-Type: application/x-www-form-urlencoded
+
+username=w
+&email=w@w
+&password=w
+
+### LOGOUT
+
+POST http://localhost/logout
+
+
+### PANEL
+
+GET http://localhost/mypanel

@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
 
 import { getSandboxUID } from "../UID";
-import { Resource } from "../LoadingMod";
+//import { Resource } from "../LoadingMod";
 
 const handlersDefinitions = new RoutesHandlersContainer();
 
@@ -20,7 +20,7 @@ handlersDefinitions
     }
     else
     {
-        res.status(403).send({ success: false, errorMessage: "forbidden access"});
+        res.status(403).send({ success: false, message: "access forbidden"});
     }
 })
 
@@ -28,7 +28,7 @@ handlersDefinitions
 {
     if(req.isAuthenticated())
     {
-        res.status(403).send({ success: false, errorMessage: "forbidden access"});
+        res.status(403).send({ success: false, message: "access forbidden"});
     }
     else
     {
@@ -72,12 +72,9 @@ handlersDefinitions
 
 .set('login', (req : Request, res: Response, next: any) => 
 {
-    console.log(req.body);
-
     env.passportManager.Passport.authenticate('local', 
     function(err: any, user?: any, options?: any) 
     {
-
         if(options && options.message)
         {
             env.logger.note(`Connection try message : ${options.message}`);
@@ -89,7 +86,7 @@ handlersDefinitions
         }
         if (!user) 
         { 
-            return res.send({ success: false, errorMessage: options.message}); 
+            return res.send({ success: false, message: options.message}); 
         }
         
         req.logIn(user, function(err) 
@@ -100,20 +97,33 @@ handlersDefinitions
                 return next(err); 
             }
             
-            env.logger.info(`user ${user.name} successfully connected`)
-            return res.send({ success: true, message: `you are connected`});
+            env.logger.info(`user ${user.username} successfully login`);
+            return res.send({ success: true, message: `you are login`});
         });
 
     })
     (req, res, next);
 })
 
-.set('logout', (req: Request, res: Response) =>
+.set('logout', (req: any, res: Response) =>
 {
-
+    try
+    {
+        env.logger.info(`user ${req.user.username} trying to logout`)
+        
+        req.logOut();
+        res.send({success: true, message:"successfully logout"})
+        
+        env.logger.info(`Success`)
+    }
+    catch(err)
+    {
+        env.logger.error(`logout error : ${err}`);
+        res.status(500).send({success: false, message: `Internal Server Error can't logout`});
+    }
 });
 
-function statusOK(data: any): { status: "OK", data: any }
+/*function statusOK(data: any): { status: "OK", data: any }
 {
     return { status: "OK", data: data };
 }
@@ -224,6 +234,6 @@ handlersDefinitions
     {
         res.status(500).send(statusError(error.message));
     }
-});
+});*/
 
 export default handlersDefinitions;

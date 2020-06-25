@@ -11,14 +11,7 @@ const express = require("express")
 
 const LocalStrategy = passportLocal.Strategy;
 
-type RegisterData = 
-{
-    username: string, 
-    email: string, 
-    password: string
-}
-
-export default class PassportManager
+export class PassportManager
 {
     //TODO temporaire le temps d'avoir une BDD
 
@@ -87,16 +80,18 @@ export default class PassportManager
         env.logger.info(`Successfully initilialized PassportManager`);
     }
 
-    public async register(req: Request, res: Response, data: RegisterData)
+    public async register(req: Request, res: Response, data: any)
     {
         try
         {
-            const hachedPassword = await bcrypt.hash(passport, 10);
+            const hachedPassword = await bcrypt.hash(data.password, 10);
 
             // TODO : verifier si l'utilisateur n'existe pas deja
             // TODO : verifier si le format de l'email est bon 
 
             // TODO : TEMPORAIRE
+ 
+            
 
             env.passportManager.users.push(
             {
@@ -112,8 +107,9 @@ export default class PassportManager
         }
         catch (err)
         {
-            env.logger.error(`register error ${err}`);
-            res.status(500).send({ success : false, errorMessage: `internal error`});
+            res.status(500).send({ success : false, message: `internal error`});
+            env.logger.error(`register error : ${err}`);
+            throw err;
         }
     }
 
