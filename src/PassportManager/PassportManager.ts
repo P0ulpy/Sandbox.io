@@ -63,7 +63,7 @@ export default class PassportManager
             if(user == null)    
             {
                 env.logger.error('No user with that email');
-                return done(null, false, { message : 'No user with that email'});
+                return done(null, false, { message : 'No user with that email' });
             }
             
             try

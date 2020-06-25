@@ -76,26 +76,28 @@ handlersDefinitions
 
         if(options && options.message)
         {
-            env.logger.note(`connection message : ${options.message}`);
+            env.logger.note(`Connection try message : ${options.message}`);
         }
 
         if (err) 
         { 
-            return next(err); 
+            return next(err);
         }
         if (!user) 
         { 
-            return res.send('pas ouf le mdp/email la'); 
+            return res.send({ success: false, errorMessage: options.message}); 
         }
         
         req.logIn(user, function(err) 
         {
             if (err) 
             { 
+                env.logger.error(`Login error : ${err}`);
                 return next(err); 
             }
             
-            return res.send('putain truc de ouf t est co');
+            env.logger.info(`user ${user.name} successfully connected`)
+            return res.send({ success: true, message: `you are connected`});
         });
 
     })
