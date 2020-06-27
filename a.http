@@ -1,10 +1,6 @@
-### LOGIN
+### LOGOUT
 
-POST http://localhost/login
-Content-Type: application/x-www-form-urlencoded
-
-email=admin@admin
-&password=admin
+POST http://localhost/logout
 
 ### REGISTER
 
@@ -15,11 +11,37 @@ username=w
 &email=w@w
 &password=w
 
-### LOGOUT
+### LOGIN
 
-POST http://localhost/logout
+POST http://localhost/login
+Content-Type: application/x-www-form-urlencoded
+
+email=admin@admin
+&password=admin
+
+### CreateRoom
+
+POST http://localhost/createRoom
 
 
 ### PANEL
 
 GET http://localhost/mypanel
+
+
+### Create Room
+
+POST http://localhost/createRoom
+Content-Type: application/x-www-form-urlencoded
+
+UID=001
+
+### get Rooms
+
+GET http://localhost/rooms
+
+### get Room public data
+
+GET http://localhost/rooms/001/publicData
+
+### 

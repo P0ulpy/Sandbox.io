@@ -6,7 +6,17 @@ import { Request, Response } from "express";
 import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
 
 import { getSandboxUID } from "../UID";
-//import { Resource } from "../LoadingMod";
+import { Resource } from "../LoadingMod";
+
+function statusOK(data: any): { status: "OK", data: any }
+{
+    return { status: "OK", data: data };
+}
+
+function statusError(data: any): { status: "KO", data: any }
+{
+    return { status: "KO", data: data };
+}
 
 const handlersDefinitions = new RoutesHandlersContainer();
 
@@ -20,7 +30,7 @@ handlersDefinitions
     }
     else
     {
-        res.status(403).send({ success: false, message: "access forbidden"});
+        res.status(403).send(statusError({ message: "access forbidden" }));
     }
 })
 
@@ -28,7 +38,7 @@ handlersDefinitions
 {
     if(req.isAuthenticated())
     {
-        res.status(403).send({ success: false, message: "access forbidden"});
+        res.status(403).send(statusError({ message: "access forbidden" }));
     }
     else
     {
@@ -38,24 +48,29 @@ handlersDefinitions
 
 .set('mypanel', (req: any, res: Response) => 
 {
+    const user = env.passportManager.getUserByID(req.user?.id);
+
     res.send(
         {
-            user:
-            {
-                name: req.user.username
-            },
-            mods:[]
+            user: user?.publicData,
+            mods: [] // TODO : recup tout les mods existantsww
         }
     );
 })
 
-.set('home', (req: Request, res: Response) => 
+.set('getRooms', (req: Request, res: Response) => 
 {
-    res.send(
-        {
-            home: null
-        }
-    );
+    try
+    {
+        res.send(statusOK({ rooms : env.roomsManager.roomsPublicData }));
+        env.logger.info(`sucessfuly sent roomsPublicData`);
+    }
+    catch(err)
+    {
+        res.status(500).send(statusError({ message: `internal error`}));
+        env.logger.error(`error while trying to send roomsPublicData`);
+        throw err;
+    }
 })
 
 .set('register', async (req: Request, res: Response) =>
@@ -68,10 +83,10 @@ handlersDefinitions
     });
 })
 
-// on utiliser le middleware de passport
-
 .set('login', (req : Request, res: Response, next: any) => 
 {
+    // on utiliser le middleware de passport
+
     env.passportManager.Passport.authenticate('local', 
     function(err: any, user?: any, options?: any) 
     {
@@ -86,7 +101,7 @@ handlersDefinitions
         }
         if (!user) 
         { 
-            return res.send({ success: false, message: options.message}); 
+            return res.send(statusError({message: options.message})); 
         }
         
         req.logIn(user, function(err) 
@@ -98,7 +113,7 @@ handlersDefinitions
             }
             
             env.logger.info(`user ${user.username} successfully login`);
-            return res.send({ success: true, message: `you are login`});
+            return res.send(statusOK({message: `you are login`}));
         });
 
     })
@@ -112,34 +127,24 @@ handlersDefinitions
         env.logger.info(`user ${req.user.username} trying to logout`)
         
         req.logOut();
-        res.send({success: true, message:"successfully logout"})
+        res.send(statusOK({ message:"successfully logout" }));
         
-        env.logger.info(`Success`)
+        env.logger.info(`Success`);
     }
     catch(err)
     {
         env.logger.error(`logout error : ${err}`);
-        res.status(500).send({success: false, message: `Internal Server Error can't logout`});
+        res.status(500).send(statusError({ message: `Internal Server Error can't logout`}));
     }
-});
-
-/*function statusOK(data: any): { status: "OK", data: any }
-{
-    return { status: "OK", data: data };
-}
-
-function statusError(data: any): { status: "KO", data: any }
-{
-    return { status: "KO", data: data };
-}
-
-handlersDefinitions
+})
 
 .set('createRoom', (req: Request, res: Response) =>
 {
+    // /!\ ANTOINE j'ai changer la method pour createRoom en POST donc on utiliser req.body au lieu de req.querry pour recup les données de la requette
+
     try
     {
-        const UID = req.query.UID as string;
+        const UID = req.body.UID as string;
 
         if (typeof UID === "undefined")
         {
@@ -234,6 +239,6 @@ handlersDefinitions
     {
         res.status(500).send(statusError(error.message));
     }
-});*/
+});
 
 export default handlersDefinitions;

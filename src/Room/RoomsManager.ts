@@ -1,5 +1,6 @@
 import { SandboxUID } from "../UID";
 import Room from "./Room";
+import { RoomPublicData } from "./Room";
 import env from "../Environment";
 import { EventEmitter } from "events";
 
@@ -57,5 +58,17 @@ export default class RoomsManager extends EventEmitter
             this.rooms.set(UID, newRoom);
         }
         return this;
+    }
+
+    public get roomsPublicData() : RoomPublicData[]
+    {
+        const rooms : RoomPublicData[] = [] ;
+
+        this.rooms.forEach((room: Room) => 
+        {
+            rooms.push(room.publicData);
+        });
+
+        return rooms;
     }
 }

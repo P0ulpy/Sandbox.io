@@ -2,36 +2,12 @@
     "get":
     [
         {
-            "route": "/",
-            "handlers": [ "getHomePage" ]
+            "route": "/rooms",
+            "handlers" : ["getRooms"]
         },
         {
-            "route": "/login",
-            "handlers": [ "getLoginPage" ]
-        },
-        {
-            "route": "/register",
-            "handlers": [ "getRegisterPage" ]
-        },
-        {
-            "route": "/room",
-            "handlers": [ "getRoom" ]
-        },
-        {
-            "route": "/mod/:UID/class.js",
-            "handlers": [ "sendClientMod" ]
-        },
-        {
-            "route": "/sandbox/:UID/infos",
-            "handlers": [ "sendSandboxInfos" ]
-        },
-        {
-            "route": "/test",
-            "handlers": [ "test" ]
-        },
-        {
-            "route": "/createRoom",
-            "handlers": [ "createRoom" ]
+            "route": "/mypanel",
+            "handlers" : ["denyNotAuthenticated", "mypanel"]
         },
         {
             "route": "/rooms/:UID/publicData",
@@ -45,12 +21,20 @@
     "post":
     [
         {
+            "route": "/createRoom",
+            "handlers": ["denyNotAuthenticated", "createRoom"]
+        },
+        { 
             "route": "/register",
-            "handlers": [ "register" ]
+            "handlers": ["denyAuthenticated", "register"]
         },
         {
             "route": "/login",
-            "handlers": [ "first", "login" ]
+            "handlers": ["denyAuthenticated", "login"]
+        },
+        {
+            "route" : "/logout",
+            "handlers" : ["denyNotAuthenticated", "logout"]
         }
     ]
 }

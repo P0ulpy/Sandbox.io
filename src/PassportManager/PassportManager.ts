@@ -5,11 +5,39 @@ import expressFlash  from "express-flash";
 import session from "express-session";
 import { Response, Request } from "express";
 import bcrypt from "bcrypt";
+import { setMaxListeners } from "process";
 
 const passport = require("passport");
 const express = require("express")
 
 const LocalStrategy = passportLocal.Strategy;
+
+export class User
+{
+    public id: string;
+    public username: string;
+    public email: string;
+    public password: string;
+
+    constructor(config : any)
+    {
+        this.id = config?.id;
+        this.username = config?.username;
+        this.email = config?.email;
+        this.password = config?.password;
+    }
+
+    public get publicData() 
+    {
+        return {
+            id: this.id,
+            username: this.username,
+            email: this.email
+        };
+    }
+}
+
+const bcryptLevel = 10;
 
 export class PassportManager
 {
@@ -17,14 +45,14 @@ export class PassportManager
 
     public Passport: any = passport;
 
-    public users: any[] =
+    public users: User[] =
     [
-        {
+        new User({
             id: '1592865086647',
             username: 'admin',
             email: 'admin@admin',
             password: '$2b$10$6fcwZXN1RuyIH6N.1tKc.OD00vOPD4UKcZWuk6JdOCuiXrKxNGXzq'
-        }
+        })
     ]
 
     constructor()
@@ -43,7 +71,7 @@ export class PassportManager
 
         this.initStrategy();
     }
-
+    
     private initStrategy()
     {
         passport.serializeUser((user: any, done: any) => done(null, user.id));
@@ -55,7 +83,7 @@ export class PassportManager
 
             if(user == null)    
             {
-                env.logger.error('No user with that email');
+                env.logger.error('PassportManager : No user with that email');
                 return done(null, false, { message : 'No user with that email' });
             }
             
@@ -67,7 +95,7 @@ export class PassportManager
                 }
                 else
                 {
-                    env.logger.error('Password incorrect');
+                    env.logger.error('PassportManager : Password incorrect');
                     return done(null, false, { message : 'Password incorrect' });
                 }
             }
@@ -84,41 +112,82 @@ export class PassportManager
     {
         try
         {
-            const hachedPassword = await bcrypt.hash(data.password, 10);
+            const hachedPassword = await bcrypt.hash(data.password, bcryptLevel);
 
             // TODO : verifier si l'utilisateur n'existe pas deja
             // TODO : verifier si le format de l'email est bon 
 
             // TODO : TEMPORAIRE
  
-            
-
-            env.passportManager.users.push(
-            {
+            env.passportManager.users.push(new User({
                 id : Date.now().toString(),
                 username: data.username,
                 email: data.email,
                 password: hachedPassword
-            });
+            }));
 
-            res.send({success: true, message: "Successfuly registered"})
+            res.send({status: "OK", data: { message: "Successfuly registered" }})
             
             console.log(this.users);
         }
         catch (err)
         {
-            res.status(500).send({ success : false, message: `internal error`});
+            res.status(500).send({status: "KO", data: { message: "internal error" }});
             env.logger.error(`register error : ${err}`);
             throw err;
         }
     }
 
-    private getUserByEmail(email: string): any
+    public updateUsername(id: string, newusername: string) : void
+    {
+        const user: User | undefined = this.getUserByID(id);
+
+        if(user)
+        {
+            user.username = newusername;
+        }
+        else
+        {
+            env.logger.error(`can't update username invalid id (${id})`);
+        }
+    }
+
+    public updateEmail(id: string, newEmail: string) : void
+    {
+        const user: User | undefined = this.getUserByID(id);
+
+        if(user)
+        {
+            user.email = newEmail;
+        }
+        else
+        {
+            env.logger.error(`can't update email invalid id (${id})`);
+        }
+    }
+
+    public async updatePassword(id: string, newPassword: string)
+    {
+        const newHachedPassword = await bcrypt.hash(newPassword, bcryptLevel);
+
+        const user: User | undefined = this.getUserByID(id);
+
+        if(user)
+        {
+            user.password = newHachedPassword;
+        }
+        else
+        {
+            env.logger.error(`can't update password invalid id (${id})`);
+        }
+    }
+
+    public getUserByEmail(email: string): User | undefined
     {
         return this.users.find(user => user.email === email);
     }
 
-    private getUserByID(id: string): any
+    public getUserByID(id: string): User | undefined
     {
         return this.users.find(user => user.id === id);
     }

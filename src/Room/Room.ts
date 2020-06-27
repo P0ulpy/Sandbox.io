@@ -4,9 +4,9 @@ import { SandboxUID } from "../UID";
 import { LoadingSandbox, ServerSandbox, ServerSandboxPublicData } from "../Sandbox";
 import env from "../Environment";
 
-type RoomPublicData = ServerSandboxPublicData;
+export type RoomPublicData = ServerSandboxPublicData;
 
-type RoomLoadingStatus = "loading" | "success" | "error";
+export type RoomLoadingStatus = "loading" | "success" | "error";
 
 export class RoomError extends Error {}
 

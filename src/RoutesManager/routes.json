@@ -2,23 +2,35 @@
     "get":
     [
         {
-            "route": "/",
-            "handlers" : ["home"]
+            "route": "/rooms",
+            "handlers" : ["getRooms"]
         },
         {
             "route": "/mypanel",
             "handlers" : ["denyNotAuthenticated", "mypanel"]
+        },
+        {
+            "route": "/rooms/:UID/publicData",
+            "handlers": [ "getRoomPublicData" ]
+        },
+        {
+            "route": "/rooms/:UID/ressources/:modCategory/:name",
+            "handlers": [ "getRoomResource" ]
         }
     ],
     "post":
     [
         {
+            "route": "/createRoom",
+            "handlers": ["denyNotAuthenticated", "createRoom"]
+        },
+        { 
             "route": "/register",
-            "handlers": ["register"]
+            "handlers": ["denyAuthenticated", "register"]
         },
         {
             "route": "/login",
-            "handlers": ["login"]
+            "handlers": ["denyAuthenticated", "login"]
         },
         {
             "route" : "/logout",
