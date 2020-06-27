@@ -8,7 +8,9 @@
         {
             "name": "mainGamImg",
             "type": "image",
-            "filename": "gamImg.png"
+            "filename": "gamImg.png",
+            "height": 200,
+            "width": 200
         }
     ]
 }

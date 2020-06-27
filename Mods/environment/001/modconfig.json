@@ -8,7 +8,9 @@
         {
             "name": "mainEnvImg",
             "type": "image",
-            "filename": "envImg.png"
+            "filename": "envImg.png",
+            "height": 200,
+            "width": 200
         }
     ]
 }

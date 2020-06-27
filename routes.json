@@ -38,8 +38,12 @@
             "handlers": [ "getRoomPublicData" ]
         },
         {
-            "route": "/rooms/:UID/ressources/:modCategory/:name",
-            "handlers": [ "getRoomResource" ]
+            "route": "/mods/:modCategory/:UID/resources/:resourceName",
+            "handlers": [ "getModResource" ]
+        },
+        {
+            "route": "/mods/:modCategory/:UID/clientClass",
+            "handlers": [ "getModClientClass" ]
         }
     ],
     "post":

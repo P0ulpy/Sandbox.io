@@ -3,8 +3,9 @@ import { join } from "path";
 
 import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
 import env from "../Environment";
-import { getSandboxUID } from "../UID";
-import { Resource } from "../LoadingMod";
+import { getSandboxUID, getModUID } from "../UID";
+import { Resource, LoadingOverlayMod, LoadingEnvironmentMod, LoadingGameplayMod } from "../LoadingMod";
+import { ServerMod } from "../ServerMod";
 
 
 const handlersDefinitions = new RoutesHandlersContainer();
@@ -19,7 +20,7 @@ function statusError(data: any): { status: "KO", data: any }
     return { status: "KO", data: data };
 }
 
-function createRoom(req: Request, res: Response)
+function createRoom(req: Request, res: Response): void
 {
     try
     {
@@ -41,7 +42,7 @@ function createRoom(req: Request, res: Response)
 }
 
 
-function getRoomPublicData(req: Request, res: Response)
+function getRoomPublicData(req: Request, res: Response): void
 {
     try
     {
@@ -56,36 +57,37 @@ function getRoomPublicData(req: Request, res: Response)
     }
 }
 
-function getRoomResource(req: Request, res: Response)
+async function getModResource(req: Request, res: Response)
 {
-    const UID = req.params.UID;
+    const modUID = req.params.UID;
     const modCategory = req.params.modCategory;
-    const resourceName = req.params.name;
+    const resourceName = req.params.resourceName;
 
     try
     {
-        const room = env.roomsManager.get(getSandboxUID(UID));
-        const modsPublicData = room.publicData.mods;
         let resources: Resource[] | null = null;
         let resourceFile: string | null = null;
+        let mod: ServerMod | null = null;
 
-        // @TODO pas ouf
+        // @TODO pas du tout opti, mais flemme de modifier la classe LoadingMod
         if (modCategory === "overlay")
         {
-            resources = modsPublicData.overlay.resources;
+            mod = await new LoadingOverlayMod(getModUID(modUID)).promise;
         }
         else if (modCategory === "environment")
         {
-            resources = modsPublicData.environment.resources;
+            mod = await new LoadingEnvironmentMod(getModUID(modUID)).promise;
         }
         else if (modCategory === "gameplay")
         {
-            resources = modsPublicData.gameplay.resources;
+            mod = await new LoadingGameplayMod(getModUID(modUID)).promise;
         }
         else
         {
             throw new Error(`Unknown mod category ${modCategory}`);
         }
+
+        resources = mod.publicData.resources; 
 
         // On cherche la ressource
         for (const res of resources)
@@ -99,10 +101,10 @@ function getRoomResource(req: Request, res: Response)
 
         if (!resourceFile)
         {
-            throw new Error(`Can't find resource ${resourceName} of ${modCategory} mod in #${UID} room`);
+            throw new Error(`Can't find resource ${resourceName} of ${modCategory} mod in #${modUID} room`);
         }
         
-        const resourcePath = join(env.modPath, modCategory, UID, "resources", resourceFile);
+        const resourcePath = join(env.modPath, modCategory, modUID, "resources", resourceFile);
 
         // Envoi du fichier, et vérification d'une éventuelle erreur
         res.sendFile(resourcePath, (err) =>
@@ -120,8 +122,43 @@ function getRoomResource(req: Request, res: Response)
     }
 }
 
+function getModClientClass(req: Request, res: Response): void
+{
+    const UID = req.params.UID;
+    const modCategory = req.params.modCategory;
+
+    try
+    {
+        if (modCategory !== "gameplay" && modCategory !== "overlay" && modCategory !== "environment")
+        {
+            throw new Error(`Unknown mod category \`${modCategory}\``);
+        }
+        if (!getModUID(UID).isValid())
+        {
+            throw new Error(`Invalid Mod UID ${UID}`);
+        }
+
+        const clientClassPath = join(env.modPath, modCategory, UID, "client.js");
+
+        // Envoi du fichier, et vérification d'une éventuelle erreur
+        res.sendFile(clientClassPath, (err) =>
+        {
+            if (err)
+            {
+                env.logger.error(`Can't find clientClass file : ${err.message}`);
+                res.status(500).send(statusError("Can't find clientClass file"));
+            }
+        });
+    }
+    catch (error)
+    {
+        res.status(500).send(statusError(error.message));
+    }
+}
+
 handlersDefinitions.set("createRoom", createRoom)
 .set("getRoomPublicData", getRoomPublicData)
-.set("getRoomResource", getRoomResource);
+.set("getModResource", getModResource)
+.set("getModClientClass", getModClientClass);
 
 export default handlersDefinitions;
