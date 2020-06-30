@@ -1,5 +1,5 @@
 //GET http://localhost/createRoom?UID=001
 
-GET http://localhost/rooms/001/ressources/environment/mainEnvImg
+//GET http://localhost/rooms/001/ressources/environment/mainEnvImg
 
 //GET http://localhost/rooms/001/publicData

@@ -2,6 +2,7 @@
     "get":
     [
         {
+<<<<<<< HEAD
             "route": "/rooms",
             "handlers" : ["getRooms"]
         },
@@ -12,19 +13,28 @@
         {
             "route": "/getUserData",
             "handlers" : ["getUserData"]
+=======
+            "route": "/createRoom",
+            "handlers": [ "createRoom" ]
+>>>>>>> TypeScriptMaj
         },
         {
             "route": "/rooms/:UID/publicData",
             "handlers": [ "getRoomPublicData" ]
         },
         {
-            "route": "/rooms/:UID/ressources/:modCategory/:name",
-            "handlers": [ "getRoomResource" ]
+            "route": "/mods/:modCategory/:UID/resources/:resourceName",
+            "handlers": [ "getModResource" ]
+        },
+        {
+            "route": "/mods/:modCategory/:UID/clientClass",
+            "handlers": [ "getModClientClass" ]
         }
     ],
     "post":
     [
         {
+<<<<<<< HEAD
             "route": "/createRoom",
             "handlers": ["denyNotAuthenticated", "createRoom"]
         },
@@ -39,6 +49,10 @@
         {
             "route" : "/logout",
             "handlers" : ["denyNotAuthenticated", "logout"]
+=======
+            "route": "/login",
+            "handlers": [ "checkUserAuthentication", "login" ]
+>>>>>>> TypeScriptMaj
         }
     ]
 }

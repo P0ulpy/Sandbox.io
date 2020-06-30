@@ -38,6 +38,7 @@ export default class LoadingSandbox
 
     constructor(UID: SandboxUID)
     {
+        console.log("new lonadingsandbobx");
         if (!UID.isValid())
         {
             this.error = new LoadingSandboxError(`Can't load Sandbox #${UID} : invalid UID`);

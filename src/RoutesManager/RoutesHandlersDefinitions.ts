@@ -179,34 +179,35 @@ handlersDefinitions
 
 .set('getRoomResource', (req: Request, res: Response) =>
 {
-    const UID = req.params.UID;
+    const modUID = req.params.UID;
     const modCategory = req.params.modCategory;
-    const resourceName = req.params.name;
+    const resourceName = req.params.resourceName;
 
     try
     {
-        const room = env.roomsManager.get(getSandboxUID(UID));
-        const modsPublicData = room.publicData.mods;
         let resources: Resource[] | null = null;
         let resourceFile: string | null = null;
+        let mod: ServerMod | null = null;
 
-        // @TODO pas ouf
+        // @TODO pas du tout opti, mais flemme de modifier la classe LoadingMod
         if (modCategory === "overlay")
         {
-            resources = modsPublicData.overlay.resources;
+            mod = await new LoadingOverlayMod(getModUID(modUID)).promise;
         }
         else if (modCategory === "environment")
         {
-            resources = modsPublicData.environment.resources;
+            mod = await new LoadingEnvironmentMod(getModUID(modUID)).promise;
         }
         else if (modCategory === "gameplay")
         {
-            resources = modsPublicData.gameplay.resources;
+            mod = await new LoadingGameplayMod(getModUID(modUID)).promise;
         }
         else
         {
             throw new Error(`Unknown mod category ${modCategory}`);
         }
+
+        resources = mod.publicData.resources; 
 
         // On cherche la ressource
         for (const res of resources)
@@ -220,10 +221,10 @@ handlersDefinitions
 
         if (!resourceFile)
         {
-            throw new Error(`Can't find resource ${resourceName} of ${modCategory} mod in #${UID} room`);
+            throw new Error(`Can't find resource ${resourceName} of ${modCategory} mod in #${modUID} room`);
         }
         
-        const resourcePath = join(env.modPath, modCategory, UID, "resources", resourceFile);
+        const resourcePath = join(env.modPath, modCategory, modUID, "resources", resourceFile);
 
         // Envoi du fichier, et vérification d'une éventuelle erreur
         res.sendFile(resourcePath, (err) =>

@@ -12,7 +12,9 @@ type ResourceType = "image"
 export type Resource = {
     name: string;
     filename: string;
-    type: ResourceType
+    type: ResourceType,
+    height: number,
+    width: number
 }
 
 export interface ModConfig {

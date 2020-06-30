@@ -2,7 +2,10 @@ import { EventEmitter } from "events";
 
 import { SandboxUID } from "../UID";
 import { LoadingSandbox, ServerSandbox, ServerSandboxPublicData } from "../Sandbox";
+import SocketManager from "../SocketManager";
+import Player from "./Player";
 import env from "../Environment";
+import { stringify } from "querystring";
 
 export type RoomPublicData = ServerSandboxPublicData;
 
@@ -18,6 +21,8 @@ export default class Room extends EventEmitter
     private serverSandbox: ServerSandbox | null = null;
     private loadingStatus: RoomLoadingStatus = "loading";
     private loadingPromise: Promise<void>;
+    private socketManager: SocketManager | null = null;
+    public players: Map<string, Player> = new Map<string, Player>();
 
     constructor(UID: SandboxUID)
     {
@@ -30,9 +35,11 @@ export default class Room extends EventEmitter
         this.loadingSandbox.promise
         .then((serverSandbox: ServerSandbox) =>
         {
+            this.serverSandbox = serverSandbox;
+            // @TODO devrait vérifier si OK mais t'façon le code est bon à jeter
+            this.socketManager = new SocketManager(this);
             this.loadingStatus = "success";
             this.emit("loadingSuccess");
-            this.serverSandbox = serverSandbox;
         })
         .catch((err: Error) =>
         {
@@ -85,20 +92,60 @@ export default class Room extends EventEmitter
         {
             return this.serverSandbox?.publicData!;
         }
-        
+
         const error = new RoomError(`Can't retrieve publicData on Room #${this.sandboxUID} which isn't successfully loaded`);
         env.logger.error(error.message);
         throw error;
     }
 
-    // @TODO route manager :
-    /*
-    try {
-        room.publicData;
-    } catch (e) {
-        if (e instanceof RoomError)
-        res.status(500).send(e.message); // truc comme ça
+    public onReceiveData(targetMod: string, data: { targetEvent: string, data: any }): void
+    {
+        if (targetMod === "gameplay")
+        {
+            this.serverSandbox!.onGameplayModReceiveData(data.targetEvent, data.data);
+        }
+        else if (targetMod === "overlay")
+        {
+            this.serverSandbox!.onOverlayModReceiveData(data.targetEvent, data.data);
+        }
+        else if (targetMod === "environment")
+        {
+            this.serverSandbox!.onEnvironmentModReceiveData(data.targetEvent, data.data);
+        }
         else
-        res.status(500).send("Véjier erreur interne");
-    }*/
+        {
+            env.logger.warning(`Trying to send data to unknow mod ${targetMod}`);
+        }
+    }
+
+    public sendBroadcast(targetMod: string, data: { targetEvent: string, data: any }): void
+    {
+        this.socketManager!.sendBroadcast(targetMod, data);
+    }
+
+    public sendToPlayer(player: Player, targetMod: string, data: { targetEvent: string, data: any }): void
+    {
+        player.socket.emit(targetMod, data);
+    }
+
+    public onPlayerConnect(player: Player)
+    {
+        env.logger.info(`New player connected ${player.username}`);
+        this.players.set(player.socket.id, player);
+        this.sendToPlayer(this.players.get(player.socket.id)!, "category", { targetEvent: "test", data: "test" });
+    }
+
+    public onPlayerDisconnect(player: Player, reason: any)
+    {
+        env.logger.info(`Player disconnected ${player.username} : ${reason}`);
+        this.players.set(player.socket.id, player);
+    }
+
+    // Détermine si un joueur peut se connecter à la room
+    // On passe quand même l'objet du joueur
+    // @TODO une ptn d'idée serait de permettre d'overrider les classes Player etc dans la config des mods ou de sandbox
+    public canHandleNewPlayer(player: Player): boolean
+    {
+        return (this.players.size < this.serverSandbox!.size);
+    }
 }
