@@ -1,12 +1,12 @@
 import env from "../Environment";
 
-import { join } from "path";
-
+import { join } from 'path';
 import { Request, Response } from "express";
-import RoutesHandlersContainer, { ExpressHandler } from "./RoutesHandlersContainer";
 
-import { getSandboxUID } from "../UID";
-import { Resource } from "../LoadingMod";
+import RoutesHandlersContainer from "./RoutesHandlersContainer";
+import { getSandboxUID, getModUID } from "../UID";
+import { Resource, LoadingOverlayMod, LoadingEnvironmentMod, LoadingGameplayMod } from "../LoadingMod";
+import { ServerMod } from "../ServerMod";
 
 function statusOK(data: any): { status: "OK", data: any }
 {
@@ -177,7 +177,7 @@ handlersDefinitions
     }
 })
 
-.set('getRoomResource', (req: Request, res: Response) =>
+.set('getModResource', async(req: Request, res: Response) =>
 {
     const modUID = req.params.UID;
     const modCategory = req.params.modCategory;
@@ -257,6 +257,40 @@ handlersDefinitions
     else
     {
         res.send(statusError({ message: `can't send user data your not logged in` }));
+    }
+})
+
+.set("getModClientClass", (req: Request, res: Response) : void =>
+{
+    const UID = req.params.UID;
+    const modCategory = req.params.modCategory;
+
+    try
+    {
+        if (modCategory !== "gameplay" && modCategory !== "overlay" && modCategory !== "environment")
+        {
+            throw new Error(`Unknown mod category \`${modCategory}\``);
+        }
+        if (!getModUID(UID).isValid())
+        {
+            throw new Error(`Invalid Mod UID ${UID}`);
+        }
+
+        const clientClassPath = join(env.modPath, modCategory, UID, "client.js");
+
+        // Envoi du fichier, et vérification d'une éventuelle erreur
+        res.sendFile(clientClassPath, (err) =>
+        {
+            if (err)
+            {
+                env.logger.error(`Can't find clientClass file : ${err.message}`);
+                res.status(500).send(statusError("Can't find clientClass file"));
+            }
+        });
+    }
+    catch (error)
+    {
+        res.status(500).send(statusError(error.message));
     }
 });
 
