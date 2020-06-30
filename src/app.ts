@@ -2,6 +2,7 @@ import env, { initEnv } from "./Environment";
 
 import { join } from "path";
 import express from "express";
+import http from "http";
 
 initEnv();
 
@@ -10,6 +11,7 @@ env.app.use("/", express.static(path));
 
 env.httpServer.listen(80);
 
+http.get("http://localhost/createRoom?UID=001");
 
 /*import LoadingSandbox from "./Sandbox/LoadingSandbox";
 import { getSandboxUID, getModUID } from "./UID";

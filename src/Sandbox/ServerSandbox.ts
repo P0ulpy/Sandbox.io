@@ -32,7 +32,7 @@ export default class ServerSandbox
     private gameplayMod: GameplayMod;
     private overlayMod: OverlayMod;
     private UID: SandboxUID;
-    private size: number;
+    public size: number;
     private name: string;
     private MOTD: string;
     private updateRate: number;
@@ -70,5 +70,20 @@ export default class ServerSandbox
                 gameplay: this.gameplayMod.publicData,
             }
         };
+    }
+
+    public onGameplayModReceiveData(targetEvent: string, data: any): void
+    {
+        this.gameplayMod.onReceiveData(targetEvent, data);
+    }
+
+    public onOverlayModReceiveData(targetEvent: string, data: any): void
+    {
+        this.overlayMod.onReceiveData(targetEvent, data);
+    }
+
+    public onEnvironmentModReceiveData(targetEvent: string, data: any): void
+    {
+        this.environmentMod.onReceiveData(targetEvent, data);
     }
 }

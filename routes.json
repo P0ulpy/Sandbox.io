@@ -2,34 +2,6 @@
     "get":
     [
         {
-            "route": "/",
-            "handlers": [ "getHomePage" ]
-        },
-        {
-            "route": "/login",
-            "handlers": [ "getLoginPage" ]
-        },
-        {
-            "route": "/register",
-            "handlers": [ "getRegisterPage" ]
-        },
-        {
-            "route": "/room",
-            "handlers": [ "getRoom" ]
-        },
-        {
-            "route": "/mod/:UID/class.js",
-            "handlers": [ "sendClientMod" ]
-        },
-        {
-            "route": "/sandbox/:UID/infos",
-            "handlers": [ "sendSandboxInfos" ]
-        },
-        {
-            "route": "/test",
-            "handlers": [ "test" ]
-        },
-        {
             "route": "/createRoom",
             "handlers": [ "createRoom" ]
         },
@@ -49,12 +21,8 @@
     "post":
     [
         {
-            "route": "/register",
-            "handlers": [ "register" ]
-        },
-        {
             "route": "/login",
-            "handlers": [ "first", "login" ]
+            "handlers": [ "checkUserAuthentication", "login" ]
         }
     ]
 }

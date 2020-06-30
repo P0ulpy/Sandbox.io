@@ -3,6 +3,7 @@
     "name": "env mod",
     "version": "0.1.0",
     "description": "First environment mod",
+    "authors": [ "Théophile Hesters", "Florian Aurousseau", "Antoine Sanson" ],
     "resources":
     [
         {

@@ -49,4 +49,9 @@ export default abstract class ServerMod extends EventEmitter implements ServerMo
     }
 
     public abstract get publicData(): ServerModPublicData;
+
+    public onReceiveData(event: string, data: any)
+    {
+        console.log("data reiceived : ", event, data);
+    }
 }
