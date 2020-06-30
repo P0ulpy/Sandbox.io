@@ -50,12 +50,10 @@ handlersDefinitions
 {
     const user = env.passportManager.getUserByID(req.user?.id);
 
-    res.send(
-        {
-            user: user?.publicData,
-            mods: [] // TODO : recup tout les mods existantsww
-        }
-    );
+    res.send(statusOK({
+        user: user?.publicData,
+        mods: [] // TODO : recup tout les mods existants
+    }));
 })
 
 .set('getRooms', (req: Request, res: Response) => 
@@ -148,16 +146,18 @@ handlersDefinitions
 
         if (typeof UID === "undefined")
         {
+            res.status(500).send(statusError({message: "Can't retrieve UID GET param"}));
             throw new Error("Can't retrieve UID GET param");
         }
         env.roomsManager.create(getSandboxUID(UID));
 
         // @TODO gère les erreurs immédiates, mais pas celles liées au chargement de la room
-        res.send(statusOK(UID));
+        res.send(statusOK({UID: UID}));
     }
     catch (error)
     {
-        res.status(500).send(statusError(error.message));
+        env.logger.error(`room creation error : ${error.message}`)
+        res.status(500).send(statusError({message: error.message}));
     }
 })
 
@@ -238,6 +238,24 @@ handlersDefinitions
     catch (error)
     {
         res.status(500).send(statusError(error.message));
+    }
+})
+
+.set("getUserData", (req : any, res : Response) => 
+{
+    if(req.isAuthenticated())
+    {
+        const user = env.passportManager.getUserByID(req.user?.id);
+
+        res.send(statusOK({
+            userData: user?.publicData,
+            message: "successfully sent userData"
+        }));
+        env.logger.info("successfully sent userData");
+    }
+    else
+    {
+        res.send(statusError({ message: `can't send user data your not logged in` }));
     }
 });
 

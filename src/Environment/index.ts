@@ -49,7 +49,7 @@ export function initEnv(): void
     env.app = app;
     env.socketServer = socketServer;
     env.roomsManager = new RoomsManager();
-    env.routesDefinitionFile = path.join(__dirname, "../../src/Routesmanager/routes.json");
+    env.routesDefinitionFile = path.join(__dirname, "../../routes.json");
     env.passportManager = new PassportManager();
     env.routesManager = new RoutesManager();
 

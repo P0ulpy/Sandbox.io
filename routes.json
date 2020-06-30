@@ -10,6 +10,10 @@
             "handlers" : ["denyNotAuthenticated", "mypanel"]
         },
         {
+            "route": "/getUserData",
+            "handlers" : ["getUserData"]
+        },
+        {
             "route": "/rooms/:UID/publicData",
             "handlers": [ "getRoomPublicData" ]
         },
@@ -26,11 +30,11 @@
         },
         { 
             "route": "/register",
-            "handlers": ["denyAuthenticated", "register"]
+            "handlers": ["register"]
         },
         {
             "route": "/login",
-            "handlers": ["denyAuthenticated", "login"]
+            "handlers": ["login"]
         },
         {
             "route" : "/logout",
