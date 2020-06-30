@@ -1,0 +1,16 @@
+{
+    "UID": "001",
+    "name": "gameplay mod",
+    "version": "0.1.0",
+    "description": "First gameplay mod",
+    "resources":
+    [
+        {
+            "name": "mainGamImg",
+            "type": "image",
+            "filename": "gamImg.png",
+            "height": 200,
+            "width": 200
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "UID": "001",
+    "name": "overlay mod",
+    "version": "0.1.0",
+    "description": "First overlay mod",
+    "resources":
+    [
+        {
+            "name": "mainOveImg",
+            "type": "image",
+            "filename": "oveImg.png",
+            "height": 200,
+            "width": 200
+        }
+    ]
+}

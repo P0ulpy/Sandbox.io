@@ -1,0 +1,55 @@
+### Create Room
+
+POST http://localhost/createRoom
+Content-Type: application/x-www-form-urlencoded
+
+UID=001
+
+
+### LOGOUT
+
+POST http://localhost/logout
+
+### REGISTER
+
+POST http://localhost/register
+Content-Type: application/x-www-form-urlencoded
+
+username=w
+&email=w@w
+&password=w
+
+### LOGIN
+
+POST http://localhost/login
+Content-Type: application/x-www-form-urlencoded
+
+email=admin@admin
+&password=admin
+
+### CreateRoom
+
+POST http://localhost/createRoom
+
+
+### PANEL
+
+GET http://localhost/mypanel
+
+
+### Create Room
+
+POST http://localhost/createRoom
+Content-Type: application/x-www-form-urlencoded
+
+UID=001
+
+### get Rooms
+
+GET http://localhost/rooms
+
+### get Room public data
+
+GET http://localhost/rooms/001/publicData
+
+### 

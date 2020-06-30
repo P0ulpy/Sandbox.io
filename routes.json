@@ -1,0 +1,56 @@
+{
+    "get":
+    [
+        {
+            "route": "/createRoom",
+            "handlers": [ "createRoom" ]
+        },
+        {
+            "route": "/rooms",
+            "handlers" : ["getRooms"]
+        },
+        {
+            "route": "/rooms/:UID/publicData",
+            "handlers": [ "getRoomPublicData" ]
+        },
+        {
+            "route": "/rooms/:UID/publicData",
+            "handlers": [ "getRoomPublicData" ]
+        },
+        {
+            "route": "/mods/:modCategory/:UID/resources/:resourceName",
+            "handlers": [ "getModResource" ]
+        },
+        {
+            "route": "/mods/:modCategory/:UID/clientClass",
+            "handlers": [ "getModClientClass" ]
+        },
+        {
+            "route": "/mypanel",
+            "handlers" : ["denyNotAuthenticated", "mypanel"]
+        },
+        {
+            "route": "/getUserData",
+            "handlers" : ["getUserData"]
+        }
+    ],
+    "post":
+    [
+        {
+            "route": "/login",
+            "handlers": ["login" ]
+        },
+        {
+            "route": "/createRoom",
+            "handlers": ["denyNotAuthenticated", "createRoom"]
+        },
+        { 
+            "route": "/register",
+            "handlers": ["register"]
+        },
+        {
+            "route" : "/logout",
+            "handlers" : ["denyNotAuthenticated", "logout"]
+        }
+    ]
+}

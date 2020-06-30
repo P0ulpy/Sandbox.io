@@ -1,0 +1,11 @@
+{
+    "UID": "001",
+    "size": 5,
+    "name": "mySandbox1",
+    "MOTD": "Welcome to mySandbox1",
+    "mods": {
+        "gameplay": "001",
+        "overlay": "001",
+        "environment": "001"
+    }
+}

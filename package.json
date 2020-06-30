@@ -1,0 +1,47 @@
+{
+  "name": "sandbox.io-server",
+  "version": "1.0.0",
+  "description": "L'objectif est de créer une plateforme multijoueur (en ligne) avec une base qui est la *sandbox*. \r Sur cette base les utilisateurs pourront ajouter des mods qu'ils devront alors développer eux même sous certaines \"contraintes\". Il y aura une partie client à développer ainsi qu'une partie serveur.",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"nodemon dist/app.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabeNThePrimaryGod/Sandbox.io.git"
+  },
+  "keywords": [
+    "sandbox.io"
+  ],
+  "author": "Burrito inc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GabeNThePrimaryGod/Sandbox.io/issues"
+  },
+  "homepage": "https://github.com/GabeNThePrimaryGod/Sandbox.io#readme",
+  "devDependencies": {
+    "@types/node": "^14.0.13",
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.6",
+    "@types/express-flash": "0.0.2",
+    "@types/express-session": "^1.17.0",
+    "@types/passport": "^1.0.3",
+    "@types/passport-local": "^1.0.33",
+    "@types/socket.io": "^2.1.8",
+    "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "promise.allsettled": "^1.0.2",
+    "socket.io": "^2.3.0"
+  }
+}
