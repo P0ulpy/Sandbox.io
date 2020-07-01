@@ -7,7 +7,7 @@
         },
         {
             "route": "/rooms",
-            "handlers" : ["getRooms"]
+            "handlers" : [ "getRooms" ]
         },
         {
             "route": "/rooms/:UID/publicData",
@@ -42,7 +42,7 @@
         },
         {
             "route": "/createRoom",
-            "handlers": ["denyNotAuthenticated", "createRoom"]
+            "handlers": [ "createRoom"]
         },
         { 
             "route": "/register",

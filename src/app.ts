@@ -1,4 +1,5 @@
 import env, { initEnv } from "./Environment";
+import { handlersDefinitions } from "./RoutesManager";
 
 import { join } from "path";
 import express from "express";
@@ -6,6 +7,7 @@ import express from "express";
 initEnv();
 
 env.httpServer.listen(80);
+
 
 
 /*import LoadingSandbox from "./Sandbox/LoadingSandbox";

@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import { ModConfig, Resource } from "../LoadingMod";
 import env from "../Environment";
 import { ModUID } from "../UID";
+import { Room, Player } from "../Room";
 
 // Données stockées dans une instance de ServerMod, récupérées depuis le fichier de configuration
 interface ServerModData {
@@ -9,7 +10,7 @@ interface ServerModData {
     name: string;
     description: string;
     version: string;
-    resources: Resource[]
+    resources: Resource[];
 }
 
 export interface ServerModPublicData {
@@ -27,6 +28,7 @@ export default abstract class ServerMod extends EventEmitter implements ServerMo
     public description: string;
     public version: string;
     public resources: Resource[];
+    public room: Room | null = null;
 
     constructor(config: ModConfig)
     {
@@ -37,7 +39,7 @@ export default abstract class ServerMod extends EventEmitter implements ServerMo
             name: this.name,
             description: this.description,
             version: this.version,
-            resources: this.resources
+            resources: this.resources,
         } = config);
 
         if (!config)
@@ -48,10 +50,9 @@ export default abstract class ServerMod extends EventEmitter implements ServerMo
         console.log(`Hello from ${this.constructor.name}`);
     }
 
+    public abstract sendToPlayer(player: Player, event: string, data: any): void;
+
     public abstract get publicData(): ServerModPublicData;
 
-    public onReceiveData(event: string, data: any)
-    {
-        console.log("data reiceived : ", event, data);
-    }
+    public abstract onReceiveData(player: Player, event: string, data: any): void;
 }

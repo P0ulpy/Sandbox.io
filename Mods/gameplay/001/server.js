@@ -5,20 +5,12 @@ module.exports = function(GameplayMod)
         constructor(config)
         {
             super(config);
-
-            this.init();
         }
 
-        init()
+        onReceiveData(player, event, data)
         {
-            this.on("test", (data) => { console.log("test recu : " + data) });
-            //this.on("test", onTest);
-            //this.on("test", (data) => { this.onTest(data) });
-            //this.on("test", this.onTest);
-
-            this.on("receiveData", (event, data) => { console.log("event : " + event + ", data : " + data)});
-
-            setInterval(() => { this.emit("sendData", "dataFromServer", "bonjour"); }, 1000);
+            super.onReceiveData(event, data);
+            console.log(`ReceiveData from player ${player.username} Gameplay #Mod001 : ${event}`, data);
         }
     }
 };

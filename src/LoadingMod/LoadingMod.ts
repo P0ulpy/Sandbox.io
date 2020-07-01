@@ -4,6 +4,7 @@ import { readFile, access } from "fs/promises";
 import { ModUID } from "../UID";
 import env from "../Environment";
 import { ServerMod, GameplayMod, OverlayMod, EnvironmentMod } from "../ServerMod/";
+import { Room } from "../Room";
 
 export type ModCategory = "gameplay" | "overlay" | "environment";
 
@@ -22,7 +23,7 @@ export interface ModConfig {
     name: string;
     description: string;
     version: string;
-    resources: Resource[]
+    resources: Resource[];
 }
 
 export default abstract class LoadingMod

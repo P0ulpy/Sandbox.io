@@ -13,8 +13,14 @@ export default (ClientMod) =>
             this.init();
         }
 
+        onReceiveData(event, data)
+        {
+            console.log(`[Env] : ${event}`, data);
+        }
+
         init()
         {
+            this.sendData("event1", "data1");
             console.log("Mod001 instancié !");
         }
     }

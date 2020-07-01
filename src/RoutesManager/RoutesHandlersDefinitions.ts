@@ -67,7 +67,7 @@ handlersDefinitions
     {
         res.status(500).send(statusError({ message: `internal error`}));
         env.logger.error(`error while trying to send roomsPublicData`);
-        throw err;
+        //throw err;
     }
 })
 

@@ -1,6 +1,7 @@
 import ServerMod from "./ServerMod";
 import { ModConfig } from "../LoadingMod";
 import { ServerModPublicData } from "./ServerMod";
+import { Player } from "../Room";
 
 export interface GameplayModPublicData extends ServerModPublicData {}
 
@@ -20,5 +21,15 @@ export default class GameplayMod extends ServerMod
             version: this.version,
             resources: this.resources
         }
+    }
+
+    public sendToPlayer(player: Player, event: string, data: any): void
+    {
+        player.socket.emit("gameplay", { targetEvent: event, data: data });
+    }
+
+    public onReceiveData(player: Player, event: string, data: any): void
+    {
+        
     }
 }

@@ -1,11 +1,12 @@
 import { EventEmitter } from "events";
+import { Socket } from "socket.io";
 
 import { SandboxUID } from "../UID";
 import { LoadingSandbox, ServerSandbox, ServerSandboxPublicData } from "../Sandbox";
 import SocketManager from "../SocketManager";
 import Player from "./Player";
 import env from "../Environment";
-import { stringify } from "querystring";
+
 
 export type RoomPublicData = ServerSandboxPublicData;
 
@@ -36,6 +37,7 @@ export default class Room extends EventEmitter
         .then((serverSandbox: ServerSandbox) =>
         {
             this.serverSandbox = serverSandbox;
+            this.serverSandbox.room = this;
             // @TODO devrait vérifier si OK mais t'façon le code est bon à jeter
             this.socketManager = new SocketManager(this);
             this.loadingStatus = "success";
@@ -98,19 +100,21 @@ export default class Room extends EventEmitter
         throw error;
     }
 
-    public onReceiveData(targetMod: string, data: { targetEvent: string, data: any }): void
+    public onReceiveData(socket: Socket, targetMod: string, data: { targetEvent: string, data: any }): void
     {
+        const player = Player.get(socket);
+
         if (targetMod === "gameplay")
         {
-            this.serverSandbox!.onGameplayModReceiveData(data.targetEvent, data.data);
+            this.serverSandbox!.onGameplayModReceiveData(player, data.targetEvent, data.data);
         }
         else if (targetMod === "overlay")
         {
-            this.serverSandbox!.onOverlayModReceiveData(data.targetEvent, data.data);
+            this.serverSandbox!.onOverlayModReceiveData(player, data.targetEvent, data.data);
         }
         else if (targetMod === "environment")
         {
-            this.serverSandbox!.onEnvironmentModReceiveData(data.targetEvent, data.data);
+            this.serverSandbox!.onEnvironmentModReceiveData(player, data.targetEvent, data.data);
         }
         else
         {
@@ -138,7 +142,7 @@ export default class Room extends EventEmitter
     public onPlayerDisconnect(player: Player, reason: any)
     {
         env.logger.info(`Player disconnected ${player.username} : ${reason}`);
-        this.players.set(player.socket.id, player);
+        this.players.delete(player.socket.id);
     }
 
     // Détermine si un joueur peut se connecter à la room

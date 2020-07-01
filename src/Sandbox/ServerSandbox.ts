@@ -1,6 +1,7 @@
 import { EnvironmentMod, EnvironmentModPublicData, GameplayMod, GameplayModPublicData, OverlayMod, OverlayModPublicData } from "../ServerMod";
 import { SandboxConfig } from "./LoadingSandbox";
 import { SandboxUID } from "../UID";
+import { Room, Player } from "../Room";
 
 export type ServerSandboxConfig = {
     environmentMod: EnvironmentMod;
@@ -36,6 +37,7 @@ export default class ServerSandbox
     private name: string;
     private MOTD: string;
     private updateRate: number;
+    public room: Room | null = null;
 
     // Propriétés nécessaires à son fonctionnement
 
@@ -54,6 +56,10 @@ export default class ServerSandbox
             MOTD: this.MOTD,
             updateRate: this.updateRate
         } = sandboxConfig.config);
+
+        this.environmentMod.room = this.room;
+        this.gameplayMod.room = this.room;
+        this.overlayMod.room = this.room;
     }
 
     // Données publiques auxquelles les clients peuvent accéder
@@ -72,18 +78,18 @@ export default class ServerSandbox
         };
     }
 
-    public onGameplayModReceiveData(targetEvent: string, data: any): void
+    public onGameplayModReceiveData(player: Player, targetEvent: string, data: any): void
     {
-        this.gameplayMod.onReceiveData(targetEvent, data);
+        this.gameplayMod.onReceiveData(player, targetEvent, data);
     }
 
-    public onOverlayModReceiveData(targetEvent: string, data: any): void
+    public onOverlayModReceiveData(player: Player, targetEvent: string, data: any): void
     {
-        this.overlayMod.onReceiveData(targetEvent, data);
+        this.overlayMod.onReceiveData(player, targetEvent, data);
     }
 
-    public onEnvironmentModReceiveData(targetEvent: string, data: any): void
+    public onEnvironmentModReceiveData(player: Player, targetEvent: string, data: any): void
     {
-        this.environmentMod.onReceiveData(targetEvent, data);
+        this.environmentMod.onReceiveData(player, targetEvent, data);
     }
 }

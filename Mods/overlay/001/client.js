@@ -13,6 +13,11 @@ export default (ClientMod) =>
             this.init();
         }
 
+        onReceiveData(event, data)
+        {
+            console.log(`[Overlay] : ${event}`, data);
+        }
+
         init()
         {
             console.log("Mod001 instancié !");

@@ -38,7 +38,7 @@ export default class SocketManager
                     // data: { event: "mod développeur", data: data }
                     const event = packet[0], data = packet[1];
 
-                    this.room.onReceiveData(event, { targetEvent: data.targetEvent, data: data.data });
+                    this.room.onReceiveData(socket, event, { targetEvent: data.targetEvent, data: data.data });
 
                     next();
                 });
