@@ -7,9 +7,16 @@
     "resources":
     [
         {
-            "name": "mainEnvImg",
+            "name": "backgroundImg1",
             "type": "image",
-            "filename": "envImg.png",
+            "filename": "backgroundImg1.png",
+            "height": 200,
+            "width": 200
+        },
+        {
+            "name": "backgroundImg2",
+            "type": "image",
+            "filename": "backgroundImg2.png",
             "height": 200,
             "width": 200
         }

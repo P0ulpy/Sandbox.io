@@ -31,13 +31,12 @@ export default class Room extends EventEmitter
 
         this.sandboxUID = UID;
 
-        this.loadingSandbox = new LoadingSandbox(UID);
+        this.loadingSandbox = new LoadingSandbox(UID, this);
 
         this.loadingSandbox.promise
         .then((serverSandbox: ServerSandbox) =>
         {
             this.serverSandbox = serverSandbox;
-            this.serverSandbox.room = this;
             // @TODO devrait vérifier si OK mais t'façon le code est bon à jeter
             this.socketManager = new SocketManager(this);
             this.loadingStatus = "success";

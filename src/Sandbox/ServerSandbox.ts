@@ -8,6 +8,7 @@ export type ServerSandboxConfig = {
     gameplayMod: GameplayMod;
     overlayMod: OverlayMod;
     config: SandboxConfig;
+    room: Room;
 }
 
 export type ServerSandboxPublicData = {
@@ -57,9 +58,22 @@ export default class ServerSandbox
             updateRate: this.updateRate
         } = sandboxConfig.config);
 
+        this.room = sandboxConfig.room;
         this.environmentMod.room = this.room;
         this.gameplayMod.room = this.room;
         this.overlayMod.room = this.room;
+
+        this.init();
+    }
+
+    public init()
+    {
+        setInterval(() =>
+        {
+            this.environmentMod.update();
+            this.gameplayMod.update();
+            this.overlayMod.update();
+        }, 50);
     }
 
     // Données publiques auxquelles les clients peuvent accéder

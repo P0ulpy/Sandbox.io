@@ -6,16 +6,41 @@ export default (ClientMod) =>
 {
     return class Mod001 extends ClientMod
     {
-        constructor()
+        constructor(config)
         {
-            super();
+            super(config);
+
+            this.updateCount = 99;
+            this.currentBackground = 1;
+            this.canvas = document.getElementById("environmentCanvas");
+            this.context = this.canvas.getContext("2d");
 
             this.init();
+        }
+
+        update()
+        {
+
         }
 
         onReceiveData(event, data)
         {
             console.log(`[Env] : ${event}`, data);
+
+            if (event === "set-background")
+            {
+                const sprite = this.loadedResources.get(data);
+
+                if (sprite)
+                {
+                    console.log(`Changing background to ${data} : `, sprite);
+                    this.context.drawImage(sprite, 0, 0);
+                }
+                else
+                {
+                    console.log(`Cannot set background ${data}`);
+                }
+            }
         }
 
         init()

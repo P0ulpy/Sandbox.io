@@ -9,9 +9,9 @@ module.exports = function(OverlayMod)
 
         onReceiveData(player, event, data)
         {
-            super.onReceiveData(event, data);
+            super.onReceiveData(player, event, data);
             console.log(`ReceiveData from player ${player.username} from Ove #Mod001 : ${event}`, data);
-            this.sendToPlayer(player, "response", "bonjour");
+            this.sendToPlayer(player, "responseOverlay", "bonjour");
         }
     }
 };

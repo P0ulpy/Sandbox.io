@@ -6,11 +6,39 @@
     "resources":
     [
         {
-            "name": "mainGamImg",
+            "name": "sprite1Img",
             "type": "image",
-            "filename": "gamImg.png",
-            "height": 200,
-            "width": 200
+            "filename": "sprite1.png",
+            "height": 100,
+            "width": 100
+        },
+        {
+            "name": "sprite2Img",
+            "type": "image",
+            "filename": "sprite2.png",
+            "height": 100,
+            "width": 100
+        },
+        {
+            "name": "sprite3Img",
+            "type": "image",
+            "filename": "sprite3.png",
+            "height": 100,
+            "width": 100
+        },
+        {
+            "name": "sprite4Img",
+            "type": "image",
+            "filename": "sprite4.png",
+            "height": 100,
+            "width": 100
+        },
+        {
+            "name": "sprite5Img",
+            "type": "image",
+            "filename": "sprite5.png",
+            "height": 100,
+            "width": 100
         }
     ]
 }

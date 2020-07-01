@@ -49,6 +49,10 @@ export default abstract class ServerMod extends EventEmitter implements ServerMo
 
         console.log(`Hello from ${this.constructor.name}`);
     }
+    
+    public abstract update(): void;
+
+    public abstract sendToBroadcast(event: string, data: any): void;
 
     public abstract sendToPlayer(player: Player, event: string, data: any): void;
 

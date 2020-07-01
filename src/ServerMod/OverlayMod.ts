@@ -23,9 +23,16 @@ export default class OverlayMod extends ServerMod
         }
     }
 
+    public update(): void {}
+
     public sendToPlayer(player: Player, event: string, data: any): void
     {
         player.socket.emit("overlay", { targetEvent: event, data: data });
+    }
+
+    public sendToBroadcast(event: string, data: any): void
+    {
+        this.room?.sendBroadcast("overlay", { targetEvent: event, data: data });
     }
 
     public onReceiveData(player: Player, event: string, data: any): void

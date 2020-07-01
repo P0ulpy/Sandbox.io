@@ -23,9 +23,16 @@ export default class GameplayMod extends ServerMod
         }
     }
 
+    public update(): void {}
+
     public sendToPlayer(player: Player, event: string, data: any): void
     {
         player.socket.emit("gameplay", { targetEvent: event, data: data });
+    }
+
+    public sendToBroadcast(event: string, data: any): void
+    {
+        this.room?.sendBroadcast("gameplay", { targetEvent: event, data: data });
     }
 
     public onReceiveData(player: Player, event: string, data: any): void

@@ -6,6 +6,7 @@ import env from "../Environment";
 import ServerSandbox, { ServerSandboxConfig } from "./ServerSandbox";
 import { GameplayMod, OverlayMod, EnvironmentMod } from "../ServerMod";
 import { LoadingGameplayMod, LoadingOverlayMod, LoadingEnvironmentMod } from "../LoadingMod";
+import { Room } from "../Room";
 
 // Représente le format de l'objet contenu dans le fichier de configuration d'une Sandbox,
 // après transformation
@@ -36,7 +37,7 @@ export default class LoadingSandbox
     private folderName: string;
     private error: LoadingSandboxError | null = null;
 
-    constructor(UID: SandboxUID)
+    constructor(UID: SandboxUID, room: Room)
     {
         if (!UID.isValid())
         {
@@ -71,7 +72,8 @@ export default class LoadingSandbox
                     environmentMod: environmentMod,
                     gameplayMod: gameplayMod,
                     overlayMod: overlayMod,
-                    config: config
+                    config: config,
+                    room: room
                 };
 
                 const serverSandbox = new ServerSandbox(serverSandboxConfig);

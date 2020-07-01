@@ -6,9 +6,12 @@ export default (ClientMod) =>
 {
     return class Mod001 extends ClientMod
     {
-        constructor()
+        constructor(config)
         {
-            super();
+            super(config);
+
+            this.canvas = document.getElementById("overlayCanvas");
+            this.context = this.canvas.getContext("2d");
 
             this.init();
         }

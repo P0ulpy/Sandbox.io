@@ -6,21 +6,74 @@ export default (ClientMod) =>
 {
     return class Mod001 extends ClientMod
     {
-        constructor()
+        constructor(config)
         {
-            super();
+            super(config);
+
+            this.canvas = document.getElementById("gameplayCanvas");
+            this.context = this.canvas.getContext("2d");
 
             this.init();
         }
 
+        onKeyDown(event)
+        {
+            if (event.key === "ArrowRight")
+            {
+                this.sendData("move", "right");
+            }
+            else if (event.key === "ArrowLeft")
+            {
+                this.sendData("move", "left");
+            }
+            else if (event.key === "ArrowUp")
+            {
+                this.sendData("move", "up");
+            }
+            else if (event.key === "ArrowDown")
+            {
+                this.sendData("move", "down");
+            }
+        }
+
         onReceiveData(event, data)
         {
-            console.log(`[Gameplay] : ${event}`, data);
+            if (event === "update")
+            {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                //{ position: player.position, sprite: player.getCustomData("sprite") }
+                for (const d of data)
+                {
+                    const resource = this.loadedResources.get(d.sprite);
+
+                    if (resource)
+                    {
+                        this.context.drawImage(resource, d.position.x, d.position.y);
+                    }
+                    else
+                    {
+                        //console.log(`Cannot find resource ${resource}`);
+                    }
+                }
+
+            }
+            else if (event === "set-sprite")
+            {
+                this.spriteResource = data;
+                console.log("Mon sprite est " + data);
+            }
         }
 
         init()
         {
             console.log("Mod001 instancié !");
+
+            document.addEventListener("keydown", (event) => this.onKeyDown(event));
+
+            setTimeout(() =>
+            {
+                this.sendData("get-sprite", null);
+            }, 1000);
         }
     }
 }

@@ -23,9 +23,16 @@ export default class EnvironmentMod extends ServerMod
         }
     }
 
+    public update(): void {}
+
     public sendToPlayer(player: Player, event: string, data: any): void
     {
         player.socket.emit("environment", { targetEvent: event, data: data });
+    }
+
+    public sendToBroadcast(event: string, data: any): void
+    {
+        this.room?.sendBroadcast("environment", { targetEvent: event, data: data });
     }
 
     public onReceiveData(player: Player, event: string, data: any): void
