@@ -14,18 +14,18 @@ module.exports = function(EnvironmentMod)
         {
             this.room.players.forEach((player) =>
             {
-                if (player.position.x > 500)
+                if (player.position.x > 800 - 100)
                 {
-                    player.position.x = 500;
+                    player.position.x = 800 - 100;
                 }
                 else if (player.position.x < 0)
                 {
                     player.position.x = 0;
                 }
 
-                if (player.position.y > 500)
+                if (player.position.y > 800 - 375)
                 {
-                    player.position.y = 500;
+                    player.position.y = 800 - 375;
                 }
                 else if (player.position.y < 0)
                 {
