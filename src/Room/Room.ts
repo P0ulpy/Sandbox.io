@@ -8,7 +8,10 @@ import Player from "./Player";
 import env from "../Environment";
 
 
-export type RoomPublicData = ServerSandboxPublicData;
+export interface RoomPublicData extends ServerSandboxPublicData
+{
+    playersCount: number;
+}
 
 export type RoomLoadingStatus = "loading" | "success" | "error";
 
@@ -91,7 +94,13 @@ export default class Room extends EventEmitter
     {
         if (this.isSuccessfullyLoaded())
         {
-            return this.serverSandbox?.publicData!;
+            const sandboxPublicData: ServerSandboxPublicData = this.serverSandbox?.publicData!;
+            const playersCount = this.players.size;
+
+            const roomPublicData: any = Object.assign({}, sandboxPublicData);
+            roomPublicData.playersCount = playersCount;
+
+            return roomPublicData;
         }
 
         const error = new RoomError(`Can't retrieve publicData on Room #${this.sandboxUID} which isn't successfully loaded`);
