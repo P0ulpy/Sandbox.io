@@ -24,6 +24,16 @@ export default (ClientMod) =>
         init()
         {
             console.log("Mod001 instancié !");
+
+            document.addEventListener("keydown", (event) =>
+            {
+                if (event.key === "Escape")
+                {
+                    const elt = document.getElementById("overlayDiv");
+
+                    elt.style.display = (elt.style.display === "block" ? "none" : "block");
+                }
+            });
         }
     }
 }
