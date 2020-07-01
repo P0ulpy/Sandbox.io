@@ -6,6 +6,13 @@
     "resources":
     [
         {
+            "name": "sprite0Img",
+            "type": "image",
+            "filename": "sprite0.png",
+            "height": 100,
+            "width": 100
+        },
+        {
             "name": "sprite1Img",
             "type": "image",
             "filename": "sprite1.png",
