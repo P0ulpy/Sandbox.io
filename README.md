@@ -11,12 +11,12 @@ Sur cette base les utilisateurs pourront ajouter des mods qu'ils devront alors d
 Il y a plusieurs technologies misent en place dans ce projet 
 
 - NodeJS
-- Sandbox.io
-- NoSql
+- express.js
+- passport.js
+- bcrypt.js
+- socket.io
 
-Le projet est principalement écris en Javascript
-
-
+Le projet est principalement écris en TypeScript
 
 Travaillant sur le projet 
 
